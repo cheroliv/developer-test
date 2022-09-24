@@ -1,6 +1,7 @@
 = Architecture Decision Records
 
 == back end
+_22 september 2022_ +
 springboot webflux reactive to get an asynchronous non blocking stack
 the database choice is H2 to get an in memory relationnal database instead of sqlite, +
 h2 fit better in a jvm environment and sticks better to sql specificication. +

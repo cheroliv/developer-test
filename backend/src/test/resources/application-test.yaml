@@ -1,0 +1,45 @@
+##############################################################################
+backend:
+  message: go visit https://www.cheroliv.com
+  item: monolith
+  clientApp:
+    name: 'server'
+  database:
+    populator-path: db/tables.sql
+  cors:
+    allowed-origins: '*'
+    allowed-methods: '*'
+    allowed-headers: '*'
+    exposed-headers: 'Authorization,Link,X-Total-Count'
+    allow-credentials: true
+    max-age: 1800
+##############################################################################
+server:
+  port: 8080
+##############################################################################
+spring:
+  application:
+    name: server
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: r2dbc:h2:file://././build/h2db/db/backend;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DB_CLOSE_DELAY=-1
+    username: sa
+    password: sa
+  devtools:
+    restart:
+      enabled: true
+  thymeleaf:
+    mode: HTML
+  messages:
+    basename: i18n/messages
+    encoding: UTF-8
+  main:
+    allow-bean-definition-overriding: true
+##############################################################################
+logging:
+  level:
+    org:
+      springframework:
+        r2dbc: DEBUG
+        org.hibernate.SQL: DEBUG
+##############################################################################

@@ -1,0 +1,12 @@
+.gradle
+.idea
+build
+gradle/wrapper/gradle-wrapper.jar
+local.properties
+private
+bin
+.classpath
+.project
+server.code-workspace
+.settings
+/monolith.code-workspace

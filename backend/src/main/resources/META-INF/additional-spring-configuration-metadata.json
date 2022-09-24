@@ -1,0 +1,78 @@
+{
+  "properties": [
+    {
+      "name": "spring.profiles.default",
+      "type": "java.lang.String",
+      "description": "Description for spring.profiles.default."
+    },
+    {
+      "name": "reaktive.message",
+      "type": "java.lang.String",
+      "description": "Description for reaktive.message."
+    },
+    {
+      "name": "reaktive.item",
+      "type": "java.lang.String",
+      "description": "Description for reaktive.item."
+    },
+    {
+      "name": "reaktive.mail.base-url",
+      "type": "java.lang.String",
+      "description": "Description for reaktive.mail.base-url."
+    },
+    {
+      "name": "reaktive.mail.from",
+      "type": "java.lang.String",
+      "description": "Description for reaktive.mail.from."
+    },
+    {
+      "name": "reaktive.security.authentication.jwt.secret",
+      "type": "java.lang.String",
+      "description": "Description for reaktive.security.authentication.jwt.secret."
+    },
+    {
+      "name": "reaktive.security.authentication.jwt.base64-secret",
+      "type": "java.lang.String",
+      "description": "Description for reaktive.security.authentication.jwt.base64-secret."
+    },
+    {
+      "name": "reaktive.security.authentication.jwt.token-validity-in-seconds",
+      "type": "java.lang.String",
+      "description": "Description for reaktive.security.authentication.jwt.token-validity-in-seconds."
+    },
+    {
+      "name": "reaktive.security.authentication.jwt.token-validity-in-seconds-for-remember-me",
+      "type": "java.lang.String",
+      "description": "Description for reaktive.security.authentication.jwt.token-validity-in-seconds-for-remember-me."
+    },
+    {
+      "name": "reaktive.cors.allowed-origins",
+      "type": "java.lang.String",
+      "description": "Description for reaktive.cors.allowed-origins."
+    },
+    {
+      "name": "reaktive.cors.allowed-methods",
+      "type": "java.lang.String",
+      "description": "Description for reaktive.cors.allowed-methods."
+    },
+    {
+      "name": "reaktive.cors.allowed-headers",
+      "type": "java.lang.String",
+      "description": "Description for reaktive.cors.allowed-headers."
+    },
+    {
+      "name": "reaktive.cors.exposed-headers",
+      "type": "java.lang.String",
+      "description": "Description for reaktive.cors.exposed-headers."
+    },
+    {
+      "name": "reaktive.cors.allow-credentials",
+      "type": "java.lang.String",
+      "description": "Description for reaktive.cors.allow-credentials."
+    },
+    {
+      "name": "reaktive.cors.max-age",
+      "type": "java.lang.String",
+      "description": "Description for reaktive.cors.max-age."
+    }
+  ] }
