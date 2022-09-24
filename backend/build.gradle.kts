@@ -40,9 +40,6 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testImplementation("io.projectreactor:reactor-test")
     testImplementation("org.mockito.kotlin:mockito-kotlin:${properties["mockito_kotlin_version"]}")
-    //blockhound
-//    implementation("io.projectreactor.tools:blockhound:${properties["blockhound_version"]}")
-//    testImplementation("io.projectreactor.tools:blockhound-junit-platform:${properties["blockhound_version"]}")
 
     //jackson mapping (json/xml)
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
@@ -77,17 +74,6 @@ dependencies {
     testImplementation("io.mockk:mockk:${properties["mockk.version"]}")
     testImplementation("com.github.tomakehurst:wiremock-jre8:${properties["wiremock.version"]}")
     testImplementation("com.ninja-squad:springmockk:3.1.0")
-
-
-    // testcontainer
-//    testImplementation("org.testcontainers:junit-jupiter")
-//    testImplementation("org.testcontainers:postgresql")
-//    testImplementation("org.testcontainers:r2dbc")
-    //testImplementation("com.tngtech.archunit:archunit-junit5-api:${properties["archunit_junit5_version"]}")
-    //testRuntimeOnly("com.tngtech.archunit:archunit-junit5-engine:${properties["archunit_junit5_version"]}")
-
-
-//    testImplementation( "org.springframework.cloud:spring-cloud-starter-contract-verifier")
 }
 
 configurations {
