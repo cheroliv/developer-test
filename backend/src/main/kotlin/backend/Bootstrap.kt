@@ -2,25 +2,23 @@ package backend
 
 import backend.Log.log
 import org.springframework.beans.factory.getBean
-import org.springframework.boot.CommandLineRunner
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication
 import org.springframework.context.ApplicationContext
-import org.springframework.context.ApplicationContextAware
 import org.springframework.context.MessageSource
-import org.springframework.stereotype.Component
 import java.net.InetAddress.getLocalHost
 import java.net.UnknownHostException
 import java.util.*
-import kotlin.system.exitProcess
 
 
 /*=================================================================================*/
 
 fun main(args: Array<String>) = runApplication<Computer>(*args) {
     with(this) {
-        setDefaultProperties(hashMapOf<String, Any>(Constants.SPRING_PROFILE_CONF_DEFAULT_KEY to Constants.SPRING_PROFILE_DEVELOPMENT))
+        setDefaultProperties(
+            hashMapOf<String, Any>(
+                Constants.SPRING_PROFILE_CONF_DEFAULT_KEY to Constants.SPRING_PROFILE_DEVELOPMENT
+            )
+        )
         setAdditionalProfiles(Constants.SPRING_PROFILE_DEVELOPMENT)
     }
 }.run { startupLog(context = this) }
