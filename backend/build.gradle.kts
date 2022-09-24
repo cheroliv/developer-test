@@ -18,7 +18,6 @@ plugins {
     kotlin("plugin.serialization")
     id("org.springframework.boot")
     id("io.spring.dependency-management")
-    application
 }
 
 repositories {
@@ -85,12 +84,31 @@ configurations {
     }
 }
 
+tasks.register("computer") {
+    group = "application"
+    description = "Run computer REST API locally"
+    doFirst {
+        springBoot.mainClass.set("backend.BootstrapKt")
+    }
+    finalizedBy("bootRun")
+}
+
+tasks.register("cli") {
+    group = "application"
+    description = "Run computer command line"
+    doFirst {
+        springBoot.mainClass.set("backend.ComputerCommandLineRunner")
+    }
+    finalizedBy("bootRun")
+}
+
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         freeCompilerArgs = listOf(properties["free_compiler_args_value"].toString())
         jvmTarget = VERSION_1_8.toString()
     }
 }
+
 
 tasks.withType<Test> {
     useJUnitPlatform()
@@ -137,8 +155,4 @@ tasks.register<DeployGAE>("deployGAE") {
     description = "Deploy to Google App Engine"
     val cmd = "gcloud app deploy src/main/appengine/app.flexible.yml"
     doLast { println(cmd) }
-}
-
-application {
-    mainClass.set("backend.ComputerCommandLineRunner")
 }

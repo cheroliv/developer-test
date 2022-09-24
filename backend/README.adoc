@@ -11,7 +11,7 @@ I assume java dev kit and runtime is installed and you are running under nix lik
 to run the cli, launch this command in the terminal, add needed arguments to fit the requirement
 [source,bash]
 ----
-./gradlew run
+./gradlew :backend:cli
 ----
 
 
@@ -20,7 +20,7 @@ to run the cli, launch this command in the terminal, add needed arguments to fit
 to run backend locally, launch this command in terminal and go to http://localhost:8080
 [source,bash]
 ----
-./gradlew bootRun
+./gradlew :backend:computer
 ----
 
 
