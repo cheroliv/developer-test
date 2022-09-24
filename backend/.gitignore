@@ -9,3 +9,4 @@ bin
 .project
 server.code-workspace
 .settings
+.vscode

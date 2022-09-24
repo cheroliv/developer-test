@@ -1,0 +1,44 @@
+= backend
+
+I assume java dev kit and runtime is installed and you are running under nix like OS.
+
+== run backend
+
+to run backend only locally, launch this command in terminal and goto http://localhost:8080
+[source,bash]
+----
+./gradlew bootRun
+----
+
+
+== test backend
+to test backend, run this command in terminal
+[source,bash]
+----
+./gradlew :backend:check
+----
+
+
+== deploy to google cloud
+
+=== install gcloud cli on ubuntu/debianLike
+[source,bash]
+----
+snap remove google-cloud-sdk
+snap install google-cloud-cli --classic
+----
+
+=== setup google credentials
+[source,bash]
+----
+gcloud init
+----
+
+
+=== deploy to google app engine
+to deploy backend on google app engine, run this command in terminal
+[source,bash]
+----
+./gradlew :backend:deployGAE
+----
+

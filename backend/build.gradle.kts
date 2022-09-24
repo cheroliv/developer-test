@@ -28,7 +28,6 @@ repositories {
 }
 
 dependencies {
-//    implementation(project(path = ":common"))
     //Kotlin lib: jdk8, reflexion, coroutines
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -63,9 +62,7 @@ dependencies {
     //H2database
     runtimeOnly("com.h2database:h2")
     runtimeOnly("io.r2dbc:r2dbc-h2")
-    //Postgresql
-//    runtimeOnly("io.r2dbc:r2dbc-postgresql")
-//    runtimeOnly("org.postgresql:postgresql")
+
     //SSL
     implementation("io.netty:netty-tcnative-boringssl-static:${properties["boring_ssl.version"]}")
     // spring Test dependencies
@@ -140,3 +137,4 @@ tasks.register<DeployGAE>("deployGAE") {
     val cmd = "gcloud app deploy src/main/appengine/app.flexible.yml"
     doLast { println(cmd) }
 }
+

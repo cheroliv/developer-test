@@ -21,7 +21,7 @@ spring:
     default: dev
   datasource:
     driver-class-name: org.h2.Driver
-    url: r2dbc:h2:file://././build/h2db/db/backend;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DB_CLOSE_DELAY=-1
+    url: r2dbc:h2:mem:backend;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DB_CLOSE_DELAY=-1
     username: sa
     password: sa
   devtools:
