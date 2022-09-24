@@ -2,17 +2,21 @@ package backend
 
 import backend.Log.log
 import org.springframework.beans.factory.getBean
+import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.runApplication
 import org.springframework.context.ApplicationContext
+import org.springframework.context.ApplicationContextAware
 import org.springframework.context.MessageSource
+import org.springframework.stereotype.Component
 import java.net.InetAddress.getLocalHost
 import java.net.UnknownHostException
 import java.util.*
+import kotlin.system.exitProcess
 
 
 /*=================================================================================*/
 
-fun main(args: Array<String>) = runApplication<Server>(*args) {
+fun main(args: Array<String>) = runApplication<Computer>(*args) {
     with(this) {
         setDefaultProperties(hashMapOf<String, Any>(Constants.SPRING_PROFILE_CONF_DEFAULT_KEY to Constants.SPRING_PROFILE_DEVELOPMENT))
         setAdditionalProfiles(Constants.SPRING_PROFILE_DEVELOPMENT)
@@ -100,5 +104,31 @@ private fun startupLog(context: ApplicationContext): Unit =
     )
 
 /*=================================================================================*/
+@Component
+class ComputerCommandLineRunner(
+    private var context: ApplicationContext
+) : CommandLineRunner, ApplicationContextAware {
 
+    override fun setApplicationContext(applicationContext: ApplicationContext) {
+        this.context = applicationContext
+    }
 
+    override fun run(vararg args: String?) {
+        //TODO: computation
+        log.info("bean provided by spring container : ${context.beanDefinitionNames.toList()}")
+    }
+
+    companion object {
+        @JvmStatic
+        fun main(args: Array<String>) {
+            log.info("STARTING : Spring boot application starting")
+            runApplication<Computer>(*args) {
+                setDefaultProperties(mutableMapOf<String, Any>("spring.main.web-application-type" to "none"))
+            }
+            log.info("STOPPED  : Spring boot application stopped")
+            exitProcess(0)
+        }
+    }
+}
+
+/*=================================================================================*/

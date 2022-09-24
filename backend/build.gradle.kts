@@ -18,6 +18,7 @@ plugins {
     kotlin("plugin.serialization")
     id("org.springframework.boot")
     id("io.spring.dependency-management")
+    application
 }
 
 repositories {
@@ -116,7 +117,6 @@ tasks.register<TestReport>("testReport") {
     reportOn("test")
 }
 
-//Google App Engine command line call
 open class DeployGAE : Exec() {
     init {
         workingDir = project.rootDir
@@ -134,7 +134,11 @@ open class DeployGAE : Exec() {
 
 tasks.register<DeployGAE>("deployGAE") {
     group = "application"
+    description = "Deploy to Google App Engine"
     val cmd = "gcloud app deploy src/main/appengine/app.flexible.yml"
     doLast { println(cmd) }
 }
 
+application {
+    mainClass.set("backend.ComputerCommandLineRunner")
+}
