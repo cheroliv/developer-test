@@ -6,7 +6,6 @@ package backend
 
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.getBean
-import org.springframework.boot.SpringApplication
 import org.springframework.boot.runApplication
 import org.springframework.boot.test.system.CapturedOutput
 import org.springframework.boot.test.system.OutputCaptureExtension
@@ -20,16 +19,14 @@ class CliComputerTests {
     private lateinit var context: ConfigurableApplicationContext
     private val dao: R2dbcEntityTemplate by lazy { context.getBean() }
 
-    private fun mutateApplication(application: SpringApplication) {
-        with(application) {
-            setAdditionalProfiles("cli")
-            setDefaultProperties(mutableMapOf<String, Any>("spring.main.web-application-type" to "none"))
-        }
-    }
-
     private fun launchCli(vararg args: String) = runApplication<Computer>(*args) {
         testLoader(this)
-        mutateApplication(this)
+        setAdditionalProfiles("cli")
+        setDefaultProperties(
+            mutableMapOf<String, Any>(
+                "spring.main.web-application-type" to "none"
+            )
+        )
     }.run { context = this }
 
     @Test
