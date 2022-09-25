@@ -36,7 +36,7 @@ class ComputerCommandLineRunner(
 ) : CommandLineRunner, ApplicationContextAware {
 
     override fun setApplicationContext(applicationContext: ApplicationContext) {
-        this.context = applicationContext
+        context = applicationContext
     }
 
     override fun run(vararg args: String?) {
