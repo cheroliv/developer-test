@@ -7,7 +7,7 @@ I assume java dev kit and runtime is installed and you are running under nix lik
 to run the frontend, launch this command in the terminal and go to http://localhost:8000
 [source,bash]
 ----
-./gradlew :backend:c3po
+./gradlew c3po
 ----
 to stop running c3p0 use Ctrl+C +
 
