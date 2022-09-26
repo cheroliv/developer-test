@@ -21,7 +21,7 @@ class R2d2Tests {
     private lateinit var context: ConfigurableApplicationContext
     private val dao: R2dbcEntityTemplate by lazy { context.getBean() }
 
-    private fun launchCli(vararg args: String) = runApplication<Computer>(*args) {
+    private fun launchCli(vararg args: String) = runApplication<OnBoardComputerApplication>(*args) {
         testLoader(this)
         setAdditionalProfiles(SPRING_PROFILE_CLI)
         setDefaultProperties(SPRING_PROFILE_CLI_PROPS)
@@ -30,6 +30,10 @@ class R2d2Tests {
     @Test
     fun `CLI canary test`(output: CapturedOutput) {
         launchCli()
-        assertTrue(output.out.contains(Computer::class.simpleName!!.lowercase()))
+        assertTrue(output.out.contains(
+            OnBoardComputerApplication::class.simpleName!!.run {
+                return@run replaceRange(0, 1, first().lowercase())
+            }
+        ))
     }
 }
