@@ -48,12 +48,12 @@ object OnBoardComputerBootstrap {
 object OnBoardComputerCliBootstrap {
     @JvmStatic
     fun main(args: Array<String>) {
-        log.info("STARTING : R2D2")
+        log.info("STARTING:\tON BOARD COMPUTER CLI")
         runApplication<OnBoardComputerApplication>(*args) {
             setAdditionalProfiles(SPRING_PROFILE_CLI)
             setDefaultProperties(SPRING_PROFILE_CLI_PROPS)
         }
-        log.info("STOPPED  : R2D2")
+        log.info("STOPPED:\tON BOARD COMPUTER CLI")
         exitProcess(0)
     }
 }
