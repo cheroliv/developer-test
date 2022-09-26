@@ -1,0 +1,9 @@
+= frontend
+
+== run the computer ship user interface
+
+to run the frontend, launch this command in the terminal and go to http://localhost:8000
+[source,bash]
+----
+./gradlew :backend:frontend
+----

@@ -23,3 +23,4 @@ pluginManagement {
 
 rootProject.name = "developer-test"
 include(":backend")
+include(":frontend")
