@@ -26,6 +26,7 @@ import java.time.Instant
 import java.time.LocalDateTime
 import java.time.LocalDateTime.ofInstant
 import java.time.ZoneOffset.UTC
+/*=================================================================================*/
 
 @Configuration
 @EnableTransactionManagement
@@ -88,3 +89,4 @@ class DatabaseConfiguration(
     }
 
 }
+/*=================================================================================*/

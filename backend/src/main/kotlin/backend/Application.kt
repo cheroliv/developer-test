@@ -18,7 +18,6 @@ import javax.annotation.PostConstruct
 import kotlin.system.exitProcess
 
 
-
 /*=================================================================================*/
 @SpringBootApplication
 @EnableConfigurationProperties(ApplicationProperties::class)
@@ -26,7 +25,10 @@ class Computer(
     private val context: ApplicationContext
 ) {
     @PostConstruct
-    private fun init() = checkProfileLog(context)
+    private fun init() = with(context) {
+        checkProfileLog(this)
+        //TODO: load computer config millennium-falcon.json
+    }
 }
 
 /*=================================================================================*/
@@ -49,12 +51,12 @@ class ComputerCommandLineRunner(
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
-            log.info("STARTING : Spring boot application starting")
+            log.info("STARTING : R2D2")
             runApplication<Computer>(*args) {
                 setAdditionalProfiles(SPRING_PROFILE_CLI)
                 setDefaultProperties(SPRING_PROFILE_CLI_PROPS)
             }
-            log.info("STOPPED  : Spring boot application stopped")
+            log.info("STOPPED  : R2D2")
             exitProcess(0)
         }
     }
