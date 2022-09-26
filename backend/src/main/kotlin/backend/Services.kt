@@ -47,7 +47,6 @@ class OnBoardComputerCliRunner(
 
     override fun run(vararg args: String?) {
         //TODO: computation
-        log.info("bean provided by spring container : ${context.beanDefinitionNames.toList()}")
     }
 
 }
