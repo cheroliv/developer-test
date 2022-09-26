@@ -28,9 +28,18 @@ class R2d2Tests {
     }.run { context = this }
 
     @Test
-    fun `CLI canary test`(output: CapturedOutput) {
+    fun `CLI canary test using output capture`(output: CapturedOutput) {
         launchCli()
         assertTrue(output.out.contains(
+            OnBoardComputerApplication::class.simpleName!!.run {
+                return@run replaceRange(0, 1, first().lowercase())
+            }
+        ))
+    }
+    @Test
+    fun `CLI canary bootstrap test`() {
+        launchCli()
+        assertTrue(context.containsBean(
             OnBoardComputerApplication::class.simpleName!!.run {
                 return@run replaceRange(0, 1, first().lowercase())
             }
