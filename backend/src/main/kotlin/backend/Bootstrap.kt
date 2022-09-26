@@ -8,22 +8,38 @@ import org.springframework.context.MessageSource
 import java.net.InetAddress.getLocalHost
 import java.net.UnknownHostException
 import java.util.*
+import kotlin.system.exitProcess
 
 
 /*=================================================================================*/
-
-fun main(args: Array<String>) = runApplication<Computer>(*args) {
-    with(this) {
-        setDefaultProperties(
-            hashMapOf<String, Any>(
-                Constants.SPRING_PROFILE_CONF_DEFAULT_KEY to Constants.SPRING_PROFILE_DEVELOPMENT
+object OnBoardComputerBootstrap{
+    @JvmStatic
+    fun main(args: Array<String>) = runApplication<Computer>(*args) {
+        with(this) {
+            setDefaultProperties(
+                hashMapOf<String, Any>(
+                    Constants.SPRING_PROFILE_CONF_DEFAULT_KEY to Constants.SPRING_PROFILE_DEVELOPMENT
+                )
             )
-        )
-        setAdditionalProfiles(Constants.SPRING_PROFILE_DEVELOPMENT)
+            setAdditionalProfiles(Constants.SPRING_PROFILE_DEVELOPMENT)
+        }
+    }.run { bootstrapLog(context = this) }
+
+}
+/*=================================================================================*/
+
+object OnBoardComputerCliBootstrap{
+    @JvmStatic
+    fun main(args: Array<String>) {
+        log.info("STARTING : R2D2")
+        runApplication<Computer>(*args) {
+            setAdditionalProfiles(Constants.SPRING_PROFILE_CLI)
+            setDefaultProperties(Constants.SPRING_PROFILE_CLI_PROPS)
+        }
+        log.info("STOPPED  : R2D2")
+        exitProcess(0)
     }
-}.run { startupLog(context = this) }
-
-
+}
 /*=================================================================================*/
 
 internal fun checkProfileLog(context: ApplicationContext) =
@@ -61,7 +77,7 @@ internal fun checkProfileLog(context: ApplicationContext) =
 
 /*=================================================================================*/
 
-private fun startupLogMessage(
+private fun bootstrapLogMessage(
     appName: String?,
     protocol: String,
     serverPort: String?,
@@ -82,9 +98,9 @@ ${"\n\n\n"}""".trimIndent()
 
 /*=================================================================================*/
 
-private fun startupLog(context: ApplicationContext): Unit =
+private fun bootstrapLog(context: ApplicationContext): Unit =
     log.info(
-        startupLogMessage(
+        bootstrapLogMessage(
             appName = context.environment.getProperty("spring.application.name"),
             protocol = if (context.environment.getProperty("server.ssl.key-store") != null) "https"
             else "http",
