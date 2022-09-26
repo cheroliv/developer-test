@@ -91,18 +91,18 @@ modernizer {
 
 tasks.register("computer") {
     group = "application"
-    description = "Run computer REST API locally"
+    description = "Run onboard computer locally"
     doFirst {
-        springBoot.mainClass.set("backend.BootstrapKt")
+        springBoot.mainClass.set("backend.OnBoardComputerBootstrap")
     }
     finalizedBy("bootRun")
 }
 
 tasks.register("r2d2") {
     group = "application"
-    description = "Run computer command line"
+    description = "Run onboard computer command line"
     doFirst {
-        springBoot.mainClass.set("backend.ComputerCommandLineRunner")
+        springBoot.mainClass.set("backend.OnBoardComputerCliBootstrap")
     }
     finalizedBy("bootRun")
 }
