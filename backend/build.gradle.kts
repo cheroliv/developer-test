@@ -96,9 +96,9 @@ tasks.register("computer") {
     finalizedBy("bootRun")
 }
 
-tasks.register("r2d2") {
+tasks.register("give-me-the-odds") {
     group = "application"
-    description = "Run onboard computer command line"
+    description = "Run onboard computer command line to give you the odds"
     doFirst { springBoot.mainClass.set("backend.OnBoardComputerCliBootstrap") }
     finalizedBy("bootRun")
 }
