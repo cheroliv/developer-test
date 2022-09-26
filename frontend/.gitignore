@@ -5,7 +5,8 @@ artisanat.code-workspace
 .storybook
 package.lock.json
 *.iml
-
+.gradle
+.cache
 .idea
 # Logs
 logs
@@ -37,12 +38,12 @@ bower_components
 
 # node-waf configuration
 .lock-wscript
-
+build
 # Compiled binary addons (http://nodejs.org/api/addons.html)
 build/Release
 
 # Dependency directories
-node_modules/
+/node_modules/
 jspm_packages/
 
 # Typescript v1 declaration files

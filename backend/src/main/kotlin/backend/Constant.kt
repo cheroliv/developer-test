@@ -33,6 +33,8 @@ object Constants {
     const val SPRING_PROFILE_SWAGGER = "swagger"
     const val SPRING_PROFILE_NO_LIQUIBASE = "no-liquibase"
     const val SPRING_PROFILE_K8S = "k8s"
+    const val SPRING_PROFILE_CLI = "cli"
+    val SPRING_PROFILE_CLI_PROPS = mutableMapOf<String, Any>("spring.main.web-application-type" to "none")
 
     //Config
     const val DEV_HOST = "localhost"
@@ -53,7 +55,6 @@ object Constants {
     const val PROP_MESSAGE = "backend.message"
     const val PROP_DATABASE_POPULATOR_PATH = "backend.database.populator-path"
     const val STARTUP_LOG_MSG_KEY = "startup.log.msg"
-
 
 
     const val DEFAULT_LANGUAGE = "en"

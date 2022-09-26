@@ -4,6 +4,8 @@
 
 package backend
 
+import backend.Constants.SPRING_PROFILE_CLI
+import backend.Constants.SPRING_PROFILE_CLI_PROPS
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.getBean
 import org.springframework.boot.runApplication
@@ -21,16 +23,12 @@ class CliComputerTests {
 
     private fun launchCli(vararg args: String) = runApplication<Computer>(*args) {
         testLoader(this)
-        setAdditionalProfiles("cli")
-        setDefaultProperties(
-            mutableMapOf<String, Any>(
-                "spring.main.web-application-type" to "none"
-            )
-        )
+        setAdditionalProfiles(SPRING_PROFILE_CLI)
+        setDefaultProperties(SPRING_PROFILE_CLI_PROPS)
     }.run { context = this }
 
     @Test
-    fun `Canary cli`(output: CapturedOutput) {
+    fun `CLI canary test`(output: CapturedOutput) {
         launchCli()
         assertTrue(output.out.contains(Computer::class.simpleName!!.lowercase()))
     }

@@ -25,12 +25,12 @@ internal class RestComputerTests {
     private val dao: R2dbcEntityTemplate by lazy { context.getBean() }
 
     @BeforeAll
-    fun `lance le server en profile test`() =
+    fun `launch the server in profile test`() =
         runApplication<Computer> { testLoader(app = this) }
             .run { context = this }
 
     @AfterAll
-    fun `arrête le serveur`() = context.close()
+    fun `stop the server`() = context.close()
 
     @Test
     fun `canary test`() = assertTrue(context.beanDefinitionCount > 0)

@@ -1,27 +1,21 @@
-@file:Suppress(
-    "GradlePackageUpdate",
-    "DEPRECATION",
-)
-
-import org.gradle.api.JavaVersion.VERSION_1_8
-import org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED
-import org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
-import java.io.ByteArrayOutputStream
+@file:Suppress("GradlePackageUpdate")
 
 plugins {
     id("com.github.node-gradle.node")
 }
 
-
-tasks.register("frontend") {
-    group = "application"
-    description = "Run frontend locally"
+repositories {
+    mavenCentral()
 }
 
-tasks.register<Delete>("cleanResources") {
-    description = "Delete directory build/resources"
-    group = "build"
-    delete("build/resources")
+node {
+    download.set(true)
+    version.set("16.17.0")
+}
+
+tasks.register("c3po") {
+    group = "application"
+    description = "Run frontend locally"
+    logger.warn("launch C3PO")
+    finalizedBy("npm_start")
 }

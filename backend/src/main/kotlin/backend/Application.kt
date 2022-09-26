@@ -3,6 +3,8 @@
 package backend
 
 
+import backend.Constants.SPRING_PROFILE_CLI
+import backend.Constants.SPRING_PROFILE_CLI_PROPS
 import backend.Log.log
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -30,7 +32,7 @@ class Computer(
 /*=================================================================================*/
 
 @Component
-@Profile("cli")
+@Profile(SPRING_PROFILE_CLI)
 class ComputerCommandLineRunner(
     private var context: ApplicationContext
 ) : CommandLineRunner, ApplicationContextAware {
@@ -49,8 +51,8 @@ class ComputerCommandLineRunner(
         fun main(args: Array<String>) {
             log.info("STARTING : Spring boot application starting")
             runApplication<Computer>(*args) {
-                setAdditionalProfiles("cli")
-                setDefaultProperties(mutableMapOf<String, Any>("spring.main.web-application-type" to "none"))
+                setAdditionalProfiles(SPRING_PROFILE_CLI)
+                setDefaultProperties(SPRING_PROFILE_CLI_PROPS)
             }
             log.info("STOPPED  : Spring boot application stopped")
             exitProcess(0)

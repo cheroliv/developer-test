@@ -1,9 +1,17 @@
 = frontend
 
+I assume java dev kit and runtime is installed and you are running under nix like OS.
+
 == run the computer ship user interface
 
 to run the frontend, launch this command in the terminal and go to http://localhost:8000
 [source,bash]
 ----
-./gradlew :backend:frontend
+./gradlew :backend:c3po
+----
+
+if the port is already runnin, just type this command to kill it.
+[source,bash]
+----
+killall node
 ----
