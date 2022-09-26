@@ -9,7 +9,6 @@ import backend.Constants.SPRING_PROFILE_CLI_PROPS
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.getBean
 import org.springframework.boot.runApplication
-import org.springframework.boot.test.system.CapturedOutput
 import org.springframework.boot.test.system.OutputCaptureExtension
 import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate
@@ -27,21 +26,28 @@ class R2d2Tests {
         setDefaultProperties(SPRING_PROFILE_CLI_PROPS)
     }.run { context = this }
 
-    @Test
-    fun `CLI canary test using output capture`(output: CapturedOutput) {
-        launchCli()
-        assertTrue(output.out.contains(
-            OnBoardComputerApplication::class.simpleName!!.run {
-                return@run replaceRange(0, 1, first().lowercase())
-            }
-        ))
-    }
+//    @Test
+//    @kotlin.test.Ignore
+//    fun `CLI canary test using output capture`(output: CapturedOutput) {
+//        launchCli()
+//        log.info("bean provided by spring container : ${context.beanDefinitionNames.toList()}")
+//        assertTrue(output.out.contains(
+//            OnBoardComputerApplication::class.simpleName!!.run {
+//                return@run replaceRange(0, 1, first().lowercase())
+//            }
+//        ))
+//    }
+
     @Test
     fun `CLI canary bootstrap test`() {
         launchCli()
         assertTrue(context.containsBean(
             OnBoardComputerApplication::class.simpleName!!.run {
-                return@run replaceRange(0, 1, first().lowercase())
+                replaceRange(
+                    0,
+                    1,
+                    first().lowercase()
+                )
             }
         ))
     }
