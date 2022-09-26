@@ -17,7 +17,7 @@ import kotlin.test.Test
 import kotlin.test.assertTrue
 
 @ExtendWith(OutputCaptureExtension::class)
-class CliComputerTests {
+class R2d2Tests {
     private lateinit var context: ConfigurableApplicationContext
     private val dao: R2dbcEntityTemplate by lazy { context.getBean() }
 

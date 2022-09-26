@@ -14,7 +14,7 @@ import org.springframework.test.web.reactive.server.WebTestClient
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
-internal class RestComputerTests {
+internal class BackendTests {
     private val client: WebTestClient by lazy {
         WebTestClient
             .bindToServer()
@@ -33,6 +33,25 @@ internal class RestComputerTests {
     fun `stop the server`() = context.close()
 
     @Test
-    fun `canary test`() = assertTrue(context.beanDefinitionCount > 0)
+    fun `When it starts, the back-end service will read a JSON configuration file containing the autonomy`() {
+        val universeFileName = "universe.csv"
+        val universeCsv =
+            """origin;destination;travel_time
+                Tatooine;Dagobah;6
+                Dagobah;Endor;4
+                Dagobah;Hoth;1
+                Hoth;Endor;1
+                Tatooine;Hoth;6"""
+        val millenniumFalconJsonFileName = "millennium-falcon.json"
+        val millenniumFalconJson =
+            """{
+                "autonomy": 6,
+                "departure": "Tatooine",
+                "arrival": "Endor",
+                "routes_db": "universe.csv"
+            }"""
+        assertTrue(context.getResource("classpath:$universeFileName").isFile)
+        assertTrue(context.getResource("classpath:$millenniumFalconJsonFileName").isFile)
+    }
 }
 
