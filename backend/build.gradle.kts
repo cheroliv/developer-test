@@ -23,7 +23,6 @@ plugins {
 }
 
 repositories {
-    maven("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/bootstrap/")
     maven("https://repo.spring.io/milestone")
     maven("https://repo.spring.io/snapshot")
 }

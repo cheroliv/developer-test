@@ -4,10 +4,6 @@ plugins {
     id("com.github.node-gradle.node")
 }
 
-//repositories {
-//    mavenCentral()
-//}
-
 node {
     download.set(true)
     version.set("16.17.0")
