@@ -9,6 +9,7 @@ to run the frontend, launch this command in the terminal and go to http://localh
 ----
 ./gradlew :backend:c3po
 ----
+to stop running c3p0 use Ctrl+C +
 
 if the port is already running, just type this command to kill it.
 [source,bash]

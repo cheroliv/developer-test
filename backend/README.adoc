@@ -18,6 +18,7 @@ to run backend locally, launch this command in terminal and go to http://localho
 ----
 ./gradlew :backend:computer
 ----
+to stop running the backend use Ctrl+C
 
 
 == test backend
