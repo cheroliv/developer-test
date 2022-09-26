@@ -3,8 +3,7 @@
 package backend
 
 import backend.Log.log
-import kotlinx.coroutines.reactor.mono
-import org.springframework.beans.factory.getBean
+import kotlinx.coroutines.runBlocking
 import org.springframework.boot.CommandLineRunner
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
@@ -26,12 +25,11 @@ class RoadMapService(
     suspend fun loadOnBoardComputerConfig() {
         log.info("not yet implemented")
     }
+
     @PostConstruct
-    private fun init() = with(context) {
+    private fun init() = context.run {
         checkProfileLog(this)
-        //mono {
-        //  getBean<RoadMapService>().loadOnBoardComputerConfig()
-        //}
+        runBlocking { loadOnBoardComputerConfig() }
     }
 }
 /*=================================================================================*/
