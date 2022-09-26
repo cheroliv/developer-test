@@ -1,8 +1,8 @@
 {
-  "name": "artisanat",
+  "name": "frontend",
   "main": "index.js",
   "private": true,
-  "description": "A digital agence build upon GatsbyJs",
+  "description": "Computer Ship UI build upon GatsbyJs",
   "version": "0.0.1",
   "license": "0BSD",
   "scripts": {
@@ -42,9 +42,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/cheroliv/artisanat"
+    "url": "https://github.com/cheroliv/developer-test"
   },
   "bugs": {
-    "url": "https://github.com/cheroliv/artisanat/issues"
+    "url": "https://github.com/cheroliv/developer-test/issues"
   }
 }
