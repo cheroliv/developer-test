@@ -19,9 +19,7 @@ plugins {
     id("org.springframework.boot")
     id("io.spring.dependency-management")
     id("com.google.cloud.tools.jib")
-    id("com.github.node-gradle.node")
     id("com.github.andygoossens.gradle-modernizer-plugin")
-//    id("io.spring.nohttp")
 }
 
 repositories {
@@ -87,6 +85,11 @@ configurations {
     }
 }
 
+modernizer {
+    failOnViolations = true
+    includeTestClasses = true
+}
+
 tasks.register("computer") {
     group = "application"
     description = "Run computer REST API locally"
@@ -96,7 +99,7 @@ tasks.register("computer") {
     finalizedBy("bootRun")
 }
 
-tasks.register("cli") {
+tasks.register("r2d2") {
     group = "application"
     description = "Run computer command line"
     doFirst {
@@ -158,9 +161,4 @@ tasks.register<DeployGAE>("deployGAE") {
     description = "Deploy to Google App Engine"
     val cmd = "gcloud app deploy src/main/appengine/app.flexible.yml"
     doLast { println(cmd) }
-}
-
-modernizer {
-    failOnViolations = true
-    includeTestClasses = true
 }
