@@ -25,12 +25,12 @@ internal class BackendTests {
     private val dao: R2dbcEntityTemplate by lazy { context.getBean() }
 
     @BeforeAll
-    fun `launch the server in profile test`() =
-        runApplication<Computer> { testLoader(app = this) }
+    fun `launch the onboard computer in profile test`() =
+        runApplication<OnBoardComputerApplication> { testLoader(app = this) }
             .run { context = this }
 
     @AfterAll
-    fun `stop the server`() = context.close()
+    fun `stop the onboard computer`() = context.close()
 
     @Test
     fun `When it starts, the back-end service will read a JSON configuration file containing the autonomy`() {
@@ -52,6 +52,9 @@ internal class BackendTests {
             }"""
         assertTrue(context.getResource("classpath:$universeFileName").isFile)
         assertTrue(context.getResource("classpath:$millenniumFalconJsonFileName").isFile)
+        println(context.getResource("classpath:$universeFileName").file.toString())
+//        assertTrue(context.getResource("classpath:$millenniumFalconJsonFileName").isFile)
+
     }
 }
 
