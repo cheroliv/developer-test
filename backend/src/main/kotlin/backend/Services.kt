@@ -27,10 +27,10 @@ class RoadMapService(
     }
 
     @PostConstruct
-    private fun init() = context.run {
-        checkProfileLog(this)
+    private fun init() = checkProfileLog(context).run {
         runBlocking { loadOnBoardComputerConfig() }
     }
+
 }
 /*=================================================================================*/
 
