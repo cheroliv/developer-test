@@ -59,6 +59,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
     //spring webflux reactive http
     implementation("org.springframework.boot:spring-boot-starter-webflux")
+    //CSV format
+    implementation("org.apache.commons:commons-csv:1.9.0")
     //H2database
     runtimeOnly("com.h2database:h2")
     runtimeOnly("io.r2dbc:r2dbc-h2")
@@ -73,7 +75,10 @@ dependencies {
     testImplementation("com.ninja-squad:springmockk:3.1.0")
 }
 
-sourceSets.getByName("main").resources.srcDir("${parent!!.rootDir.path}/examples")
+sourceSets {
+    getByName("main").resources.srcDir("${parent!!.rootDir.path}/configuration")
+    getByName("test").resources.srcDir("${parent!!.rootDir.path}/examples")
+}
 
 configurations {
     compileOnly { extendsFrom(configurations.annotationProcessor.get()) }

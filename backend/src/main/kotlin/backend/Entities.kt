@@ -24,5 +24,7 @@ data class RouteEntity(
     @field:Positive
     @Column("`travel_time`")
     val travelTime: Int,
-) : RouteRecord
+) : RouteRecord{
+    fun toDomain():Route = Route(origin=origin,destination=destination,travelTime=travelTime)
+}
 /*=================================================================================*/

@@ -9,4 +9,11 @@ data class Route(
     val destination: String,
     val travelTime: Int
 )
+
 /*=================================================================================*/
+data class ComputerConfig(
+    val autonomy: Int,
+    val departure: String,
+    val arrival: String,
+    val routesDb: String
+)
