@@ -50,9 +50,9 @@ internal class BackendTests {
                 "arrival": "Endor",
                 "routes_db": "universe.csv"
             }"""
-        assertTrue(context.getResource("classpath:$universeFileName").isFile)
-        assertTrue(context.getResource("classpath:$millenniumFalconJsonFileName").isFile)
-        println(context.getResource("classpath:$universeFileName").file.toString())
+        assertTrue(context.getResource("classpath:example1/$universeFileName").isFile)
+        assertTrue(context.getResource("classpath:example1/$millenniumFalconJsonFileName").isFile)
+        println(context.getResource("classpath:example1/$universeFileName").file.toString())
 //        assertTrue(context.getResource("classpath:$millenniumFalconJsonFileName").isFile)
 
     }
