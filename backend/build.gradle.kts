@@ -76,7 +76,8 @@ dependencies {
 sourceSets.getByName("main").resources.srcDirs(
     "${parent!!.rootDir.path}/examples/example1",
     "${parent!!.rootDir.path}/examples/example2",
-    "${parent!!.rootDir.path}/examples/example3"
+    "${parent!!.rootDir.path}/examples/example3",
+    "${parent!!.rootDir.path}/examples/example4",
 )
 
 configurations {
