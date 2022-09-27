@@ -3,6 +3,7 @@
 package backend
 
 import org.springframework.data.annotation.Id
+import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
 import java.util.*
 import javax.validation.constraints.NotBlank
@@ -21,6 +22,7 @@ data class RouteEntity(
     @field:NotBlank
     val destination: String,
     @field:Positive
+    @Column("`travel_time`")
     val travelTime: Int,
 ) : RouteRecord
 /*=================================================================================*/
