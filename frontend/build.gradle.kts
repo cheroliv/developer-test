@@ -16,6 +16,7 @@ tasks.register("c3po") {
     logger.warn("launch C3PO")
     finalizedBy("npm_start")
 }
+
 idea {
     module {
         excludeDirs.add(File("${projectDir.path}/node_modules"))
