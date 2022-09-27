@@ -2,6 +2,7 @@
 
 package backend
 
+import backend.Constants.SPRING_PROFILE_CLI
 import backend.Log.log
 import kotlinx.coroutines.runBlocking
 import org.springframework.boot.CommandLineRunner
@@ -22,7 +23,7 @@ class RoadMapService(
     private val routeRepository: RouteRepository,
     private val context: ApplicationContext,
 ) {
-    suspend fun loadOnBoardComputerConfig() {
+    private suspend fun loadOnBoardComputerConfig() {
         log.info("not yet implemented")
     }
 
@@ -35,7 +36,7 @@ class RoadMapService(
 /*=================================================================================*/
 
 @Component
-@Profile(Constants.SPRING_PROFILE_CLI)
+@Profile(SPRING_PROFILE_CLI)
 class OnBoardComputerCliRunner(
     private var context: ApplicationContext,
 ) : CommandLineRunner, ApplicationContextAware {

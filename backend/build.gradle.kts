@@ -73,12 +73,7 @@ dependencies {
     testImplementation("com.ninja-squad:springmockk:3.1.0")
 }
 
-sourceSets.getByName("main").resources.srcDirs(
-    "${parent!!.rootDir.path}/examples/example1",
-    "${parent!!.rootDir.path}/examples/example2",
-    "${parent!!.rootDir.path}/examples/example3",
-    "${parent!!.rootDir.path}/examples/example4",
-)
+sourceSets.getByName("main").resources.srcDir("${parent!!.rootDir.path}/examples")
 
 configurations {
     compileOnly { extendsFrom(configurations.annotationProcessor.get()) }
