@@ -6,6 +6,7 @@ package backend
 import backend.Constants.REQUEST_PARAM_LANG
 import backend.Log.log
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.dataformat.csv.CsvMapper
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import org.springframework.context.annotation.Bean
@@ -50,14 +51,17 @@ class WebConfiguration(
         }
     }
 
+//    @Bean
+//    fun csvMapper()= CsvMapper()
+
     @Bean
     fun validator(): Validator = LocalValidatorFactoryBean()
 
     @Bean
-    fun javaTimeModule(): JavaTimeModule = JavaTimeModule()
+    fun javaTimeModule() = JavaTimeModule()
 
     @Bean
-    fun jdk8TimeModule(): Jdk8Module = Jdk8Module()
+    fun jdk8TimeModule() = Jdk8Module()
 
     /**
      * The handler must have precedence over
@@ -72,7 +76,7 @@ class WebConfiguration(
     ): WebExceptionHandler = ProblemExceptionHandler(mapper, problemHandling)
 
     @Bean
-    fun problemModule(): ProblemModule = ProblemModule()
+    fun problemModule() = ProblemModule()
 
     @Bean
     fun constraintViolationProblemModule() = ConstraintViolationProblemModule()

@@ -3,7 +3,7 @@
 package backend
 
 import backend.Constants.SPRING_PROFILE_CLI
-import backend.Log.log
+import com.fasterxml.jackson.databind.ObjectMapper
 import kotlinx.coroutines.runBlocking
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.CommandLineRunner
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import javax.annotation.PostConstruct
-import kotlin.text.Charsets.UTF_8
 
 
 /*=================================================================================*/
@@ -23,23 +22,56 @@ import kotlin.text.Charsets.UTF_8
 @Service
 @Transactional
 class RoadMapService(
-    private val routeRepository: RouteRepository,
-    private val context: ApplicationContext,
     @Value("classpath:millennium-falcon.json")
-    private val configurationFile: Resource
-
+    private val configurationFile: Resource,
+    private val routeRepository: RouteRepository,
+    private val mapper: ObjectMapper,
+//    private val csvMapper: CsvMapper,
+    private val context: ApplicationContext,
 ) {
-    //    val computerConfig: ComputerConfig by lazy { readComputerConfig() }
-//    private final fun readComputerConfig(): ComputerConfig {
-//        TODO("")
-//    }
 
     private suspend fun loadOnBoardComputerConfig() {
-        log.info("not yet implemented")
         //read json on classpath read ComputerConfig
-//read csv on classpath
-        configurationFile.file.readText(UTF_8).run { println(this) }
+        val conf: ComputerConfig = mapper.readValue(
+            configurationFile.file, ComputerConfig::class.java
+        )
+        //read csv on classpath
+//        val routes: List<Route> = readUniverseCsv(conf.routesDb).apply {
+//            map { println(it) }
+//        }
+//        println(context.getResource("classpath:${conf.routes_db}").file.readText(UTF_8))
+
+//        routeRepository.insertAll(routes)
+
+
+        listOf(
+            Route(origin = "Tatooine", destination = "Dagobah", travel_time = 6),
+            Route(origin = "Dagobah", destination = "Endor", travel_time = 4),
+            Route(origin = "Dagobah", destination = "Hoth", travel_time = 1),
+            Route(origin = "Hoth", destination = "Endor", travel_time = 1),
+            Route(origin = "Tatooine", destination = "Hoth", travel_time = 6),
+        ).run {
+//            routeRepository.insertAll(this)
+        }
+
+//        readUniverseCsv(conf.routesDb).map { println(it) }
     }
+
+//    private fun readUniverseCsv(fileName: String): List<Route> = try {
+//        CsvMapper()
+//            .readerFor(Route::class.java)
+//            .with(CsvSchema.emptySchema().withHeader().withSkipFirstDataRow(true))
+//            .readValues<Route>(
+//                context
+//                    .getResource("classpath:${fileName}")
+//                    .file
+//                    .readText(UTF_8)
+//            ).readAll()
+//
+//    } catch (e: Exception) {
+//        log.error("Error occurred while loading object list from file $fileName", e)
+//        emptyList()
+//    }
 
     @PostConstruct
     private fun init() = checkProfileLog(context).run {

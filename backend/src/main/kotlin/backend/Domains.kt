@@ -7,13 +7,15 @@ package backend
 data class Route(
     val origin: String,
     val destination: String,
-    val travelTime: Int
+//    @JsonProperty("travel_time")
+    val travel_time: Int
 )
-
 /*=================================================================================*/
-data class ComputerConfig(
+data class ComputerConfig    (
     val autonomy: Int,
     val departure: String,
     val arrival: String,
-    val routesDb: String
+//    @JsonProperty("routes_db")
+    val routes_db: String
 )
+/*=================================================================================*/
