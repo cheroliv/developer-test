@@ -1,9 +1,9 @@
 -- noinspection SqlNoDataSourceInspectionForFile
-CREATE TABLE IF NOT EXISTS `routes` (
-    `id`          UUID default random_uuid() PRIMARY KEY,
-    `origin`      VARCHAR,
-    `destination` VARCHAR,
-    `travel_time` INT
+CREATE TABLE IF NOT EXISTS `ROUTES` (
+    `ID`          UUID default random_uuid() PRIMARY KEY,
+    `ORIGIN`      VARCHAR,
+    `DESTINATION` VARCHAR,
+    `TRAVEL_TIME` INT
 );
-CREATE UNIQUE INDEX IF NOT EXISTS `unique_idx_origin_destination`
-ON `routes` (`origin`, `destination`);
+CREATE UNIQUE INDEX IF NOT EXISTS `UNIQUE_IDX_ORIGIN_DESTINATION`
+ON `ROUTES` (`ORIGIN`, `DESTINATION`);

@@ -11,15 +11,17 @@ import javax.validation.constraints.Positive
 
 
 /*=================================================================================*/
-@Table("`routes`")
+@Table("`ROUTES`")
 data class RouteEntity(
     @Id var id: UUID? = null,
     @field:NotBlank
+    @Column("ORIGIN")
     var origin: String,
     @field:NotBlank
+    @Column("DESTINATION")
     var destination: String,
     @field:Positive
-    @Column("`travel_time`")
+    @Column("`TRAVEL_TIME`")
     var travelTime: Int,
 ) {
     constructor(route: Route) : this(

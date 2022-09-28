@@ -59,5 +59,11 @@ internal class BackendTests {
             ).map { assertTrue(contains(it)) }
         }
     }
+
+    @Test
+    fun `upload a JSON file containing the data intercepted by the rebels about the plans of the Empire and displaying the odds`() {
+
+    }
+
 }
 

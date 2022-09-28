@@ -12,8 +12,9 @@ data class Route(
     @JsonProperty("travel_time")
     val travelTime: Int
 )
+
 /*=================================================================================*/
-data class ComputerConfig    (
+data class ComputerConfig(
     val autonomy: Int,
     val departure: String,
     val arrival: String,
