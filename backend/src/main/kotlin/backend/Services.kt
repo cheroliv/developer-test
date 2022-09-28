@@ -4,8 +4,10 @@ package backend
 
 import backend.Constants.SPRING_PROFILE_CLI
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import kotlinx.coroutines.runBlocking
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.beans.factory.getBean
 import org.springframework.boot.CommandLineRunner
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
@@ -26,7 +28,6 @@ class RoadMapService(
     @Value("classpath:millennium-falcon.json")
     private val configurationFile: Resource,
     private val routeRepository: RouteRepository,
-    private val mapper: ObjectMapper,
     private val context: ApplicationContext,
 ) {
     @PostConstruct
@@ -35,12 +36,10 @@ class RoadMapService(
         loadOnBoardComputerConfig()
     }
 
-    private suspend fun loadOnBoardComputerConfig() = mapper.readValue(
-        configurationFile.file,
-        ComputerConfig::class.java
-    ).run {
-        routeRepository.saveAll(readUniverseCsv(routesDb))
-    }
+    private suspend fun loadOnBoardComputerConfig() = context
+        .getBean<ObjectMapper>()
+        .readValue<ComputerConfig>(configurationFile.file)
+        .run { routeRepository.saveAll(readUniverseCsv(routesDb)) }
 
     private fun readUniverseCsv(fileName: String): List<Route> = context
         .getResource("classpath:${fileName}")
