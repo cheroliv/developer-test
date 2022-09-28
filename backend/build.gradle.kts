@@ -59,10 +59,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
     //spring webflux reactive http
     implementation("org.springframework.boot:spring-boot-starter-webflux")
-    //CSV format
-//    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.13.4")
-//    implementation("org.apache.commons:commons-csv:1.9.0")
-
 
     //H2database
     runtimeOnly("com.h2database:h2")
