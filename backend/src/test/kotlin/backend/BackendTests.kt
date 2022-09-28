@@ -24,7 +24,8 @@ internal class BackendTests {
 
     @BeforeAll
     fun `launch the onboard computer in profile test`() =
-        runApplication<OnBoardComputerApplication> { testLoader(app = this) }.run { context = this }
+        runApplication<OnBoardComputerApplication> { testLoader(app = this) }
+            .run { context = this }
 
     @AfterAll
     fun `stop the onboard computer`() = context.close()
@@ -80,7 +81,8 @@ internal class BackendTests {
             }.isNotEmpty().run { assertTrue(this) }
     }
 
-    @Test @Ignore
+    @Test
+    @Ignore
     fun `Example 1, upload a JSON file containing the data intercepted by the rebels about the plans of the Empire and displaying the odds`() {
         client
             .post()
@@ -97,7 +99,8 @@ internal class BackendTests {
             }.isNotEmpty().run { assertTrue(this) }
     }
 
-    @Test @Ignore
+    @Test
+    @Ignore
     fun `Example 2, upload a JSON file containing the data intercepted by the rebels about the plans of the Empire and displaying the odds`() {
         client
             .post()
@@ -114,7 +117,8 @@ internal class BackendTests {
             }.isNotEmpty().run { assertTrue(this) }
     }
 
-    @Test @Ignore
+    @Test
+    @Ignore
     fun `Example 3, upload a JSON file containing the data intercepted by the rebels about the plans of the Empire and displaying the odds`() {
         client
             .post()
@@ -131,7 +135,8 @@ internal class BackendTests {
             }.isNotEmpty().run { assertTrue(this) }
     }
 
-    @Test @Ignore
+    @Test
+    @Ignore
     fun `Example 4, upload a JSON file containing the data intercepted by the rebels about the plans of the Empire and displaying the odds`() {
         client
             .post()
