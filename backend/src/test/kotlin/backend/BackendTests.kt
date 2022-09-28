@@ -11,6 +11,7 @@ import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.http.MediaType
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.test.web.reactive.server.returnResult
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -73,7 +74,77 @@ internal class BackendTests {
             .isOk
             .returnResult<Int>()
             .responseBodyContent!!.apply {
-                //TODO: check odds in response body
+                val oddsResponse = map { it.toInt().toChar().toString() }
+                    .reduce { acc: String, s: String -> acc + s }.toInt()
+                assertEquals(-1, oddsResponse)
+            }.isNotEmpty().run { assertTrue(this) }
+    }
+
+    @Test @Ignore
+    fun `Example 1, upload a JSON file containing the data intercepted by the rebels about the plans of the Empire and displaying the odds`() {
+        client
+            .post()
+            .uri("api/roadmap/give-me-the-odds")
+            .contentType(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus()
+            .isOk
+            .returnResult<Int>()
+            .responseBodyContent!!.apply {
+                val oddsResponse = map { it.toInt().toChar().toString() }
+                    .reduce { acc: String, s: String -> acc + s }.toInt()
+                assertEquals(-1, oddsResponse)
+            }.isNotEmpty().run { assertTrue(this) }
+    }
+
+    @Test @Ignore
+    fun `Example 2, upload a JSON file containing the data intercepted by the rebels about the plans of the Empire and displaying the odds`() {
+        client
+            .post()
+            .uri("api/roadmap/give-me-the-odds")
+            .contentType(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus()
+            .isOk
+            .returnResult<Int>()
+            .responseBodyContent!!.apply {
+                val oddsResponse = map { it.toInt().toChar().toString() }
+                    .reduce { acc: String, s: String -> acc + s }.toInt()
+                assertEquals(-1, oddsResponse)
+            }.isNotEmpty().run { assertTrue(this) }
+    }
+
+    @Test @Ignore
+    fun `Example 3, upload a JSON file containing the data intercepted by the rebels about the plans of the Empire and displaying the odds`() {
+        client
+            .post()
+            .uri("api/roadmap/give-me-the-odds")
+            .contentType(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus()
+            .isOk
+            .returnResult<Int>()
+            .responseBodyContent!!.apply {
+                val oddsResponse = map { it.toInt().toChar().toString() }
+                    .reduce { acc: String, s: String -> acc + s }.toInt()
+                assertEquals(-1, oddsResponse)
+            }.isNotEmpty().run { assertTrue(this) }
+    }
+
+    @Test @Ignore
+    fun `Example 4, upload a JSON file containing the data intercepted by the rebels about the plans of the Empire and displaying the odds`() {
+        client
+            .post()
+            .uri("api/roadmap/give-me-the-odds")
+            .contentType(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus()
+            .isOk
+            .returnResult<Int>()
+            .responseBodyContent!!.apply {
+                val oddsResponse = map { it.toInt().toChar().toString() }
+                    .reduce { acc: String, s: String -> acc + s }.toInt()
+                assertEquals(-1, oddsResponse)
             }.isNotEmpty().run { assertTrue(this) }
     }
 
