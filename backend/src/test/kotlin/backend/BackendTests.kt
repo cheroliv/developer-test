@@ -8,7 +8,9 @@ import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.springframework.boot.runApplication
 import org.springframework.context.ConfigurableApplicationContext
+import org.springframework.http.MediaType
 import org.springframework.test.web.reactive.server.WebTestClient
+import org.springframework.test.web.reactive.server.returnResult
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -62,7 +64,17 @@ internal class BackendTests {
 
     @Test
     fun `upload a JSON file containing the data intercepted by the rebels about the plans of the Empire and displaying the odds`() {
-
+        client
+            .post()
+            .uri("api/roadmap/give-me-the-odds")
+            .contentType(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus()
+            .isOk
+            .returnResult<Int>()
+            .responseBodyContent!!.apply {
+                //TODO: check odds in response body
+            }.isNotEmpty().run { assertTrue(this) }
     }
 
 }
