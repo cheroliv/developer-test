@@ -24,16 +24,23 @@ fun testLoader(app: SpringApplication) = with(app) {
     setAdditionalProfiles(SPRING_PROFILE_TEST)
 }
 
-fun countRoute(context: ApplicationContext): Int {
-    return if (context.getBean("routeRepository") is RouteRepositoryInMemory)
-        runBlocking { context.getBean<RouteRepositoryInMemory>().findAllRoutes().size }
-    else context.getBean<R2dbcEntityTemplate>().select(RouteEntity::class.java).count().block()?.toInt()!!
+fun countRoute(context: ApplicationContext): Int = when {
+    context.getBean("routeRepository") is RouteRepositoryInMemory ->
+        runBlocking {
+            context.getBean<RouteRepositoryInMemory>().findAllRoutes().size
+        }
+
+    else -> context.getBean<R2dbcEntityTemplate>()
+        .select(RouteEntity::class.java)
+        .count()
+        .block()?.toInt()!!
 }
 
 fun findAllRoutes(context: ApplicationContext): List<Route> = when {
-    context.getBean("routeRepository") is RouteRepositoryInMemory -> runBlocking {
-        context.getBean<RouteRepositoryInMemory>().findAllRoutes()
-    }
+    context.getBean("routeRepository") is RouteRepositoryInMemory ->
+        runBlocking {
+            context.getBean<RouteRepositoryInMemory>().findAllRoutes()
+        }
 
     else -> context.getBean<R2dbcEntityTemplate>()
         .select(RouteEntity::class.java)
