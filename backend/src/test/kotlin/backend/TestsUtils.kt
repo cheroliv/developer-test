@@ -5,6 +5,7 @@ package backend
 import backend.Constants.SPRING_PROFILE_CONF_DEFAULT_KEY
 import backend.Constants.SPRING_PROFILE_TEST
 import com.fasterxml.jackson.databind.ObjectMapper
+import kotlinx.coroutines.runBlocking
 import org.springframework.beans.factory.getBean
 import org.springframework.boot.SpringApplication
 import org.springframework.context.ApplicationContext
@@ -23,15 +24,25 @@ fun testLoader(app: SpringApplication) = with(app) {
     setAdditionalProfiles(SPRING_PROFILE_TEST)
 }
 
-fun countRoute(dao: R2dbcEntityTemplate): Int =
-    dao.select(RouteEntity::class.java).count().block()?.toInt()!!
+fun countRoute(context: ApplicationContext): Int {
+    return if (context.getBean("routeRepository") is RouteRepositoryInMemory)
+        runBlocking { context.getBean<RouteRepositoryInMemory>().findAllRoutes().size }
+    else context.getBean<R2dbcEntityTemplate>().select(RouteEntity::class.java).count().block()?.toInt()!!
+}
 
-fun findAllRoutes(dao: R2dbcEntityTemplate): List<Route> =
-    dao.select(RouteEntity::class.java).all()
+fun findAllRoutes(context: ApplicationContext): List<Route> = when {
+    context.getBean("routeRepository") is RouteRepositoryInMemory -> runBlocking {
+        context.getBean<RouteRepositoryInMemory>().findAllRoutes()
+    }
+
+    else -> context.getBean<R2dbcEntityTemplate>()
+        .select(RouteEntity::class.java)
+        .all()
         .toIterable()
         .map { it.toDomain }
+}
 
-fun printConfig(context:ApplicationContext) = println(
+fun printConfig(context: ApplicationContext) = println(
     context.getBean<ObjectMapper>()
         .readValue(
             context.getResource("classpath:millennium-falcon.json").file,

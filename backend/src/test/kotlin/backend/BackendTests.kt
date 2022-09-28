@@ -6,12 +6,11 @@ package backend
 
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
-import org.springframework.beans.factory.getBean
 import org.springframework.boot.runApplication
 import org.springframework.context.ConfigurableApplicationContext
-import org.springframework.data.r2dbc.core.R2dbcEntityTemplate
 import org.springframework.test.web.reactive.server.WebTestClient
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 internal class BackendTests {
@@ -19,7 +18,6 @@ internal class BackendTests {
         WebTestClient.bindToServer().baseUrl(BASE_URL_DEV).build()
     }
     private lateinit var context: ConfigurableApplicationContext
-    private val dao: R2dbcEntityTemplate by lazy { context.getBean() }
 
     @BeforeAll
     fun `launch the onboard computer in profile test`() =
@@ -48,19 +46,18 @@ internal class BackendTests {
             assertTrue(contains("\"arrival\": \"Endor\","))
             assertTrue(contains("\"routes_db\": \"universe.csv\""))
         }
-//        //universe must be persisted
-//        assertEquals(5, countRoute(dao))
+        //universe must be persisted
+        assertEquals(5, countRoute(context))
 //        //let's compare retrieved data from database with what csv contains
-//        with(findAllRoutes(dao)) {
-//            listOf(
-//                Route(origin = "Tatooine", destination = "Dagobah", travel_time = 6),
-//                Route(origin = "Dagobah", destination = "Endor", travel_time = 4),
-//                Route(origin = "Dagobah", destination = "Hoth", travel_time = 1),
-//                Route(origin = "Hoth", destination = "Endor", travel_time = 1),
-//                Route(origin = "Tatooine", destination = "Hoth", travel_time = 6),
-//            ).map { assertTrue(contains(it)) }
-//        }
-        println("countRoute: ${countRoute(dao)}")
+        with(findAllRoutes(context)) {
+            listOf(
+                Route(origin = "Tatooine", destination = "Dagobah", travelTime = 6),
+                Route(origin = "Dagobah", destination = "Endor", travelTime = 4),
+                Route(origin = "Dagobah", destination = "Hoth", travelTime = 1),
+                Route(origin = "Hoth", destination = "Endor", travelTime = 1),
+                Route(origin = "Tatooine", destination = "Hoth", travelTime = 6),
+            ).map { assertTrue(contains(it)) }
+        }
     }
 }
 

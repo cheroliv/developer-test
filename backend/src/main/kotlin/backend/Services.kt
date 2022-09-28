@@ -29,6 +29,11 @@ class RoadMapService(
 //    private val csvMapper: CsvMapper,
     private val context: ApplicationContext,
 ) {
+    @PostConstruct
+    private fun init() = runBlocking {
+        checkProfileLog(context)
+        loadOnBoardComputerConfig()
+    }
 
     private suspend fun loadOnBoardComputerConfig() {
         //read json on classpath read ComputerConfig
@@ -45,13 +50,13 @@ class RoadMapService(
 
 
         listOf(
-            Route(origin = "Tatooine", destination = "Dagobah", travel_time = 6),
-            Route(origin = "Dagobah", destination = "Endor", travel_time = 4),
-            Route(origin = "Dagobah", destination = "Hoth", travel_time = 1),
-            Route(origin = "Hoth", destination = "Endor", travel_time = 1),
-            Route(origin = "Tatooine", destination = "Hoth", travel_time = 6),
+            Route(origin = "Tatooine", destination = "Dagobah", travelTime = 6),
+            Route(origin = "Dagobah", destination = "Endor", travelTime = 4),
+            Route(origin = "Dagobah", destination = "Hoth", travelTime = 1),
+            Route(origin = "Hoth", destination = "Endor", travelTime = 1),
+            Route(origin = "Tatooine", destination = "Hoth", travelTime = 6),
         ).run {
-//            routeRepository.insertAll(this)
+            routeRepository.saveAll(this)
         }
 
 //        readUniverseCsv(conf.routesDb).map { println(it) }
@@ -73,10 +78,6 @@ class RoadMapService(
 //        emptyList()
 //    }
 
-    @PostConstruct
-    private fun init() = checkProfileLog(context).run {
-        runBlocking { loadOnBoardComputerConfig() }
-    }
 
 }
 /*=================================================================================*/

@@ -5,5 +5,5 @@ CREATE TABLE IF NOT EXISTS `routes` (
     `destination` VARCHAR,
     `travel_time` INT
 );
-CREATE UNIQUE INDEX IF NOT EXISTS `uniq_idx_origin_destination`
+CREATE UNIQUE INDEX IF NOT EXISTS `unique_idx_origin_destination`
 ON `routes` (`origin`, `destination`);
