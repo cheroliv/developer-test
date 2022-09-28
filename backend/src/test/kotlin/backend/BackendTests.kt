@@ -48,7 +48,7 @@ internal class BackendTests {
         }
         //universe must be persisted
         assertEquals(5, countRoute(context))
-//        //let's compare retrieved data from database with what csv contains
+        //let's compare retrieved data from database with what csv contains
         with(findAllRoutes(context)) {
             listOf(
                 Route(origin = "Tatooine", destination = "Dagobah", travelTime = 6),

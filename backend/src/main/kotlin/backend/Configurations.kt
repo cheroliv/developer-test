@@ -6,7 +6,6 @@ package backend
 import backend.Constants.REQUEST_PARAM_LANG
 import backend.Log.log
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.dataformat.csv.CsvMapper
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import org.springframework.context.annotation.Bean
@@ -50,9 +49,6 @@ class WebConfiguration(
             registerFormatters(registry)
         }
     }
-
-//    @Bean
-//    fun csvMapper()= CsvMapper()
 
     @Bean
     fun validator(): Validator = LocalValidatorFactoryBean()
@@ -109,6 +105,7 @@ class WebConfiguration(
     // TODO: remove when this is supported in spring-boot
     @Bean
     fun reactiveSortHandlerMethodArgumentResolver() = ReactiveSortHandlerMethodArgumentResolver()
+
 }
 
 
