@@ -4,6 +4,7 @@
 
 package backend
 
+import backend.Log.log
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.springframework.boot.runApplication
@@ -76,16 +77,22 @@ internal class BackendTests {
             Pair("example3/empire.json", 0.9),
             Pair("example4/empire.json", 1.0),
         ).map {
+            val bodyValue=fromMultipartData(MultipartBodyBuilder().apply {
+                part(
+                    "empire",
+                    context.getResource("classpath:${it.first}")
+                ).contentType(MULTIPART_FORM_DATA)
+            }.build())
+/*
+  MultipartBodyBuilder builder = new MultipartBodyBuilder();
+        builder.part("fileParts", new ClassPathResource("/foo.txt", DemoApplicationTests.class));
+        return builder.build();
+ */
             client
                 .post()
                 .uri("api/roadmap/give-me-the-odds")
                 .contentType(APPLICATION_JSON)
-                .body(fromMultipartData(MultipartBodyBuilder().apply {
-                    part(
-                        "empire",
-                        context.getResource("classpath:${it.first}")
-                    ).contentType(MULTIPART_FORM_DATA)
-                }.build()))
+                .body(bodyValue)
                 .exchange()
                 .expectStatus()
                 .isOk
@@ -94,6 +101,7 @@ internal class BackendTests {
                     val oddsResponse = map { it.toInt().toChar().toString() }
                         .reduce { acc: String, s: String -> acc + s }.toDouble()
 //                    assertEquals(it.second, oddsResponse)
+                    log.info("expected odds: ${it.second}")
                     assertEquals((-1).toDouble(), oddsResponse)
                 }.isNotEmpty().run { assertTrue(this) }
 
