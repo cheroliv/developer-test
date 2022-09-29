@@ -9,10 +9,13 @@ import org.junit.jupiter.api.BeforeAll
 import org.springframework.boot.runApplication
 import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.http.MediaType
+import org.springframework.http.MediaType.APPLICATION_JSON
+import org.springframework.http.MediaType.MULTIPART_FORM_DATA
 import org.springframework.http.client.MultipartBodyBuilder
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.test.web.reactive.server.returnResult
 import org.springframework.web.reactive.function.BodyInserters.fromMultipartData
+import org.springframework.web.util.UriComponentsBuilder
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -76,13 +79,13 @@ internal class BackendTests {
             client
                 .post()
                 .uri("api/roadmap/give-me-the-odds")
-                .contentType(MediaType.APPLICATION_JSON)
-//                .body(fromMultipartData(MultipartBodyBuilder().apply {
-//                    part(
-//                        "empire",
-//                        context.getResource("classpath:${it.first}")
-//                    ).contentType(MediaType.MULTIPART_FORM_DATA)
-//                }.build()))
+                .contentType(APPLICATION_JSON)
+                .body(fromMultipartData(MultipartBodyBuilder().apply {
+                    part(
+                        "empire",
+                        context.getResource("classpath:${it.first}")
+                    ).contentType(MULTIPART_FORM_DATA)
+                }.build()))
                 .exchange()
                 .expectStatus()
                 .isOk

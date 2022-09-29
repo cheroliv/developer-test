@@ -2,11 +2,13 @@
 
 package backend
 
-import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatus.OK
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
-import java.nio.charset.StandardCharsets.UTF_8
+import java.io.IOException
+import kotlin.jvm.Throws
 
 
 /*=================================================================================*/
@@ -14,13 +16,18 @@ import java.nio.charset.StandardCharsets.UTF_8
 @RequestMapping("/api/roadmap")
 class RoadMapController(private val roadMapService: RoadMapService) {
 
-    @PostMapping("give-me-the-odds")
-    @ResponseStatus(HttpStatus.OK)
+
+    @PostMapping(
+        value = ["give-me-the-odds"],
+//        consumes = [MediaType.MULTIPART_FORM_DATA_VALUE]
+    )
+    @ResponseStatus(OK)
+    @Throws(IOException::class)
     suspend fun giveMeOdds(
-//        @RequestParam("empire") empire: MultipartFile
+//        @RequestPart("empire") empire: MultipartFile
     ): ResponseEntity<Int> {
-//        println(empire.resource.file.readText(UTF_8))
-        return ResponseEntity<Int>(-1, HttpStatus.OK)
+//        println(empire.resource.file.readText(StandardCharsets.UTF_8))
+        return ResponseEntity<Int>(-1, OK)
     }
 }
 /*=================================================================================*/
