@@ -5,6 +5,7 @@ package backend
 import backend.Constants.SPRING_PROFILE_CONF_DEFAULT_KEY
 import backend.Constants.SPRING_PROFILE_TEST
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import kotlinx.coroutines.runBlocking
 import org.springframework.beans.factory.getBean
 import org.springframework.boot.SpringApplication
@@ -49,10 +50,10 @@ fun findAllRoutes(context: ApplicationContext): List<Route> = when {
         .map { it.toDomain }
 }
 
-fun printConfig(context: ApplicationContext) = println(
-    context.getBean<ObjectMapper>()
-        .readValue(
-            context.getResource("classpath:millennium-falcon.json").file,
-            ComputerConfig::class.java
+fun printConfig(context: ApplicationContext) = with(context) {
+    println(
+        getBean<ObjectMapper>().readValue<ComputerConfig>(
+            getResource("classpath:millennium-falcon.json").file
         )
-)
+    )
+}

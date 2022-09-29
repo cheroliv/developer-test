@@ -19,7 +19,7 @@ class RoadMapController(private val roadMapService: RoadMapService) {
 
     @PostMapping(
         value = ["give-me-the-odds"],
-//        consumes = [MediaType.MULTIPART_FORM_DATA_VALUE]
+        consumes = [MediaType.MULTIPART_FORM_DATA_VALUE]
     )
     @ResponseStatus(OK)
     @Throws(IOException::class)

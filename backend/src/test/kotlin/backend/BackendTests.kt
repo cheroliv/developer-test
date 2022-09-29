@@ -4,19 +4,20 @@
 
 package backend
 
-import backend.Log.log
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
+import org.springframework.beans.factory.getBean
 import org.springframework.boot.runApplication
 import org.springframework.context.ConfigurableApplicationContext
-import org.springframework.http.MediaType
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.http.MediaType.MULTIPART_FORM_DATA
 import org.springframework.http.client.MultipartBodyBuilder
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.test.web.reactive.server.returnResult
+import org.springframework.web.reactive.function.BodyInserters
 import org.springframework.web.reactive.function.BodyInserters.fromMultipartData
-import org.springframework.web.util.UriComponentsBuilder
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -72,22 +73,17 @@ internal class BackendTests {
     @Test
     fun `Upload a JSON file containing the data intercepted by the rebels about the plans of the Empire and displaying the odds`() {
         setOf(
-            Pair("example1/empire.json", 0.0),
-            Pair("example2/empire.json", 0.81),
-            Pair("example3/empire.json", 0.9),
-            Pair("example4/empire.json", 1.0),
+            Pair("example1/empire.json", "example1/answer.json"),
+            Pair("example2/empire.json", "example2/answer.json"),
+            Pair("example3/empire.json", "example3/answer.json"),
+            Pair("example4/empire.json", "example4/answer.json"),
         ).map {
-            val bodyValue=fromMultipartData(MultipartBodyBuilder().apply {
+            val bodyValue: BodyInserters.MultipartInserter = fromMultipartData(MultipartBodyBuilder().apply {
                 part(
                     "empire",
                     context.getResource("classpath:${it.first}")
                 ).contentType(MULTIPART_FORM_DATA)
             }.build())
-/*
-  MultipartBodyBuilder builder = new MultipartBodyBuilder();
-        builder.part("fileParts", new ClassPathResource("/foo.txt", DemoApplicationTests.class));
-        return builder.build();
- */
             client
                 .post()
                 .uri("api/roadmap/give-me-the-odds")
@@ -98,15 +94,16 @@ internal class BackendTests {
                 .isOk
                 .returnResult<Int>()
                 .responseBodyContent!!.apply {
-                    val oddsResponse = map { it.toInt().toChar().toString() }
+                    val answer = context.getBean<ObjectMapper>().readValue<Answer>(
+                        context.getResource("classpath:${it.second}").file
+                    )
+                    val oddsResponseResult = map { byte -> byte.toInt().toChar().toString() }
                         .reduce { acc: String, s: String -> acc + s }.toDouble()
-//                    assertEquals(it.second, oddsResponse)
-                    log.info("expected odds: ${it.second}")
-                    assertEquals((-1).toDouble(), oddsResponse)
+                    //TODO: uncomment this assertion to validate functionalities
+//                    assertEquals(answer.odds, oddsResponseResult)
+                    assertEquals((-1).toDouble(), oddsResponseResult)
                 }.isNotEmpty().run { assertTrue(this) }
-
         }
     }
-
 }
 
