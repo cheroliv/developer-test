@@ -18,6 +18,7 @@ import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.test.web.reactive.server.returnResult
 import org.springframework.web.reactive.function.BodyInserters
 import org.springframework.web.reactive.function.BodyInserters.fromMultipartData
+import java.nio.charset.StandardCharsets
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -55,20 +56,35 @@ internal class BackendTests {
             assertTrue(contains("\"departure\": \"Tatooine\","))
             assertTrue(contains("\"arrival\": \"Endor\","))
             assertTrue(contains("\"routes_db\": \"universe.csv\""))
+
+            context.getBean<ObjectMapper>().readValue<ComputerConfig>(this).run {
+                assertEquals(6, autonomy)
+                assertEquals("Tatooine", departure)
+                assertEquals("Endor", arrival)
+                assertEquals("universe.csv", routesDb)
+            }
         }
         //universe must be persisted
         assertEquals(5, countRoute(context))
         //let's compare retrieved data from database with what csv contains
         with(findAllRoutes(context)) {
-            listOf(
-                Route(origin = "Tatooine", destination = "Dagobah", travelTime = 6),
-                Route(origin = "Dagobah", destination = "Endor", travelTime = 4),
-                Route(origin = "Dagobah", destination = "Hoth", travelTime = 1),
-                Route(origin = "Hoth", destination = "Endor", travelTime = 1),
-                Route(origin = "Tatooine", destination = "Hoth", travelTime = 6),
-            ).map { assertTrue(contains(it)) }
+            context.getResource("classpath:universe.csv")
+                .file
+                .readText(StandardCharsets.UTF_8)
+                .lines()
+                .drop(1)
+                .map {
+                    it.split(";").run {
+                        Route(
+                            origin = first(),
+                            destination = this[1],
+                            travelTime = last().toInt(),
+                        )
+                    }
+                }.map { assertTrue(contains(it)) }
         }
     }
+
 
     @Test
     fun `Upload a JSON file containing the data intercepted by the rebels about the plans of the Empire and displaying the odds`() {
