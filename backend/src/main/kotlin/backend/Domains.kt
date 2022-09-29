@@ -21,4 +21,20 @@ data class ComputerConfig(
     @JsonProperty("routes_db")
     val routesDb: String
 )
+
+/*=================================================================================*/
+data class Answer(val odds: Double)
+
+/*=================================================================================*/
+data class Empire(
+    val countdown: Int,
+    @JsonProperty("bounty_hunters")
+    val bountyHunters: List<BountyHunter>
+)
+
+/*=================================================================================*/
+data class BountyHunter(
+    val planet: String,
+    val day: Int
+)
 /*=================================================================================*/
