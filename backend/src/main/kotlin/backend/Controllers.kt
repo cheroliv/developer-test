@@ -3,10 +3,10 @@
 package backend
 
 import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.ResponseStatus
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.*
+import org.springframework.web.multipart.MultipartFile
+import java.nio.charset.StandardCharsets.UTF_8
 
 
 /*=================================================================================*/
@@ -16,6 +16,11 @@ class RoadMapController(private val roadMapService: RoadMapService) {
 
     @PostMapping("give-me-the-odds")
     @ResponseStatus(HttpStatus.OK)
-    suspend fun giveMeOdds(): Int = -1
+    suspend fun giveMeOdds(
+        @RequestParam("empire") empire: MultipartFile
+    ): ResponseEntity<Int> {
+        println(empire.resource.file.readText(UTF_8))
+        return ResponseEntity<Int>(-1, HttpStatus.OK)
+    }
 }
 /*=================================================================================*/
