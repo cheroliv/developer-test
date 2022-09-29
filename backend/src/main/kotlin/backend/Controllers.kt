@@ -17,9 +17,9 @@ class RoadMapController(private val roadMapService: RoadMapService) {
     @PostMapping("give-me-the-odds")
     @ResponseStatus(HttpStatus.OK)
     suspend fun giveMeOdds(
-        @RequestParam("empire") empire: MultipartFile
+//        @RequestParam("empire") empire: MultipartFile
     ): ResponseEntity<Int> {
-        println(empire.resource.file.readText(UTF_8))
+//        println(empire.resource.file.readText(UTF_8))
         return ResponseEntity<Int>(-1, HttpStatus.OK)
     }
 }
