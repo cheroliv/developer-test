@@ -57,6 +57,10 @@ class RoadMapService(
             }
         }
 
+    fun giveMeOdds(empire: String): Float {
+        return (-1).toFloat()
+    }
+
 
 }
 /*=================================================================================*/
