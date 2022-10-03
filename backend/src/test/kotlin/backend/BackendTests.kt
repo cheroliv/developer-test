@@ -37,15 +37,6 @@ internal class BackendTests {
     @AfterAll
     fun `stop the onboard computer`() = context.close()
 
-    /**
-     * universe.csv:
-     * origin;      destination;    travel_time
-     * Tatooine;    Dagobah;        6
-     * Dagobah;     Endor;          4
-     * Dagobah;     Hoth;           1
-     * Hoth;        Endor;          1
-     * Tatooine;    Hoth;           6
-     */
     @Test
     fun `When it starts, the back-end service will read a JSON configuration file containing the autonomy`() {
         //validate needed resources are on classpath and contains expected values
@@ -116,8 +107,8 @@ internal class BackendTests {
                             .map { it.toInt().toChar().toString() }
                             .reduce { acc: String, s: String -> acc + s }
                             .lines()
-                            .drop(5)//clean not json in request body
-                            .dropLast(1)//clean not json in request body
+                            .drop(5)//clean what's not json in request body
+                            .dropLast(1)//clean what's not json in request body
                             .reduce { accumulator: String, s: String -> accumulator + "\n" + s })
                         assertEquals(expectedEmpire, resultEmpire)
 
@@ -139,4 +130,3 @@ internal class BackendTests {
         }
     }
 }
-
