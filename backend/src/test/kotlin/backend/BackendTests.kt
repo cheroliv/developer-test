@@ -122,9 +122,7 @@ internal class BackendTests {
                                 val oddsResponseResult = map { byte -> byte.toInt().toChar().toString() }
                                     .reduce { accumulator: String, s: String -> accumulator + s }
                                     .toFloat()
-//                            //TODO: uncomment this assertion to validate functionalities
-//                    assertEquals(answer.odds, oddsResponseResult)
-                                assertEquals((-1).toFloat(), oddsResponseResult)
+                                assertEquals(answer.odds, oddsResponseResult)
                             }.isNotEmpty().run { assertTrue(this) }
                         }
                     }

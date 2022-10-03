@@ -20,6 +20,8 @@ class RoadMapController(private val roadMapService: RoadMapService) {
     suspend fun giveMeOdds(
         @RequestPart("empire") name: String,
         @RequestPart("empire") filePart: FilePart
-    ): ResponseEntity<Int> = ResponseEntity<Int>(-1, OK)
+    ): ResponseEntity<Int> {
+        return ResponseEntity<Int>(-1, OK)
+    }
 }
 /*=================================================================================*/
