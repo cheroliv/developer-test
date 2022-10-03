@@ -89,7 +89,7 @@ internal class BackendTests {
         ).map {
             client
                 .post()
-                .uri("api/roadmap/give-me-the-odds")
+                .uri("api/give-me-the-odds")
                 .contentType(APPLICATION_JSON)
                 .body(fromMultipartData(MultipartBodyBuilder().apply {
                     part(
