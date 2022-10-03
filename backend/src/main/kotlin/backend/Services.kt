@@ -3,6 +3,7 @@
 package backend
 
 import backend.Constants.SPRING_PROFILE_CLI
+import backend.Log.log
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import kotlinx.coroutines.runBlocking
@@ -23,7 +24,6 @@ import javax.annotation.PostConstruct
 /*=================================================================================*/
 
 @Service
-@Transactional
 class RoadMapService(
     @Value("classpath:millennium-falcon.json")
     private val configurationFile: Resource,
@@ -36,6 +36,7 @@ class RoadMapService(
         loadOnBoardComputerConfig()
     }
 
+    @Transactional
     private suspend fun loadOnBoardComputerConfig() = context
         .getBean<ObjectMapper>()
         .readValue<ComputerConfig>(configurationFile.file)
@@ -50,14 +51,19 @@ class RoadMapService(
         .map {
             it.split(";").run {
                 Route(
-                    origin = first(),
+                    origin = this[0],
                     destination = this[1],
-                    travelTime = last().toInt(),
+                    travelTime = this[2].toInt(),
                 )
             }
         }
 
-   suspend fun giveMeOdds(empire: String): Double = (-1).toDouble()
+    @Transactional(readOnly = true)
+    suspend fun giveMeTheOdds(strEmpire: String): Double {
+        val empire = context.getBean<ObjectMapper>().readValue<Empire>(strEmpire)
+        log.info(empire)
+        return (-1).toDouble()
+    }
 }
 /*=================================================================================*/
 

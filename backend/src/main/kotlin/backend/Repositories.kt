@@ -4,6 +4,7 @@ package backend
 
 import kotlinx.coroutines.reactor.awaitSingle
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate
+import org.springframework.data.r2dbc.core.select
 import org.springframework.stereotype.Repository
 
 /*=================================================================================*/
@@ -13,7 +14,7 @@ interface RouteRepository {
 }
 /*=================================================================================*/
 
-//@Repository
+//@Repository("routeRepository")
 class RouteRepositoryR2dbc(
     private val dao: R2dbcEntityTemplate
 ) : RouteRepository {
@@ -24,9 +25,12 @@ class RouteRepositoryR2dbc(
         }
     }
 
-    override suspend fun findAllRoutes(): List<Route> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun findAllRoutes(): List<Route> = dao
+        .select<RouteEntity>()
+        .all()
+        .map { it.toDomain }
+        .toIterable()
+        .toList()
 }
 
 /*=================================================================================*/
