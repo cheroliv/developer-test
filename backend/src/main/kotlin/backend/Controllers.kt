@@ -18,6 +18,6 @@ class RoadMapController(private val roadMapService: RoadMapService) {
     @Throws(IOException::class)
     suspend fun giveMeOdds(
         @RequestPart("empire") empire: String
-    ): ResponseEntity<Float> = ResponseEntity<Float>(roadMapService.giveMeOdds(empire), OK)
+    ): ResponseEntity<Double> = ResponseEntity<Double>(roadMapService.giveMeOdds(empire), OK)
 }
 /*=================================================================================*/
