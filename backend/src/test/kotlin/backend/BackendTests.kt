@@ -118,7 +118,7 @@ internal class BackendTests {
                             .lines()
                             .drop(5)//clean not json in request body
                             .dropLast(1)//clean not json in request body
-                            .reduce { acc: String, s: String -> acc + "\n" + s })
+                            .reduce { accumulator: String, s: String -> accumulator + "\n" + s })
                         assertEquals(expectedEmpire, resultEmpire)
 
                         runBlocking {
@@ -127,13 +127,13 @@ internal class BackendTests {
                                     context.getResource("classpath:${it.second}").file
                                 )
                                 val oddsResponseResult = map { byte -> byte.toInt().toChar().toString() }
-                                    .reduce { acc: String, s: String -> acc + s }.toDouble()
-                                println(oddsResponseResult)
+                                    .reduce { accumulator: String, s: String -> accumulator + s }
+                                    .toFloat()
+//                                println(oddsResponseResult)
 //                            //TODO: uncomment this assertion to validate functionalities
 //                    assertEquals(answer.odds, oddsResponseResult)
-                                assertEquals((-1).toDouble(), oddsResponseResult)
+                                assertEquals((-1).toFloat(), oddsResponseResult)
                             }.isNotEmpty().run { assertTrue(this) }
-
                         }
                     }
                 }
