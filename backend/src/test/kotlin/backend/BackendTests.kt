@@ -1,11 +1,12 @@
 @file:Suppress(
-    "NonAsciiCharacters", "unused"
+    "NonAsciiCharacters", "unused", "RemoveExplicitTypeArguments"
 )
 
 package backend
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.springframework.beans.factory.getBean
@@ -16,7 +17,6 @@ import org.springframework.http.MediaType.MULTIPART_FORM_DATA
 import org.springframework.http.client.MultipartBodyBuilder
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.test.web.reactive.server.returnResult
-import org.springframework.web.reactive.function.BodyInserters
 import org.springframework.web.reactive.function.BodyInserters.fromMultipartData
 import java.nio.charset.StandardCharsets
 import kotlin.test.Test
@@ -94,31 +94,49 @@ internal class BackendTests {
             Pair("example3/empire.json", "example3/answer.json"),
             Pair("example4/empire.json", "example4/answer.json"),
         ).map {
-            val bodyValue: BodyInserters.MultipartInserter = fromMultipartData(MultipartBodyBuilder().apply {
-                part(
-                    "empire",
-                    context.getResource("classpath:${it.first}")
-                ).contentType(MULTIPART_FORM_DATA)
-            }.build())
             client
                 .post()
                 .uri("api/roadmap/give-me-the-odds")
                 .contentType(APPLICATION_JSON)
-                .body(bodyValue)
+                .body(fromMultipartData(MultipartBodyBuilder().apply {
+                    part(
+                        "empire",
+                        context.getResource("classpath:${it.first}")
+                    ).contentType(MULTIPART_FORM_DATA)
+                }.build()))
                 .exchange()
                 .expectStatus()
                 .isOk
-                .returnResult<Int>()
-                .responseBodyContent!!.apply {
-                    val answer = context.getBean<ObjectMapper>().readValue<Answer>(
-                        context.getResource("classpath:${it.second}").file
-                    )
-                    val oddsResponseResult = map { byte -> byte.toInt().toChar().toString() }
-                        .reduce { acc: String, s: String -> acc + s }.toDouble()
-                    //TODO: uncomment this assertion to validate functionalities
+                .returnResult<Int>().run {
+                    context.getBean<ObjectMapper>().run {
+                        val expectedEmpire: Empire = readValue<Empire>(
+                            context.getResource("classpath:${it.first}").file
+                        )
+                        val resultEmpire: Empire = readValue<Empire>(requestBodyContent!!
+                            .map { it.toInt().toChar().toString() }
+                            .reduce { acc: String, s: String -> acc + s }
+                            .lines()
+                            .drop(5)//clean not json in request body
+                            .dropLast(1)//clean not json in request body
+                            .reduce { acc: String, s: String -> acc + "\n" + s })
+                        assertEquals(expectedEmpire, resultEmpire)
+
+                        runBlocking {
+                            responseBodyContent!!.apply {
+                                val answer = readValue<Answer>(
+                                    context.getResource("classpath:${it.second}").file
+                                )
+                                val oddsResponseResult = map { byte -> byte.toInt().toChar().toString() }
+                                    .reduce { acc: String, s: String -> acc + s }.toDouble()
+                                println(oddsResponseResult)
+//                            //TODO: uncomment this assertion to validate functionalities
 //                    assertEquals(answer.odds, oddsResponseResult)
-                    assertEquals((-1).toDouble(), oddsResponseResult)
-                }.isNotEmpty().run { assertTrue(this) }
+                                assertEquals((-1).toDouble(), oddsResponseResult)
+                            }.isNotEmpty().run { assertTrue(this) }
+
+                        }
+                    }
+                }
         }
     }
 }
