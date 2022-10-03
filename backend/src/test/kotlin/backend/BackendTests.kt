@@ -1,5 +1,7 @@
 @file:Suppress(
-    "NonAsciiCharacters", "unused", "RemoveExplicitTypeArguments"
+    "NonAsciiCharacters",
+    "unused",
+    "RemoveExplicitTypeArguments"
 )
 
 package backend

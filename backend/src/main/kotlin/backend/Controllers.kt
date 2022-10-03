@@ -3,12 +3,12 @@
 package backend
 
 import org.springframework.http.HttpStatus.OK
-import org.springframework.http.MediaType
+import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
+import org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE
 import org.springframework.http.ResponseEntity
+import org.springframework.http.codec.multipart.FilePart
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.multipart.MultipartFile
 import java.io.IOException
-import kotlin.jvm.Throws
 
 
 /*=================================================================================*/
@@ -16,18 +16,16 @@ import kotlin.jvm.Throws
 @RequestMapping("/api/roadmap")
 class RoadMapController(private val roadMapService: RoadMapService) {
 
-
     @PostMapping(
         value = ["give-me-the-odds"],
-        consumes = [MediaType.MULTIPART_FORM_DATA_VALUE]
+        consumes = [MULTIPART_FORM_DATA_VALUE],
+        produces = [APPLICATION_JSON_VALUE]
     )
     @ResponseStatus(OK)
     @Throws(IOException::class)
     suspend fun giveMeOdds(
-//        @RequestPart("empire") empire: MultipartFile
-    ): ResponseEntity<Int> {
-//        println(empire.resource.file.readText(StandardCharsets.UTF_8))
-        return ResponseEntity<Int>(-1, OK)
-    }
+        @RequestPart("empire") name: String,
+        @RequestPart("empire") filePart: FilePart
+    ): ResponseEntity<Int> = ResponseEntity<Int>(-1, OK)
 }
 /*=================================================================================*/
