@@ -22,6 +22,9 @@ import javax.annotation.PostConstruct
 
 
 /*=================================================================================*/
+fun hyperjump(from: Triple<String, Int, Int>): Triple<String, Int, Int> = Triple("", 0, 0)
+
+/*=================================================================================*/
 
 @Service
 class RoadMapService(
