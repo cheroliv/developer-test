@@ -7,19 +7,7 @@ import java.net.URI.create
 
 
 object Constants {
-
-
-    //SignUpController
-    @JvmStatic
-    val ALLOWED_ORDERED_PROPERTIES = arrayOf(
-        "id",
-        "login",
-        "firstName",
-        "lastName",
-        "email",
-        "activated",
-        "langKey"
-    )
+    const val REFUEL_DURATION = 1
 
     //Spring profiles
     const val SPRING_PROFILE_DEVELOPMENT = "dev"
@@ -41,11 +29,6 @@ object Constants {
 
     //HTTP param
     const val REQUEST_PARAM_LANG = "lang"
-    const val CONTENT_SECURITY_POLICY =
-        "default-src 'self'; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:"
-    const val FEATURE_POLICY =
-        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; speaker 'none'; fullscreen 'self'; payment 'none'"
-
 
     //REST API
     //URIs
@@ -68,13 +51,4 @@ object Constants {
 
     @JvmField
     val CONSTRAINT_VIOLATION_TYPE: URI = create("$PROBLEM_BASE_URL/constraint-violation")
-
-    @JvmField
-    val INVALID_PASSWORD_TYPE: URI = create("$PROBLEM_BASE_URL/invalid-password")
-
-    @JvmField
-    val EMAIL_ALREADY_USED_TYPE: URI = create("$PROBLEM_BASE_URL/email-already-used")
-
-    @JvmField
-    val LOGIN_ALREADY_USED_TYPE: URI = create("$PROBLEM_BASE_URL/login-already-used")
 }
