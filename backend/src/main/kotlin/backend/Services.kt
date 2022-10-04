@@ -21,9 +21,11 @@ import javax.annotation.PostConstruct
 
 
 /*=================================================================================*/
+//TODO: use sealed class
 /**
- * @param Pair<from,to>
- * @return Triple<location,autonomy,daysLeft>
+ * @param Pair<Route,Route>: a pair of from, to route
+ * @return Triple<String, Int, Int>?: a triple of location,autonomy & daysLeft
+ * could be null to express inability to make the travel and must refuel to the nearby planet.
  */
 fun hyperjump(travel: Pair<Route, Route>): Triple<String, Int, Int>? = null
 
