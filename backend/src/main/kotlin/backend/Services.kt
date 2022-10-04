@@ -3,7 +3,6 @@
 package backend
 
 import backend.Constants.SPRING_PROFILE_CLI
-import backend.Log.log
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import kotlinx.coroutines.runBlocking
@@ -22,7 +21,11 @@ import javax.annotation.PostConstruct
 
 
 /*=================================================================================*/
-fun hyperjump(from: Triple<String, Int, Int>): Triple<String, Int, Int> = Triple("", 0, 0)
+/**
+ * @param Pair<from,to>
+ * @return Triple<location,autonomy,daysLeft>
+ */
+fun hyperjump(travel: Pair<Route, Route>): Triple<String, Int, Int>? = null
 
 /*=================================================================================*/
 
@@ -64,7 +67,6 @@ class RoadMapService(
     @Transactional(readOnly = true)
     suspend fun giveMeTheOdds(strEmpire: String): Double {
         val empire = context.getBean<ObjectMapper>().readValue<Empire>(strEmpire)
-        log.info(empire)
         return (-1).toDouble()
     }
 }
