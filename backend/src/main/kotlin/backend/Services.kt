@@ -19,16 +19,6 @@ import org.springframework.transaction.annotation.Transactional
 import java.nio.charset.StandardCharsets.UTF_8
 import javax.annotation.PostConstruct
 
-
-/*=================================================================================*/
-//TODO: use sealed class
-/**
- * @param Pair<Route,Route>: a pair of from, to route
- * @return Triple<String, Int, Int>?: a triple of location,autonomy & daysLeft
- * could be null to express inability to make the travel and must refuel to the nearby planet.
- */
-fun hyperjump(travel: Pair<Route, Route>): Triple<String, Int, Int>? = null
-
 /*=================================================================================*/
 
 @Service
@@ -65,6 +55,14 @@ class RoadMapService(
                 )
             }
         }
+
+    //TODO: use sealed class
+    /**
+     * @param Pair<Route,Route>: a pair of from, to route
+     * @return Triple<String, Int, Int>?: a triple of location,autonomy & daysLeft
+     * could be null to express inability to make the travel and must refuel to the nearby planet or current planet.
+     */
+    fun hyperspaceJump(travel: Pair<Route, Route>): Triple<String, Int, Int>? = null
 
     @Transactional(readOnly = true)
     suspend fun giveMeTheOdds(strEmpire: String): Double {
