@@ -63,3 +63,16 @@ to deploy backend on google app engine, run this command in terminal
 to solve the problem let's use the Dijkstra’s algorithm who answers the question +
 of the shortest and fastest paths for travelers. +
 
+
+
+
+starting vertex from Tatooine
+
+|===
+|starting point |Dagobah | Endor | Hoth | Tatooine
+| Tatooine
+|6
+|4
+|6
+|0
+|===
