@@ -60,5 +60,6 @@ to deploy backend on google app engine, run this command in terminal
 
 == Algorithm approach
 
-to solve the problem let's use the Dijkstra’s algorithm who answer the question of the shortest and fastest paths for travelers +
+to solve the problem let's use the Dijkstra’s algorithm who answers the question +
+of the shortest and fastest paths for travelers. +
 
