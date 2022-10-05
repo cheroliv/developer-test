@@ -23,7 +23,7 @@ data class ComputerConfig(
 )
 
 /*=================================================================================*/
-data class Answer(val odds: Float)
+data class Answer(val odds: Double)
 
 /*=================================================================================*/
 data class Empire(
