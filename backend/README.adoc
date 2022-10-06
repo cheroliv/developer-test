@@ -64,15 +64,14 @@ to solve the problem let's use the Dijkstra’s algorithm who answers the questi
 of the shortest and fastest paths for travelers. +
 
 
-
-
 starting vertex from Tatooine
-
+first pass
 |===
-|starting point |Dagobah | Endor | Hoth | Tatooine
-| Tatooine
+|starting vertex: Tatooine|Dagobah | Endor | Hoth
+|days from start
 |6
 |4
 |6
-|0
 |===
+
+lowest-cost-path
