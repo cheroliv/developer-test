@@ -8,7 +8,7 @@ import java.net.URI.create
 
 object Constants {
     const val REFUEL_DURATION = 1
-
+const val NORMAL_TERMINATION=0
     //Spring profiles
     const val SPRING_PROFILE_DEVELOPMENT = "dev"
     const val SPRING_PROFILE_PRODUCTION = "prod"

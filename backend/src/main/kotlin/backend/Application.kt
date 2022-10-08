@@ -4,6 +4,7 @@ package backend
 
 
 import backend.Constants.DEV_HOST
+import backend.Constants.NORMAL_TERMINATION
 import backend.Constants.SPRING_PROFILE_CLI
 import backend.Constants.SPRING_PROFILE_CLI_PROPS
 import backend.Constants.SPRING_PROFILE_CLOUD
@@ -23,7 +24,7 @@ import java.util.*
 import kotlin.system.exitProcess
 
 /*=================================================================================*/
-@SpringBootApplication
+@SpringBootApplication()
 @EnableConfigurationProperties(ApplicationProperties::class)
 class OnBoardComputerApplication
 
@@ -48,13 +49,11 @@ object OnBoardComputerBootstrap {
 object OnBoardComputerCliBootstrap {
     @JvmStatic
     fun main(args: Array<String>) {
-        log.info("STARTING:\tON BOARD COMPUTER CLI")
         runApplication<OnBoardComputerApplication>(*args) {
             setAdditionalProfiles(SPRING_PROFILE_CLI)
             setDefaultProperties(SPRING_PROFILE_CLI_PROPS)
         }
-        log.info("STOPPED:\tON BOARD COMPUTER CLI")
-        exitProcess(0)
+        exitProcess(NORMAL_TERMINATION)
     }
 }
 /*=================================================================================*/
@@ -89,10 +88,7 @@ fun checkProfileLog(context: ApplicationContext) = context.environment.activePro
         )
     }
 }
-
-
 /*=================================================================================*/
-
 private fun bootstrapLogMessage(
     appName: String?,
     protocol: String,
@@ -110,10 +106,7 @@ External:   $protocol://$hostAddress:$serverPort$contextPath
 Profile(s): $profiles
 ----------------------------------------------------------
 ${"\n\n\n"}""".trimIndent()
-
-
 /*=================================================================================*/
-
 private fun bootstrapLog(context: ApplicationContext): Unit =
     log.info(
         bootstrapLogMessage(
@@ -134,5 +127,4 @@ private fun bootstrapLog(context: ApplicationContext): Unit =
             profiles = context.environment.activeProfiles.joinToString(separator = ",")
         )
     )
-
 /*=================================================================================*/

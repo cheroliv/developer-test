@@ -7,7 +7,7 @@ import org.gradle.api.JavaVersion.VERSION_1_8
 import org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED
 import org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
+import org.springframework.boot.gradle.tasks.run.BootRun
 import java.io.ByteArrayOutputStream
 
 plugins {
@@ -75,8 +75,10 @@ dependencies {
 }
 
 sourceSets {
-    getByName("main").resources.srcDir("${parent!!.rootDir.path}/configuration")
-    getByName("test").resources.srcDir("${parent!!.rootDir.path}/examples")
+    getByName("main").resources.srcDirs(
+        "${parent!!.rootDir.path}/configuration",
+        "${parent!!.rootDir.path}/examples"
+    )
 }
 
 configurations {
@@ -102,13 +104,17 @@ tasks.register("computer") {
     doFirst { springBoot.mainClass.set("backend.OnBoardComputerBootstrap") }
     finalizedBy("bootRun")
 }
+//--args='--spring.profiles.active=dev,cli'
+springBoot.mainClass.set("backend.OnBoardComputerCliBootstrap")
 
-tasks.register("give-me-the-odds") {
-    group = "application"
-    description = "Run onboard computer command line to give you the odds"
-    doFirst { springBoot.mainClass.set("backend.OnBoardComputerCliBootstrap") }
-    finalizedBy("bootRun")
-}
+//tasks.register<BootRun>("give-me-the-odds") {
+//    group = "application"
+//    description = "Run onboard computer command line to give you the odds"
+//    doFirst {
+//        springBoot.mainClass.set("backend.OnBoardComputerCliBootstrap")
+//    }
+//    finalizedBy("bootRun")
+//}
 
 tasks.withType<KotlinCompile> {
     kotlinOptions {

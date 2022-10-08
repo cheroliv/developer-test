@@ -3,6 +3,7 @@
 package backend
 
 import backend.Constants.SPRING_PROFILE_CLI
+import backend.Log.log
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import kotlinx.coroutines.runBlocking
@@ -27,6 +28,7 @@ class RoadMapService(
     private val configurationFile: Resource,
     private val routeRepository: RouteRepository,
     private val context: ApplicationContext,
+    private val objectMapper: ObjectMapper,
 ) {
     @PostConstruct
     private fun init() = runBlocking {
@@ -35,8 +37,7 @@ class RoadMapService(
     }
 
     @Transactional
-    private suspend fun loadOnBoardComputerConfig() = context
-        .getBean<ObjectMapper>()
+    private suspend fun loadOnBoardComputerConfig() = objectMapper
         .readValue<ComputerConfig>(configurationFile.file)
         .run { routeRepository.saveAll(readUniverseCsv(routesDb)) }
 
@@ -58,7 +59,7 @@ class RoadMapService(
 
     @Transactional(readOnly = true)
     suspend fun giveMeTheOdds(strEmpire: String): Double {
-        val empire = context.getBean<ObjectMapper>().readValue<Empire>(strEmpire)
+        val empire = objectMapper.readValue<Empire>(strEmpire)
         return (-1).toDouble()
     }
 }
@@ -67,88 +68,27 @@ class RoadMapService(
 @Component
 @Profile(SPRING_PROFILE_CLI)
 class OnBoardComputerCliRunner(
-    private var context: ApplicationContext,
-) : CommandLineRunner, ApplicationContextAware {
-    override fun setApplicationContext(applicationContext: ApplicationContext) {
-        context = applicationContext
-    }
+    private val context: ApplicationContext,
+    private val objectMapper: ObjectMapper,
+    private val roadMapService:RoadMapService
+) : CommandLineRunner {
 
     override fun run(vararg args: String?) {
-        //TODO: computation
+        val computerConfig = objectMapper.readValue<ComputerConfig>(
+            context.getResource("classpath:${args.first()}")
+                .file.readText(Charsets.UTF_8)
+        )
+        val empire = objectMapper.readValue<Empire>(
+            context.getResource("classpath:${args.last()}")
+                .file.readText(Charsets.UTF_8)
+        )
+
+        log.info("computerConfig: $computerConfig")
+        log.info("empire: $empire")
+        args.map { log.info(it) }
     }
 
 }
-
-
-
 /*=================================================================================*/
-class Dijkstra(private val graph: AdjacencyList<Route>) {
-    private fun route(
-        destination: Vertex,
-        paths: HashMap<Vertex, Visit>
-    ): ArrayList<Edge> {
-        var vertex = destination
-        val path = arrayListOf<Edge>()
-        loop@ while (true) {
-            val visit = paths[vertex] ?: break
-            when (visit.type) {
-                VisitType.EDGE -> visit.edge?.let {
-                    path.add(it)
-                    vertex = it.source
-                }
+/*=================================================================================*/
 
-                VisitType.START -> break@loop
-            }
-        }
-        return path
-    }
-
-    private fun distance(
-        destination: Vertex,
-        paths: HashMap<Vertex, Visit>
-    ): Double {
-        val path = route(destination, paths)
-        return path.sumOf { it.weight ?: 0.0 }
-    }
-
-    fun shortestPath(start: Vertex): HashMap<Vertex, Visit> {
-        val paths: HashMap<Vertex, Visit> = HashMap()
-        paths[start]= Visit(VisitType.START)
-        val distanceComparator= Comparator<Vertex> { first, second ->
-            (distance(second, paths) - distance(first, paths)).toInt()
-        }
-        val priorityQueue=ComparatorPriorityQueueImpl(distanceComparator)
-        priorityQueue.enqueue(start)
-        return TODO("Provide the return value")
-    }
-
-    class ComparatorPriorityQueueImpl(distanceComparator: Comparator<Vertex>) {
-        //TODO: add empire constraint
-        fun enqueue(start: Vertex) {
-            TODO("Not yet implemented")
-        }
-
-    }
-}
-
-class AdjacencyList<T> {
-
-}
-
-class Visit(
-    val type: VisitType, val edge: Edge? =
-        null
-)
-
-class Edge(val source: Vertex, val weight: Double?) {
-
-}
-
-enum class VisitType {
-    START,
-    EDGE
-}
-
-class Vertex {
-
-}
