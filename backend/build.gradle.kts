@@ -65,18 +65,15 @@ dependencies {
 
     //SSL
     implementation("io.netty:netty-tcnative-boringssl-static:${properties["boring_ssl.version"]}")
+
     // spring Test dependencies
     testImplementation("org.springframework.boot:spring-boot-starter-test") { exclude(module = "mockito-core") }
-    // Mocking
-    testImplementation("io.mockk:mockk:${properties["mockk.version"]}")
-    testImplementation("com.github.tomakehurst:wiremock-jre8:${properties["wiremock.version"]}")
-    testImplementation("com.ninja-squad:springmockk:3.1.0")
 }
 
 sourceSets {
     getByName("main").resources.srcDirs(
-        "${parent!!.rootDir.path}/configuration",
-        "${parent!!.rootDir.path}/examples"
+        "${parent?.rootDir?.path}/configuration",
+        "${parent?.rootDir?.path}/examples"
     )
 }
 
