@@ -59,8 +59,9 @@ class RoadMapService(
 
     @Transactional(readOnly = true)
     suspend fun giveMeTheOdds(strEmpire: String): Double {
-        val empire = objectMapper.readValue<Empire>(strEmpire)
-        return (-1).toDouble()
+        log.info(strEmpire)
+//        val empire = objectMapper.readValue<Empire>(strEmpire)
+        return -1.0
     }
 }
 /*=================================================================================*/
@@ -83,9 +84,8 @@ class OnBoardComputerCliRunner(
                 .file.readText(Charsets.UTF_8)
         )
 
-        log.info("computerConfig: $computerConfig")
-        log.info("empire: $empire")
-        args.map { log.info(it) }
+        val odds:Double=-1.0
+        log.info("odds = $odds")
     }
 
 }

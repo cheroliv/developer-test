@@ -7,7 +7,6 @@ import org.gradle.api.JavaVersion.VERSION_1_8
 import org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED
 import org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.springframework.boot.gradle.tasks.run.BootRun
 import java.io.ByteArrayOutputStream
 
 plugins {
@@ -104,17 +103,8 @@ tasks.register("computer") {
     doFirst { springBoot.mainClass.set("backend.OnBoardComputerBootstrap") }
     finalizedBy("bootRun")
 }
-//--args='--spring.profiles.active=dev,cli'
-springBoot.mainClass.set("backend.OnBoardComputerCliBootstrap")
 
-//tasks.register<BootRun>("give-me-the-odds") {
-//    group = "application"
-//    description = "Run onboard computer command line to give you the odds"
-//    doFirst {
-//        springBoot.mainClass.set("backend.OnBoardComputerCliBootstrap")
-//    }
-//    finalizedBy("bootRun")
-//}
+springBoot.mainClass.set("backend.OnBoardComputerCliBootstrap")
 
 tasks.withType<KotlinCompile> {
     kotlinOptions {

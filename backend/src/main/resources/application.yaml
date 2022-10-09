@@ -10,7 +10,7 @@ backend:
     allowed-methods: '*'
     allowed-headers: '*'
     exposed-headers: 'Authorization,Link,X-Total-Count'
-    allow-credentials: true
+    allow-credentials: false
     max-age: 1800
 server:
   port: 8080
@@ -32,9 +32,18 @@ spring:
   messages:
     basename: i18n/messages
     encoding: UTF-8
+  main:
+    banner-mode: "off"
+  http:
+    multipart:
+      enabled: true
+      location: /api/give-me-the-odds
 logging:
   level:
     org:
       springframework:
-        r2dbc: INFO
-        org.hibernate.SQL: INFO
+        r2dbc: WARN
+        org.hibernate.SQL: WARN
+
+
+

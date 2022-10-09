@@ -10,7 +10,7 @@ export default function Empire() {
     event.preventDefault();
 
     const dataArray = new FormData();
-    dataArray.append("uploadFile", uploadFile);
+    dataArray.append("empire", uploadFile);
 
     axios
         .post(
@@ -29,7 +29,8 @@ export default function Empire() {
   return (
     <div>
       <form onSubmit={submitForm}>
-        <input type="file" onChange={(e) => setUploadFile(e.target.files)} />
+        <input type="file" name="empire"
+        onChange={(e) => setUploadFile(e.target.files)}/>
         <br />
         <input type="submit" />
       </form>
