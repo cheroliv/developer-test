@@ -37,7 +37,6 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testImplementation("io.projectreactor:reactor-test")
-    testImplementation("org.mockito.kotlin:mockito-kotlin:${properties["mockito_kotlin.version"]}")
 
     //jackson mapping (json/xml)
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
