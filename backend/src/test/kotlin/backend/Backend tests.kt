@@ -23,6 +23,7 @@ import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.test.web.reactive.server.returnResult
 import org.springframework.web.reactive.function.BodyInserters.fromMultipartData
 import java.nio.charset.StandardCharsets
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -82,6 +83,7 @@ internal class `Backend tests` {
     }
 
     @Test
+    @Ignore
     fun `Upload a JSON file containing the data intercepted by the rebels about the plans of the Empire and displaying the odds`() {
 
         pairSet.map {
@@ -99,9 +101,11 @@ internal class `Backend tests` {
                 .expectStatus()
                 .isOk
                 .returnResult<Int>().run {
+
                     val expectedEmpire = mapper.readValue<Empire>(
                         context.getResource("classpath:${it.first}").file
                     )
+
                     val resultEmpire = mapper.readValue<Empire>(requestBodyContent!!
                         .map { it.toInt().toChar().toString() }
                         .reduce { acc: String, s: String -> acc + s }
@@ -109,6 +113,7 @@ internal class `Backend tests` {
                         .drop(5)//clean what's not json in request body
                         .dropLast(1)//clean what's not json in request body
                         .reduce { accumulator: String, s: String -> accumulator + "\n" + s })
+
                     assertEquals(expectedEmpire, resultEmpire)
 
                     runBlocking {
@@ -116,13 +121,56 @@ internal class `Backend tests` {
                             val oddsResponseResult = map { byte -> byte.toInt().toChar().toString() }
                                 .reduce { accumulator: String, s: String -> accumulator + s }
                                 .toDouble()
-//                            assertEquals(
-//                                mapper.readValue<Answer>(
-//                                    context.getResource("classpath:${it.second}").file
-//                                ).odds, oddsResponseResult
-//                            )
+                            val expectedOdds = mapper.readValue<Answer>(
+                                context.getResource("classpath:${it.second}").file
+                            ).odds
+                            assertEquals(expectedOdds, oddsResponseResult)
+                        }
+                    }
+                }
+        }
+    }
+
+    @Test
+    fun `men at work Upload a JSON file containing the data intercepted by the rebels about the plans of the Empire and displaying the odds`() {
+
+        pairSet.map {
+            client
+                .post()
+                .uri("api/give-me-the-odds")
+                .contentType(APPLICATION_JSON)
+                .body(fromMultipartData(MultipartBodyBuilder().apply {
+                    part(
+                        "empire",
+                        context.getResource("classpath:${it.first}")
+                    ).contentType(MULTIPART_FORM_DATA)
+                }.build()))
+                .exchange()
+                .expectStatus()
+                .isOk
+                .returnResult<Int>().run {
+
+                    val expectedEmpire = mapper.readValue<Empire>(
+                        context.getResource("classpath:${it.first}").file
+                    )
+
+                    val resultEmpire = mapper.readValue<Empire>(requestBodyContent!!
+                        .map { it.toInt().toChar().toString() }
+                        .reduce { acc: String, s: String -> acc + s }
+                        .lines()
+                        .drop(5)//clean what's not json in request body
+                        .dropLast(1)//clean what's not json in request body
+                        .reduce { accumulator: String, s: String -> accumulator + "\n" + s })
+
+                    assertEquals(expectedEmpire, resultEmpire)
+
+                    runBlocking {
+                        responseBodyContent!!.apply {
+                            val oddsResponseResult = map { byte -> byte.toInt().toChar().toString() }
+                                .reduce { accumulator: String, s: String -> accumulator + s }
+                                .toDouble()
                             assertEquals(-1.0, oddsResponseResult)
-                        }.isNotEmpty().run { assertTrue(this) }
+                        }
                     }
                 }
         }

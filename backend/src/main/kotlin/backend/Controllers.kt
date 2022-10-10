@@ -21,6 +21,6 @@ class RoadMapController(private val roadMapService: RoadMapService) {
         @RequestPart("empire") empire: String
     ): ResponseEntity<Double> = ResponseEntity(
         roadMapService.giveMeTheOdds(empire), OK)
-        .also { log.info("empire: $empire") }
+//        .also { log.info("empire: $empire") }
 }
 /*=================================================================================*/

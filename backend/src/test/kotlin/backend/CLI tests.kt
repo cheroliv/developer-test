@@ -35,28 +35,24 @@ internal class `CLI tests` {
         }.run { context = this }
 
     @Test
-    fun `cli men at work`(output: CapturedOutput) {
+    fun `men at work check cli`(output: CapturedOutput) {
         tripleSet.map {
             launchCli(it.first, it.second)
             assertTrue(output.out.contains("odds = -1"))
         }
     }
 
-    @Test @Ignore
+    @Test
+    @Ignore
     fun `check cli`(output: CapturedOutput) {
         tripleSet.map {
             launchCli(it.first, it.second)
-            assertTrue(
-                output.out.contains(
-                    "odds = ${
-                        mapper.readValue<Answer>(
-                            context.getResource("classpath:${it.third}")
-                                .file
-                                .readText(Charsets.UTF_8)
-                        ).odds
-                    }"
-                )
-            )
+            val expectedOdds = mapper.readValue<Answer>(
+                context.getResource("classpath:${it.third}")
+                    .file
+                    .readText(Charsets.UTF_8)
+            ).odds
+            assertTrue(output.out.contains("odds = $expectedOdds"))
         }
     }
 }

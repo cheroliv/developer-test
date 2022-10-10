@@ -7,16 +7,12 @@
 
 package backend
 
+import backend.Constants.DISTANCE
+import backend.Constants.PARENT
+import backend.Constants.VISITE
 import com.fasterxml.jackson.annotation.JsonProperty
 
 /*=================================================================================*/
-
-private const val DISTANCE = "distance"
-
-private const val PARENT = "parent"
-
-private const val VISITE = "visite"
-
 fun initialisation(
     config: ComputerConfig,
     routes: List<Route>,
@@ -36,10 +32,7 @@ fun initialisation(
     this[PARENT] = parentu
     this[VISITE] = v
 }
-
-
 /*=================================================================================*/
-
 fun relachement(
     graph: Map<String, Any>,
     u: String,
@@ -54,19 +47,14 @@ fun relachement(
     this[DISTANCE] = d[v]!!
     this[PARENT] = u
 }
-
-
 /*=================================================================================*/
-
 fun mini(d: MutableMap<String, Int>): Int? {
     d.minBy { it.value }.run {
         d.map { if (this.value == d[it.key]) return it.value }
     }
     return null
 }
-
 /*=================================================================================*/
-
 fun dijsktra(
     graphe: MutableMap<String, Any>,
     source: String,
@@ -75,7 +63,6 @@ fun dijsktra(
 //    val g = initialisation(graphe, source)
 
 }
-
 /*=================================================================================*/
 data class Route(
     val origin: String,
@@ -83,7 +70,6 @@ data class Route(
     @JsonProperty("travel_time")
     val travelTime: Int
 )
-
 /*=================================================================================*/
 data class ComputerConfig(
     val autonomy: Int,
@@ -92,17 +78,14 @@ data class ComputerConfig(
     @JsonProperty("routes_db")
     val routesDb: String
 )
-
 /*=================================================================================*/
 data class Answer(val odds: Double)
-
 /*=================================================================================*/
 data class Empire(
     val countdown: Int,
     @JsonProperty("bounty_hunters")
     val bountyHunters: List<BountyHunter>
 )
-
 /*=================================================================================*/
 data class BountyHunter(
     val planet: String,

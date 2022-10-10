@@ -7,8 +7,14 @@ import java.net.URI.create
 
 
 object Constants {
+    //Domain
+    const val DISTANCE = "distance"
+    const val PARENT = "parent"
+    const val VISITE = "visite"
+
     const val REFUEL_DURATION = 1
-const val NORMAL_TERMINATION=0
+    const val NORMAL_TERMINATION = 0
+
     //Spring profiles
     const val SPRING_PROFILE_DEVELOPMENT = "dev"
     const val SPRING_PROFILE_PRODUCTION = "prod"
@@ -23,6 +29,7 @@ const val NORMAL_TERMINATION=0
     const val SPRING_PROFILE_K8S = "k8s"
     const val SPRING_PROFILE_CLI = "cli"
     val SPRING_PROFILE_CLI_PROPS = mutableMapOf<String, Any>("spring.main.web-application-type" to "none")
+
 
     //Config
     const val DEV_HOST = "localhost"
