@@ -56,11 +56,14 @@ class RoadMapService(
                 )
             }
         }
-
+    @Transactional(readOnly = true)
+    suspend fun giveMeTheOdds(strEmpire: String,routes:List<Route>): Double {
+        val empire = objectMapper.readValue<Empire>(strEmpire)
+        return -1.0
+    }
     @Transactional(readOnly = true)
     suspend fun giveMeTheOdds(strEmpire: String): Double {
-        log.info(strEmpire)
-//        val empire = objectMapper.readValue<Empire>(strEmpire)
+        val empire = objectMapper.readValue<Empire>(strEmpire)
         return -1.0
     }
 }

@@ -1,9 +1,80 @@
-@file:Suppress("unused")
+@file:Suppress(
+    "unused",
+    "SpellCheckingInspection",
+    "UNCHECKED_CAST",
+    "UNUSED_PARAMETER",
+)
 
 package backend
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
+/*=================================================================================*/
+
+private const val DISTANCE = "distance"
+
+private const val PARENT = "parent"
+
+private const val VISITE = "visite"
+
+fun initialisation(
+    config: ComputerConfig,
+    routes: List<Route>,
+): Map<String, Any> = mutableMapOf<String, Any>().apply {
+    val du = mutableMapOf<String, Int>()
+    val parentu = mutableMapOf<String, Map<String, Int>>()
+    val v = mutableListOf<String>()
+
+    routes.forEach {
+        du[it.origin] = 100000000
+        parentu[it.origin] = emptyMap()
+        v.add(it.origin)
+    }
+
+    du[config.departure] = 0
+    this[DISTANCE] = du
+    this[PARENT] = parentu
+    this[VISITE] = v
+}
+
+
+/*=================================================================================*/
+
+fun relachement(
+    graph: Map<String, Any>,
+    u: String,
+    v: String,
+    d: MutableMap<String, Int>,
+    p: MutableMap<String, Any>
+): MutableMap<String, Any> = mutableMapOf<String, Any>().apply {
+    if (d[v]!! > d[u]!! + (graph[u] as Map<String, Int>)[v]!!) {
+        d[v] = d[u]!! + (graph[u] as Map<String, Int>)[v]!!
+        p[v] = u
+    }
+    this[DISTANCE] = d[v]!!
+    this[PARENT] = u
+}
+
+
+/*=================================================================================*/
+
+fun mini(d: MutableMap<String, Int>): Int? {
+    d.minBy { it.value }.run {
+        d.map { if (this.value == d[it.key]) return it.value }
+    }
+    return null
+}
+
+/*=================================================================================*/
+
+fun dijsktra(
+    graphe: MutableMap<String, Any>,
+    source: String,
+    destination: String
+) {
+//    val g = initialisation(graphe, source)
+
+}
 
 /*=================================================================================*/
 data class Route(

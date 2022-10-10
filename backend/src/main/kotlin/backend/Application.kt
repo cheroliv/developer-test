@@ -10,6 +10,7 @@ import backend.Constants.SPRING_PROFILE_CLI_PROPS
 import backend.Constants.SPRING_PROFILE_CLOUD
 import backend.Constants.SPRING_PROFILE_CONF_DEFAULT_KEY
 import backend.Constants.SPRING_PROFILE_DEVELOPMENT
+import backend.Constants.SPRING_PROFILE_PRODUCTION
 import backend.Constants.STARTUP_LOG_MSG_KEY
 import backend.Log.log
 import org.springframework.beans.factory.getBean
@@ -21,6 +22,7 @@ import org.springframework.context.MessageSource
 import java.net.InetAddress.getLocalHost
 import java.net.UnknownHostException
 import java.util.*
+import java.util.Locale.getDefault
 import kotlin.system.exitProcess
 
 /*=================================================================================*/
@@ -61,15 +63,15 @@ object OnBoardComputerCliBootstrap {
 fun checkProfileLog(context: ApplicationContext) = context.environment.activeProfiles.run {
     when {
         contains(SPRING_PROFILE_DEVELOPMENT) &&
-                contains(Constants.SPRING_PROFILE_PRODUCTION)
+                contains(SPRING_PROFILE_PRODUCTION)
         -> log.error(
             context.getBean<MessageSource>().getMessage(
                 STARTUP_LOG_MSG_KEY,
                 arrayOf(
                     SPRING_PROFILE_DEVELOPMENT,
-                    Constants.SPRING_PROFILE_PRODUCTION
+                    SPRING_PROFILE_PRODUCTION
                 ),
-                Locale.getDefault()
+                getDefault()
             )
         )
     }
@@ -83,7 +85,7 @@ fun checkProfileLog(context: ApplicationContext) = context.environment.activePro
                     SPRING_PROFILE_DEVELOPMENT,
                     SPRING_PROFILE_CLOUD
                 ),
-                Locale.getDefault()
+                getDefault()
             )
         )
     }

@@ -83,7 +83,6 @@ class WebConfiguration(
     @Bean
     fun corsFilter(): CorsWebFilter = CorsWebFilter(UrlBasedCorsConfigurationSource().apply source@{
         properties.cors.apply config@{
-//            allowedOriginPatterns = listOf("*")
             if (
                 allowedOrigins != null &&
                 allowedOrigins!!.isNotEmpty()
