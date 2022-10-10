@@ -13,20 +13,7 @@ import backend.Constants.VISITE
 import com.fasterxml.jackson.annotation.JsonProperty
 
 /*=================================================================================*/
-//val List<Route>.toGraph
-//    get() = {
-//        map {
-//            mapOf( it.origin
-//        }
-//    }
-/*
-origin;destination;travel_time
-Tatooine;Dagobah;6
-Dagobah;Endor;4
-Dagobah;Hoth;1
-Hoth;Endor;1
-Tatooine;Hoth;6
- */
+
 /*=================================================================================*/
 val List<Route>.toGraph
     get() = groupBy { it.origin }
@@ -35,7 +22,6 @@ val List<Route>.toGraph
                 mapOf(destination to travelTime)
             })
         }
-
 /*=================================================================================*/
 fun initialisation(
     config: ComputerConfig,
