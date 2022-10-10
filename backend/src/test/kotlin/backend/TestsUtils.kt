@@ -14,7 +14,7 @@ import org.springframework.data.r2dbc.core.R2dbcEntityTemplate
 
 const val BASE_URL_DEV = "http://localhost:8080"
 
-fun testLoader(app: SpringApplication) = with(app) {
+fun bootstrap(app: SpringApplication) = with(app) {
     setDefaultProperties(
         hashMapOf<String, Any>().apply {
             set(

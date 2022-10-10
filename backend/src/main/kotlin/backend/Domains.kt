@@ -15,30 +15,31 @@ import com.fasterxml.jackson.annotation.JsonProperty
 /*=================================================================================*/
 
 /*=================================================================================*/
-val List<Route>.toGraph
+val List<Route>.toGraph: List<Map<String, List<Map<String, Int>>>>
     get() = groupBy { it.origin }
         .map { (key, value) ->
             mapOf(key to value.map { (_, destination, travelTime) ->
                 mapOf(destination to travelTime)
             })
         }
+
 /*=================================================================================*/
 fun initialisation(
-    config: ComputerConfig,
-    routes: List<Route>,
-//    graph:List<Map<String, List<Map<String, Int>>>>
+    graphe: List<Map<String, List<Map<String, Int>>>>,
+    source: String,
 ): Map<String, Any> = mutableMapOf<String, Any>().apply {
     val du = mutableMapOf<String, Int>()
     val parentu = mutableMapOf<String, Map<String, Int>>()
     val v = mutableListOf<String>()
 
-    routes.forEach {
-        du[it.origin] = 100000000
-        parentu[it.origin] = emptyMap()
-        v.add(it.origin)
+    graphe.forEach { it: Map<String, List<Map<String, Int>>> ->
+        val origin = it.keys.iterator().next()
+        du[origin] = 100000000
+        parentu[origin] = emptyMap()
+        v.add(origin)
     }
 
-    du[config.departure] = 0
+    du[source] = 0
     this[DISTANCE] = du
     this[PARENT] = parentu
     this[VISITE] = v

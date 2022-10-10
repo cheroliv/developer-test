@@ -37,8 +37,7 @@ internal class `Backend tests` {
 
     @BeforeAll
     fun `launch the onboard computer in profile test`() =
-        runApplication<OnBoardComputerApplication> { testLoader(app = this) }
-            .run { context = this }
+        runApplication<OnBoardComputerApplication> { bootstrap(app = this) }.run { context = this }
 
     @AfterAll
     fun `stop the onboard computer`() = context.close()
