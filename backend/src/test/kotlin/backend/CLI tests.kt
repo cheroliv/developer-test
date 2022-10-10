@@ -60,25 +60,14 @@ internal class `CLI tests` {
         tripleSet.map { triple ->
             launchCli(triple.first, triple.second)
             with(findAllRoutes(context)) {
-//                map { log.info(it) }
                 groupBy { it.origin }
                     .map { item: Map.Entry<String, List<Route>> ->
-                        mapOf(item.key to item.value.map {
-                            route: Route ->
+                        mapOf(item.key to item.value.map { route: Route ->
                             mapOf(route.destination to route.travelTime)
                         })
-                    }
-                    .map {  log.info(it)  }
+                    }.run { assertEquals(toString(), toGraph.toString()) }
 
-//                assertTrue(
-//                    groupBy { it.origin }
-//                    .map {
-//                        mapOf(it.key to it.value
-//                            .map { route -> mapOf(it.key to mapOf( route.destination to route.travelTime)) })
-//                    }
-//                        .toString().apply { log.info(this) }
-//                        .contains(toGraph.toString().apply { log.info(this) })
-//                )
+                log.info(toGraph)
             }
         }
     }

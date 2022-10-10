@@ -29,11 +29,12 @@ Tatooine;Hoth;6
  */
 /*=================================================================================*/
 val List<Route>.toGraph
-    get() = groupBy { it.origin }.map { node ->
-        mapOf(node.key to node.value.map { route ->
-            mapOf(route.destination to route.travelTime)
-        })
-    }
+    get() = groupBy { it.origin }
+        .map { (key, value) ->
+            mapOf(key to value.map { (_, destination, travelTime) ->
+                mapOf(destination to travelTime)
+            })
+        }
 
 /*=================================================================================*/
 fun initialisation(
