@@ -106,7 +106,7 @@ internal class `Backend tests` {
                         context.getResource("classpath:${it.first}").file
                     )
 
-                    val resultEmpire = mapper.readValue<Empire>(requestBodyContent!!
+                    val sentEmpire = mapper.readValue<Empire>(requestBodyContent!!
                         .map { it.toInt().toChar().toString() }
                         .reduce { acc: String, s: String -> acc + s }
                         .lines()
@@ -114,7 +114,7 @@ internal class `Backend tests` {
                         .dropLast(1)//clean what's not json in request body
                         .reduce { accumulator: String, s: String -> accumulator + "\n" + s })
 
-                    assertEquals(expectedEmpire, resultEmpire)
+                    assertEquals(expectedEmpire, sentEmpire)
 
                     runBlocking {
                         responseBodyContent!!.apply {
@@ -154,7 +154,7 @@ internal class `Backend tests` {
                         context.getResource("classpath:${it.first}").file
                     )
 
-                    val resultEmpire = mapper.readValue<Empire>(requestBodyContent!!
+                    val sentEmpire = mapper.readValue<Empire>(requestBodyContent!!
                         .map { it.toInt().toChar().toString() }
                         .reduce { acc: String, s: String -> acc + s }
                         .lines()
@@ -162,7 +162,7 @@ internal class `Backend tests` {
                         .dropLast(1)//clean what's not json in request body
                         .reduce { accumulator: String, s: String -> accumulator + "\n" + s })
 
-                    assertEquals(expectedEmpire, resultEmpire)
+                    assertEquals(expectedEmpire, sentEmpire)
 
                     runBlocking {
                         responseBodyContent!!.apply {
