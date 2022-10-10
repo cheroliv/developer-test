@@ -9,6 +9,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import kotlinx.coroutines.runBlocking
 import org.springframework.beans.factory.getBean
 import org.springframework.boot.SpringApplication
+import org.springframework.boot.runApplication
 import org.springframework.context.ApplicationContext
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate
 
@@ -23,6 +24,12 @@ fun bootstrap(app: SpringApplication) = with(app) {
             )
         })
     setAdditionalProfiles(SPRING_PROFILE_TEST)
+}
+
+fun cli(vararg args: String) = runApplication<OnBoardComputerApplication>(*args) {
+    bootstrap(this)
+    setAdditionalProfiles(Constants.SPRING_PROFILE_CLI)
+    setDefaultProperties(Constants.SPRING_PROFILE_CLI_PROPS)
 }
 
 fun countRoute(context: ApplicationContext): Int = when {

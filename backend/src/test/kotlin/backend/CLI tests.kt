@@ -1,18 +1,17 @@
 @file:Suppress(
-    "NonAsciiCharacters", "unused", "ClassName"
+    "NonAsciiCharacters",
+    "unused",
+    "ClassName",
 )
 
 package backend
 
-import backend.Constants.SPRING_PROFILE_CLI
-import backend.Constants.SPRING_PROFILE_CLI_PROPS
 import backend.Data.tripleSet
 import backend.Log.log
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.getBean
-import org.springframework.boot.runApplication
 import org.springframework.boot.test.system.CapturedOutput
 import org.springframework.boot.test.system.OutputCaptureExtension
 import org.springframework.context.ConfigurableApplicationContext
@@ -27,17 +26,12 @@ internal class `CLI & Domain tests` {
     private val dao by lazy { context.getBean<R2dbcEntityTemplate>() }
     private val mapper by lazy { context.getBean<ObjectMapper>() }
 
-    private fun cli(vararg args: String) =
-        runApplication<OnBoardComputerApplication>(*args) {
-            bootstrap(this)
-            setAdditionalProfiles(SPRING_PROFILE_CLI)
-            setDefaultProperties(SPRING_PROFILE_CLI_PROPS)
-        }.run { context = this }
 
-    @Test @Ignore
+    @Test
+    @Ignore
     fun `men at work check cli`(output: CapturedOutput) {
         tripleSet.map {
-            cli(it.first, it.second)
+            context = cli(it.first, it.second)
             assertTrue(output.out.contains("odds = -1"))
         }
     }
@@ -46,7 +40,7 @@ internal class `CLI & Domain tests` {
     @Ignore
     fun `check cli`(output: CapturedOutput) {
         tripleSet.map {
-            cli(it.first, it.second)
+            context = cli(it.first, it.second)
             val expectedOdds = mapper.readValue<Answer>(
                 context.getResource("classpath:${it.third}")
                     .file
@@ -59,7 +53,7 @@ internal class `CLI & Domain tests` {
     @Test
     fun `toGraph extension function who converts a list of Route to a graph`() {
         tripleSet.map { triple ->
-            cli(triple.first, triple.second)
+            context = cli(triple.first, triple.second)
             with(findAllRoutes(context)) {
                 groupBy { it.origin }
                     .map { item: Map.Entry<String, List<Route>> ->
@@ -74,20 +68,21 @@ internal class `CLI & Domain tests` {
     @Test
     fun `initialisation function`(output: CapturedOutput) {
         tripleSet.map { triple ->
-            cli(triple.first, triple.second)
+            context = cli(triple.first, triple.second)
+            val source = mapper.readValue<ComputerConfig>(
+                context
+                    .getResource("classpath:${triple.first}")
+                    .file
+                    .readText(UTF_8)
+            ).departure
+
             initialisation(
                 findAllRoutes(context).toGraph,
-                mapper.readValue<ComputerConfig>(
-                    context
-                        .getResource("classpath:${triple.first}")
-                        .file
-                        .readText(UTF_8)
-                ).departure
-            ).run {
-                log.info(this)
+                source
+            ).run { log.info(this) }
 //{'distance': {'A': 0}, 'parent': {}, 'visite': []}
 //{distance={Tatooine=0, Dagobah=100000000, Hoth=100000000}, parent={Tatooine={}, Dagobah={}, Hoth={}}, visite=[Tatooine, Dagobah, Hoth]}
-            }
+
         }
     }
 }
