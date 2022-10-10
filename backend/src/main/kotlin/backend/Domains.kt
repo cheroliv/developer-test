@@ -13,9 +13,33 @@ import backend.Constants.VISITE
 import com.fasterxml.jackson.annotation.JsonProperty
 
 /*=================================================================================*/
+//val List<Route>.toGraph
+//    get() = {
+//        map {
+//            mapOf( it.origin
+//        }
+//    }
+/*
+origin;destination;travel_time
+Tatooine;Dagobah;6
+Dagobah;Endor;4
+Dagobah;Hoth;1
+Hoth;Endor;1
+Tatooine;Hoth;6
+ */
+/*=================================================================================*/
+val List<Route>.toGraph
+    get() = groupBy { it.origin }.map { node ->
+        mapOf(node.key to node.value.map { route ->
+            mapOf(route.destination to route.travelTime)
+        })
+    }
+
+/*=================================================================================*/
 fun initialisation(
     config: ComputerConfig,
     routes: List<Route>,
+//    graph:List<Map<String, List<Map<String, Int>>>>
 ): Map<String, Any> = mutableMapOf<String, Any>().apply {
     val du = mutableMapOf<String, Int>()
     val parentu = mutableMapOf<String, Map<String, Int>>()
@@ -32,6 +56,7 @@ fun initialisation(
     this[PARENT] = parentu
     this[VISITE] = v
 }
+
 /*=================================================================================*/
 fun relachement(
     graph: Map<String, Any>,
@@ -47,13 +72,15 @@ fun relachement(
     this[DISTANCE] = d[v]!!
     this[PARENT] = u
 }
+
 /*=================================================================================*/
 fun mini(d: MutableMap<String, Int>): Int? {
-    d.minBy { it.value }.run {
-        d.map { if (this.value == d[it.key]) return it.value }
-    }
+    val min = d.minBy { it.value }
+    d.map { if (min.value == d[it.key]) it.value }
+
     return null
 }
+
 /*=================================================================================*/
 fun dijsktra(
     graphe: MutableMap<String, Any>,
@@ -62,6 +89,7 @@ fun dijsktra(
 ) {
 //    val g = initialisation(graphe, source)
 }
+
 /*=================================================================================*/
 data class Route(
     val origin: String,
@@ -69,6 +97,7 @@ data class Route(
     @JsonProperty("travel_time")
     val travelTime: Int
 )
+
 /*=================================================================================*/
 data class ComputerConfig(
     val autonomy: Int,
@@ -77,14 +106,17 @@ data class ComputerConfig(
     @JsonProperty("routes_db")
     val routesDb: String
 )
+
 /*=================================================================================*/
 data class Answer(val odds: Double)
+
 /*=================================================================================*/
 data class Empire(
     val countdown: Int,
     @JsonProperty("bounty_hunters")
     val bountyHunters: List<BountyHunter>
 )
+
 /*=================================================================================*/
 data class BountyHunter(
     val planet: String,
