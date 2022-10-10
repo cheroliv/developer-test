@@ -28,7 +28,6 @@ internal class `CLI & Domain tests` {
 
 
     @Test
-    @Ignore
     fun `men at work check cli`(output: CapturedOutput) {
         tripleSet.map {
             context = cli(it.first, it.second)
@@ -65,6 +64,8 @@ internal class `CLI & Domain tests` {
         }
     }
 
+    //{'distance': {'A': 0}, 'parent': {}, 'visite': []}
+    //{distance={Tatooine=0, Dagobah=100000000, Hoth=100000000}, parent={Tatooine={}, Dagobah={}, Hoth={}}, visite=[Tatooine, Dagobah, Hoth]}
     @Test
     fun `initialisation function`(output: CapturedOutput) {
         tripleSet.map { triple ->
@@ -76,13 +77,8 @@ internal class `CLI & Domain tests` {
                     .readText(UTF_8)
             ).departure
 
-            initialisation(
-                findAllRoutes(context).toGraph,
-                source
-            ).run { log.info(this) }
-//{'distance': {'A': 0}, 'parent': {}, 'visite': []}
-//{distance={Tatooine=0, Dagobah=100000000, Hoth=100000000}, parent={Tatooine={}, Dagobah={}, Hoth={}}, visite=[Tatooine, Dagobah, Hoth]}
-
+            initialisation(findAllRoutes(context).toGraph, source)
+                .run { log.info(this) }
         }
     }
 }

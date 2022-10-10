@@ -63,9 +63,10 @@ fun relachement(
 
 /*=================================================================================*/
 fun mini(d: MutableMap<String, Int>): Int? {
-    val min = d.minBy { it.value }
-    d.map { if (min.value == d[it.key]) it.value }
-
+    d.map { node ->
+        if (d.minBy { it.value }.value == d[node.key])
+            return node.value
+    }
     return null
 }
 
