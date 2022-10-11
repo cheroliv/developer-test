@@ -69,15 +69,17 @@ internal class `CLI & Domain tests` {
                             }
                         }
                 }.run {
-                    assertEquals(toString(), toGraph.toString())
-                    assertEquals(
-                        mapOf(
-                            "Tatooine" to mapOf("Dagobah" to 6, "Hoth" to 6),
-                            "Dagobah" to mapOf("Endor" to 4, "Hoth" to 1),
-                            "Hoth" to mapOf("Endor" to 1)
-                        ).toString(), toGraph.toString(),
-                        "only possible with initial universe.csv"
-                    )
+                    toGraph.let {
+                        assertEquals(toString(), it.toString())
+                        assertEquals(
+                            mapOf(
+                                "Tatooine" to mapOf("Dagobah" to 6, "Hoth" to 6),
+                                "Dagobah" to mapOf("Endor" to 4, "Hoth" to 1),
+                                "Hoth" to mapOf("Endor" to 1)
+                            ).toString(), it.toString(),
+                            "only possible with initial universe.csv"
+                        )
+                    }
                 }
             }
         }
