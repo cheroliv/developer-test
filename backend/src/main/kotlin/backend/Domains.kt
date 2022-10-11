@@ -10,33 +10,43 @@ package backend
 import backend.Constants.DISTANCE
 import backend.Constants.PARENT
 import backend.Constants.VISITE
+import backend.Log.log
 import com.fasterxml.jackson.annotation.JsonProperty
 
 /*=================================================================================*/
 
 /*=================================================================================*/
-val List<Route>.toGraph: List<Map<String, List<Map<String, Int>>>>
-    get() = groupBy { it.origin }
-        .map { (key, value) ->
-            mapOf(key to value.map { (_, destination, travelTime) ->
-                mapOf(destination to travelTime)
-            })
-        }
+val List<Route>.toGraph: Map<String, Map<String, Int>>
+    get() = mutableMapOf<String, Map<String, Int>>().apply {
+        groupBy { it.origin }
+            .map { (key, value) ->
+                mapOf(key to value.map { (_, destination, travelTime) ->
+                    mapOf(destination to travelTime)
+                })
+            }
+            .flatMap { it.entries }
+            .map { entry ->
+                this[entry.key] = mutableMapOf<String, Int>().apply {
+                    entry.value.map {
+                        it.entries.map { it1 -> set(it1.key, it1.value) }
+                    }
+                }
+            }
+    }
 
 /*=================================================================================*/
 fun initialisation(
-    graphe: List<Map<String, List<Map<String, Int>>>>,
+    graphe: Map<String, Map<String, Int>>,
     source: String,
-): Map<String, Any> = mutableMapOf<String, Any>().apply {
+) = mutableMapOf<String, Any>().apply {
     val du = mutableMapOf<String, Int>()
     val parentu = mutableMapOf<String, Map<String, Int>>()
     val v = mutableListOf<String>()
 
-    graphe.forEach { it: Map<String, List<Map<String, Int>>> ->
-        val origin = it.keys.iterator().next()
-        du[origin] = 100000000
-        parentu[origin] = emptyMap()
-        v.add(origin)
+    graphe.map {
+        du[it.key] = 100000000
+        parentu[it.key] = emptyMap()
+        v.add(it.key)
     }
 
     du[source] = 0
@@ -62,21 +72,35 @@ fun relachement(
 }
 
 /*=================================================================================*/
-fun mini(d: MutableMap<String, Int>): Int? {
+fun mini(d: MutableMap<String, Int>): Pair<String, Int>? {
     d.map { node ->
         if (d.minBy { it.value }.value == d[node.key])
-            return node.value
+            return Pair(node.key, node.value)
     }
     return null
 }
 
 /*=================================================================================*/
-fun dijsktra(
-    graphe: MutableMap<String, Any>,
+fun dijkstra(
+    graphe: Map<String, Map<String, Int>>,
     source: String,
     destination: String
 ) {
-//    val g = initialisation(graphe, source)
+    val g: MutableMap<String, Any> = initialisation(graphe, source)
+
+//    log.info(u)
+    repeat(5) {
+//    while ((g[VISITE] as List<String>).isNotEmpty()) {
+        val chemins = mutableListOf<String>()
+        val u: Pair<String, Int>? = mini(g[DISTANCE] as MutableMap<String, Int>)
+        val s = u!!.first
+        val m = (g[DISTANCE] as MutableMap<String, Int>)[s]
+        log.info(m)
+//        while (s != source) {
+//            chemins.add(u.first)
+//            s=(g[PARENT] as MutableMap<String, Map<String, Int>>)[s].keys
+//        }
+    }
 }
 
 /*=================================================================================*/
