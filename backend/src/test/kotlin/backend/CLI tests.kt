@@ -6,8 +6,11 @@
 
 package backend
 
+import backend.Constants.DISTANCE
+import backend.Constants.DISTANCE_LIMIT
+import backend.Constants.PARENT
+import backend.Constants.VISITE
 import backend.Data.tripleSet
-import backend.Log.log
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.junit.jupiter.api.extension.ExtendWith
@@ -85,8 +88,6 @@ internal class `CLI & Domain tests` {
         }
     }
 
-    //TODO: test isolated case 1
-    //{distance={Tatooine=0, Dagobah=100000000, Hoth=100000000}, parent={Tatooine={}, Dagobah={}, Hoth={}}, visite=[Tatooine, Dagobah, Hoth]}
     @Test
     fun `initialisation function`(output: CapturedOutput) {
         tripleSet.map { example ->
@@ -101,7 +102,35 @@ internal class `CLI & Domain tests` {
                     .readText(UTF_8)
             ).departure
 
-            log.info(initialisation(graph, source))
+            initialisation(graph, source).run {
+                assertTrue(containsKey(DISTANCE))
+                assertTrue(containsKey(PARENT))
+                assertTrue(containsKey(VISITE))
+
+                assertEquals(
+                    this[DISTANCE].toString(), mapOf(
+                        "Tatooine" to 0,
+                        "Dagobah" to DISTANCE_LIMIT,
+                        "Hoth" to DISTANCE_LIMIT
+                    ).toString()
+                )
+
+                mapOf(
+                    "Tatooine" to null,
+                    "Dagobah" to null,
+                    "Hoth" to null
+                ).map {
+                    assertTrue((this[PARENT] as Map<*, *>).containsKey(it.key))
+                }
+
+                assertEquals(
+                    this[VISITE].toString(), listOf(
+                        "Tatooine",
+                        "Dagobah",
+                        "Hoth"
+                    ).toString()
+                )
+            }
         }
     }
 

@@ -8,6 +8,7 @@
 package backend
 
 import backend.Constants.DISTANCE
+import backend.Constants.DISTANCE_LIMIT
 import backend.Constants.PARENT
 import backend.Constants.VISITE
 import com.fasterxml.jackson.annotation.JsonProperty
@@ -36,13 +37,13 @@ val List<Route>.toGraph: Map<String, Map<String, Int>>
 fun initialisation(
     graphe: Map<String, Map<String, Int>>,
     source: String,
-) = mutableMapOf<String, Any>().apply {
+): Map<String, Any> = mutableMapOf<String, Any>().apply {
     val du = mutableMapOf<String, Int>()
     val parentu = mutableMapOf<String, Map<String, Int>>()
     val v = mutableListOf<String>()
 
     graphe.map {
-        du[it.key] = 100000000
+        du[it.key] = DISTANCE_LIMIT
         parentu[it.key] = emptyMap()
         v.add(it.key)
     }
@@ -84,7 +85,7 @@ fun dijkstra(
     source: String,
     destination: String
 ) {
-    val g: MutableMap<String, Any> = initialisation(graphe, source)
+    val g: MutableMap<String, Any> = initialisation(graphe, source) as MutableMap<String, Any>
 
 //    Log.log.info(u)
     repeat(5) {

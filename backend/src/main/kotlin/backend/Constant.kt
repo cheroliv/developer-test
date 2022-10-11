@@ -11,6 +11,8 @@ object Constants {
     const val DISTANCE = "distance"
     const val PARENT = "parent"
     const val VISITE = "visite"
+    const val DISTANCE_LIMIT = 100000000
+
 
     const val REFUEL_DURATION = 1
     const val NORMAL_TERMINATION = 0
