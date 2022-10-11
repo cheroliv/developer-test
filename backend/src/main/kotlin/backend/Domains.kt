@@ -88,20 +88,16 @@ fun dijkstra(
 ) {
     val g: MutableMap<String, Any> = initialisation(graphe, source) as MutableMap<String, Any>
 
-//    Log.log.info(u)
-    repeat(5) {
-//    while ((g[VISITE] as List<String>).isNotEmpty()) {
+    while ((g[VISITE] as List<*>).isNotEmpty()) {
         val chemins = mutableListOf<String>()
         val u: Pair<String, Int> = mini(g[DISTANCE] as MutableMap<String, Int>)!!
         var s: Pair<String, Int> = u
         val m: Int = (g[DISTANCE] as MutableMap<String, Int>)[s.first]!!
-//        Log.log.info(m)
-        repeat(5) {
-//        while (s.first != source) {
+        while (s.first != source) {
             chemins.add(u.first)
 //            s=(g[PARENT] as MutableMap<String, Map<String, Int>>)[s].keys
             s = Pair("", 1)
-            log.info("toto")
+            log.info(g[PARENT])
         }
     }
 }
