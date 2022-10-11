@@ -71,7 +71,7 @@ fun relachement(
 }
 
 /*=================================================================================*/
-fun mini(d: MutableMap<String, Int>): Pair<String, Int>? {
+fun mini(d: Map<String, Int>): Pair<String, Int>? {
     d.map { node ->
         if (d.minBy { it.value }.value == d[node.key])
             return Pair(node.key, node.value)

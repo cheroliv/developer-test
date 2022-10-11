@@ -7,6 +7,7 @@
 package backend
 
 import backend.Data.tripleSet
+import backend.Log.log
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.junit.jupiter.api.extension.ExtendWith
@@ -75,7 +76,7 @@ internal class `CLI & Domain tests` {
                             "Dagobah" to mapOf("Endor" to 4, "Hoth" to 1),
                             "Hoth" to mapOf("Endor" to 1)
                         ).toString(), toGraph.toString(),
-                        "only possible with universe.csv"
+                        "only possible with initial universe.csv"
                     )
                 }
             }
@@ -101,6 +102,15 @@ internal class `CLI & Domain tests` {
             initialisation(graph, source)
         }
     }
+
+    @Test
+    fun `check mini function`() {
+        assertEquals(
+            Pair("Hoth", 1),
+            mini(mapOf("Endor" to 4, "Hoth" to 1, "Dagobah" to 6))
+        )
+    }
+
 
     @Test
     fun `dijkstra function`() {
