@@ -10,7 +10,6 @@ package backend
 import backend.Constants.DISTANCE
 import backend.Constants.PARENT
 import backend.Constants.VISITE
-import backend.Log.log
 import com.fasterxml.jackson.annotation.JsonProperty
 
 /*=================================================================================*/
@@ -19,15 +18,15 @@ import com.fasterxml.jackson.annotation.JsonProperty
 val List<Route>.toGraph: Map<String, Map<String, Int>>
     get() = mutableMapOf<String, Map<String, Int>>().apply {
         groupBy { it.origin }
-            .map { (key, value) ->
-                mapOf(key to value.map { (_, destination, travelTime) ->
+            .map { (origin, routes) ->
+                mapOf(origin to routes.map { (_, destination, travelTime) ->
                     mapOf(destination to travelTime)
                 })
             }.flatMap { it.entries }
-            .map { entry ->
-                this[entry.key] = mutableMapOf<String, Int>().apply {
-                    entry.value.map {
-                        it.entries.map { it1 -> set(it1.key, it1.value) }
+            .map { (origin, routes) ->
+                this[origin] = mutableMapOf<String, Int>().apply {
+                    routes.map {
+                        it.entries.map { (destination, travelTime) -> set(destination, travelTime) }
                     }
                 }
             }
@@ -87,14 +86,14 @@ fun dijkstra(
 ) {
     val g: MutableMap<String, Any> = initialisation(graphe, source)
 
-//    log.info(u)
+//    Log.log.info(u)
     repeat(5) {
 //    while ((g[VISITE] as List<String>).isNotEmpty()) {
         val chemins = mutableListOf<String>()
         val u: Pair<String, Int>? = mini(g[DISTANCE] as MutableMap<String, Int>)
         val s = u!!.first
         val m = (g[DISTANCE] as MutableMap<String, Int>)[s]
-//        log.info(m)
+//        Log.log.info(m)
 //        while (s != source) {
 //            chemins.add(u.first)
 //            s=(g[PARENT] as MutableMap<String, Map<String, Int>>)[s].keys

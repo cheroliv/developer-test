@@ -89,19 +89,19 @@ internal class `CLI & Domain tests` {
     //{distance={Tatooine=0, Dagobah=100000000, Hoth=100000000}, parent={Tatooine={}, Dagobah={}, Hoth={}}, visite=[Tatooine, Dagobah, Hoth]}
     @Test
     fun `initialisation function`(output: CapturedOutput) {
-        tripleSet.map { triple ->
-            context = cli(triple.first, triple.second)
+        tripleSet.map { example ->
+            context = cli(example.first, example.second)
 
             val graph = findAllRoutes(context).toGraph
 
             val source = mapper.readValue<ComputerConfig>(
                 context
-                    .getResource("classpath:${triple.first}")
+                    .getResource("classpath:${example.first}")
                     .file
                     .readText(UTF_8)
             ).departure
 
-            initialisation(graph, source)
+            log.info(initialisation(graph, source))
         }
     }
 
