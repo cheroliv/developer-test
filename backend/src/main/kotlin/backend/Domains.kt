@@ -23,8 +23,7 @@ val List<Route>.toGraph: Map<String, Map<String, Int>>
                 mapOf(key to value.map { (_, destination, travelTime) ->
                     mapOf(destination to travelTime)
                 })
-            }
-            .flatMap { it.entries }
+            }.flatMap { it.entries }
             .map { entry ->
                 this[entry.key] = mutableMapOf<String, Int>().apply {
                     entry.value.map {
@@ -95,7 +94,7 @@ fun dijkstra(
         val u: Pair<String, Int>? = mini(g[DISTANCE] as MutableMap<String, Int>)
         val s = u!!.first
         val m = (g[DISTANCE] as MutableMap<String, Int>)[s]
-        log.info(m)
+//        log.info(m)
 //        while (s != source) {
 //            chemins.add(u.first)
 //            s=(g[PARENT] as MutableMap<String, Map<String, Int>>)[s].keys

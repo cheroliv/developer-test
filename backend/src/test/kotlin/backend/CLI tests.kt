@@ -49,27 +49,7 @@ internal class `CLI & Domain tests` {
     }
 
     @Test
-    fun `exemple1 toGraph extension function who converts a list of Route to a graph`() {
-        //"millennium-falcon.json"
-        val configPath = tripleSet.first().first
-        //"example1/empire.json"
-        val empirePath = tripleSet.first().second
-
-        context = cli(configPath, empirePath)
-
-        assertEquals(
-            mapOf(
-                "Tatooine" to mapOf("Dagobah" to 6, "Hoth" to 6),
-                "Dagobah" to mapOf("Endor" to 4, "Hoth" to 1),
-                "Hoth" to mapOf("Endor" to 1)
-            ).toString(), findAllRoutes(context).toGraph.toString(),
-            "only true with initial universe.csv"
-        )
-    }
-
-    @Test
     fun `toGraph extension function who converts a list of Route to a graph`() {
-
         tripleSet.map { triple ->
             with(findAllRoutes(cli(triple.first, triple.second))) {
                 mutableMapOf<String, Map<String, Int>>().apply {
@@ -87,7 +67,17 @@ internal class `CLI & Domain tests` {
                                 }
                             }
                         }
-                }.run { assertEquals(toString(), toGraph.toString()) }
+                }.run {
+                    assertEquals(toString(), toGraph.toString())
+                    assertEquals(
+                        mapOf(
+                            "Tatooine" to mapOf("Dagobah" to 6, "Hoth" to 6),
+                            "Dagobah" to mapOf("Endor" to 4, "Hoth" to 1),
+                            "Hoth" to mapOf("Endor" to 1)
+                        ).toString(), toGraph.toString(),
+                        "only possible with universe.csv"
+                    )
+                }
             }
         }
     }
