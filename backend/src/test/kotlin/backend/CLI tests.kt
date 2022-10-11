@@ -89,6 +89,14 @@ internal class `CLI & Domain tests` {
     }
 
     @Test
+    fun `mini function`() {
+        assertEquals(
+            Pair("Hoth", 1),
+            mini(mapOf("Endor" to 4, "Hoth" to 1, "Dagobah" to 6))
+        )
+    }
+
+    @Test
     fun `initialisation function`() {
         tripleSet.map { example ->
             context = cli(example.first, example.second)
@@ -132,14 +140,6 @@ internal class `CLI & Domain tests` {
                 )
             }
         }
-    }
-
-    @Test
-    fun `mini function`() {
-        assertEquals(
-            Pair("Hoth", 1),
-            mini(mapOf("Endor" to 4, "Hoth" to 1, "Dagobah" to 6))
-        )
     }
 
 

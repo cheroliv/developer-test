@@ -11,6 +11,7 @@ import backend.Constants.DISTANCE
 import backend.Constants.DISTANCE_LIMIT
 import backend.Constants.PARENT
 import backend.Constants.VISITE
+import backend.Log.log
 import com.fasterxml.jackson.annotation.JsonProperty
 
 /*=================================================================================*/
@@ -24,10 +25,10 @@ val List<Route>.toGraph: Map<String, Map<String, Int>>
                     mapOf(destination to travelTime)
                 })
             }.flatMap { it.entries }
-            .map { (origin, routes) ->
+            .forEach { (origin, routes) ->
                 this[origin] = mutableMapOf<String, Int>().apply {
-                    routes.map {
-                        it.entries.map { (destination, travelTime) -> set(destination, travelTime) }
+                    routes.forEach {
+                        it.entries.forEach { (destination, travelTime) -> set(destination, travelTime) }
                     }
                 }
             }
@@ -42,7 +43,7 @@ fun initialisation(
     val parentu = mutableMapOf<String, Map<String, Int>>()
     val v = mutableListOf<String>()
 
-    graphe.map {
+    graphe.forEach {
         du[it.key] = DISTANCE_LIMIT
         parentu[it.key] = emptyMap()
         v.add(it.key)
@@ -52,6 +53,15 @@ fun initialisation(
     this[DISTANCE] = du
     this[PARENT] = parentu
     this[VISITE] = v
+}
+
+/*=================================================================================*/
+fun mini(d: Map<String, Int>): Pair<String, Int>? {
+    d.forEach { node ->
+        if (d.minBy { it.value }.value == d[node.key])
+            return Pair(node.key, node.value)
+    }
+    return null
 }
 
 /*=================================================================================*/
@@ -71,15 +81,6 @@ fun relachement(
 }
 
 /*=================================================================================*/
-fun mini(d: Map<String, Int>): Pair<String, Int>? {
-    d.map { node ->
-        if (d.minBy { it.value }.value == d[node.key])
-            return Pair(node.key, node.value)
-    }
-    return null
-}
-
-/*=================================================================================*/
 fun dijkstra(
     graphe: Map<String, Map<String, Int>>,
     source: String,
@@ -91,14 +92,17 @@ fun dijkstra(
     repeat(5) {
 //    while ((g[VISITE] as List<String>).isNotEmpty()) {
         val chemins = mutableListOf<String>()
-        val u: Pair<String, Int>? = mini(g[DISTANCE] as MutableMap<String, Int>)
-        val s = u!!.first
-        val m = (g[DISTANCE] as MutableMap<String, Int>)[s]
+        val u: Pair<String, Int> = mini(g[DISTANCE] as MutableMap<String, Int>)!!
+        var s: Pair<String, Int> = u
+        val m: Int = (g[DISTANCE] as MutableMap<String, Int>)[s.first]!!
 //        Log.log.info(m)
-//        while (s != source) {
-//            chemins.add(u.first)
+        repeat(5) {
+//        while (s.first != source) {
+            chemins.add(u.first)
 //            s=(g[PARENT] as MutableMap<String, Map<String, Int>>)[s].keys
-//        }
+            s = Pair("", 1)
+            log.info("toto")
+        }
     }
 }
 
