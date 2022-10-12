@@ -14,23 +14,23 @@ import backend.Constants.VISITE
 import com.fasterxml.jackson.annotation.JsonProperty
 
 /*=================================================================================*/
+val List<Route>.destinations: Set<String>
+    get() = mutableListOf<String>().apply {
+        addAll(this@destinations.map { it.origin })
+        addAll(this@destinations.map { it.destination })
+    }.toSet()
+
 
 /*=================================================================================*/
 val List<Route>.toGraph: Map<String, Map<String, Int>>
-    get() = mutableMapOf<String, Map<String, Int>>().apply {
-        groupBy { it.origin }
-            .map { (origin, routes) ->
-                mapOf(origin to routes.map { (_, destination, travelTime) ->
-                    mapOf(destination to travelTime)
-                })
-            }.flatMap { it.entries }
-            .forEach { (origin, routes) ->
-                this[origin] = mutableMapOf<String, Int>().apply {
-                    routes.forEach {
-                        it.entries.forEach { (destination, travelTime) -> set(destination, travelTime) }
-                    }
-                }
-            }
+    get() = mutableMapOf<String, MutableMap<String, Int>>().apply {
+        destinations.forEach { destination -> set(destination, mutableMapOf()) }
+        forEach { route: Route ->
+            if (!this[route.origin]!!.containsKey(route.destination))
+                this[route.origin]!![route.destination] = route.travelTime
+            if (!this[route.destination]!!.containsKey(route.origin))
+                this[route.destination]!![route.origin] = route.travelTime
+        }
     }
 
 /*=================================================================================*/

@@ -11,8 +11,8 @@ import backend.Constants.DISTANCE_LIMIT
 import backend.Constants.PARENT
 import backend.Constants.VISITE
 import backend.Data.config
+import backend.Data.expectedGraph
 import backend.Data.routes
-import backend.Log.log
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -20,41 +20,42 @@ import kotlin.test.assertTrue
 
 internal class `Domain tests` {
 
+
+
     @Test
-    fun `toGraph extension function who converts a list of Route to a graph`() = with(routes) {
-        mutableMapOf<String, Map<String, Int>>().apply {
-            groupBy { it.origin }
-                .map { node ->
-                    mapOf(node.key to node.value.map { route ->
-                        mapOf(route.destination to route.travelTime)
-                    })
-                }.flatMap {
-                    it.entries
-                }.map { entry ->
-                    this[entry.key] = mutableMapOf<String, Int>().apply {
-                        entry.value.map {
-                            it.entries.map { it1 -> set(it1.key, it1.value) }
-                        }
-                    }
-                }
-        }.run {
-            toGraph.let {
-                assertEquals(toString(), it.toString())
-                assertEquals(
-                    mapOf(
-                        "Tatooine" to mapOf("Dagobah" to 6, "Hoth" to 6),
-                        "Dagobah" to mapOf("Endor" to 4, "Hoth" to 1),
-                        "Hoth" to mapOf("Endor" to 1)
-                    ).toString(), it.toString(),
-                    "only possible with initial universe.csv"
-                )
-            }
+    fun `list of destinations from routes`() {
+        mutableListOf<String>().apply {
+            addAll(routes.map { it.origin })
+            addAll(routes.map { it.destination })
+        }.toSet().run {
+            assertEquals(setOf("Tatooine", "Dagobah", "Hoth", "Endor"), this)
+            assertEquals(setOf("Tatooine", "Dagobah", "Hoth", "Endor"), routes.destinations)
         }
     }
 
 
     @Test
-    fun `mini function`() = assertEquals(
+    fun `toGraph function return the destinations graph for a list of routes`() = with(routes) {
+        expectedGraph.run {
+            assertEquals(this, mutableMapOf<String, MutableMap<String, Int>>().apply {
+                destinations.forEach { destination -> set(destination, mutableMapOf()) }
+                forEach { route: Route ->
+                    if (!this[route.origin]!!.containsKey(route.destination)) {
+                        this[route.origin]!![route.destination] = route.travelTime
+                    }
+                    if (!this[route.destination]!!.containsKey(route.origin)) {
+                        this[route.destination]!![route.origin] = route.travelTime
+                    }
+                }
+            })
+            assertEquals(this, routes.toGraph)
+            assertEquals(toString(), routes.toGraph.toString())
+        }
+    }
+
+
+    @Test
+    fun `mini function a pair destination and travel time`() = assertEquals(
         Pair("Hoth", 1),
         mapOf("Endor" to 4, "Hoth" to 1, "Dagobah" to 6).mini
     )
@@ -66,7 +67,8 @@ internal class `Domain tests` {
             this[DISTANCE].toString(), mapOf(
                 "Tatooine" to 0,
                 "Dagobah" to DISTANCE_LIMIT,
-                "Hoth" to DISTANCE_LIMIT
+                "Hoth" to DISTANCE_LIMIT,
+                "Endor" to DISTANCE_LIMIT,
             ).toString()
         )
 
@@ -74,20 +76,18 @@ internal class `Domain tests` {
         mapOf(
             "Tatooine" to null,
             "Dagobah" to null,
-            "Hoth" to null
-        ).apply {
-            assertEquals(size, (this@run[PARENT] as Map<*, *>).size)
-        }.map {
-            assertTrue((this[PARENT] as Map<*, *>).containsKey(it.key))
-        }
-
+            "Hoth" to null,
+            "Endor" to null,
+        ).apply { assertEquals(size, (this@run[PARENT] as Map<*, *>).size) }
+            .map { assertTrue((this[PARENT] as Map<*, *>).containsKey(it.key)) }
 
         assertTrue(containsKey(VISITE))
         assertEquals(
             this[VISITE].toString(), listOf(
                 "Tatooine",
                 "Dagobah",
-                "Hoth"
+                "Hoth",
+                "Endor",
             ).toString()
         )
     }
@@ -97,15 +97,16 @@ internal class `Domain tests` {
         config.departure,
         config.arrival
     ).run {
-        log.info(
-            "graph: ${
-                mapOf(
-                    "Tatooine" to mapOf("Dagobah" to 6, "Hoth" to 6),
-                    "Dagobah" to mapOf("Endor" to 4, "Hoth" to 1),
-                    "Hoth" to mapOf("Endor" to 1)
-                )
-            }"
-        )
-        log.info("shortestPath: $this")
+//        log.info(
+//            "graph: ${
+//                mapOf(
+//                    "Tatooine" to mapOf("Dagobah" to 6, "Hoth" to 6),
+//                    "Dagobah" to mapOf("Endor" to 4, "Hoth" to 1),
+//                    "Hoth" to mapOf("Endor" to 1)
+//                    // "Endor" to mapOf("Dagobah" to 4, "Hoth" to 1)
+//                )
+//            }"
+//        )
+//        log.info("shortestPath: $this")
     }
 }
