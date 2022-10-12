@@ -96,5 +96,16 @@ internal class `Domain tests` {
     fun `shortestPath function`() = routes.shortestPath(
         config.departure,
         config.arrival
-    ).run { log.info(this) }
+    ).run {
+        log.info(
+            "graph: ${
+                mapOf(
+                    "Tatooine" to mapOf("Dagobah" to 6, "Hoth" to 6),
+                    "Dagobah" to mapOf("Endor" to 4, "Hoth" to 1),
+                    "Hoth" to mapOf("Endor" to 1)
+                )
+            }"
+        )
+        log.info("shortestPath: $this")
+    }
 }
