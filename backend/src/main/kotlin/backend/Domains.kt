@@ -55,13 +55,13 @@ fun initialisation(
 }
 
 /*=================================================================================*/
-val Map<String, Int>.mini: Pair<String, Int>?
+val Map<String, Int>.mini: Pair<String, Int>
     get() {
         forEach { node ->
             if (minBy { it.value }.value == this[node.key])
                 return Pair(node.key, node.value)
         }
-        return null
+        throw Exception("mini problem, content of map: $this")
     }
 
 /*=================================================================================*/
