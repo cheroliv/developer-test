@@ -11,7 +11,6 @@ import backend.Constants.DISTANCE
 import backend.Constants.DISTANCE_LIMIT
 import backend.Constants.PARENT
 import backend.Constants.VISITE
-import backend.Log.log
 import com.fasterxml.jackson.annotation.JsonProperty
 
 /*=================================================================================*/
@@ -56,13 +55,14 @@ fun initialisation(
 }
 
 /*=================================================================================*/
-fun mini(d: Map<String, Int>): Pair<String, Int>? {
-    d.forEach { node ->
-        if (d.minBy { it.value }.value == d[node.key])
-            return Pair(node.key, node.value)
+val Map<String, Int>.mini: Pair<String, Int>?
+    get() {
+        forEach { node ->
+            if (minBy { it.value }.value == this[node.key])
+                return Pair(node.key, node.value)
+        }
+        return null
     }
-    return null
-}
 
 /*=================================================================================*/
 fun relachement(
@@ -81,12 +81,11 @@ fun relachement(
 }
 
 /*=================================================================================*/
-fun dijkstra(
-    graphe: Map<String, Map<String, Int>>,
+fun List<Route>.shortestPath(
     source: String,
     destination: String
-) {
-    val g: MutableMap<String, Any> = initialisation(graphe, source) as MutableMap<String, Any>
+): Map<Pair<String, String>, Map<String, Any>> {
+    val g: MutableMap<String, Any> = initialisation(toGraph, source) as MutableMap<String, Any>
 
 //    while ((g[VISITE] as List<*>).isNotEmpty()) {
 //        val chemins = mutableListOf<String>()
@@ -100,6 +99,7 @@ fun dijkstra(
 //            log.info(g[PARENT])
 //        }
 //    }
+    return emptyMap()
 }
 
 /*=================================================================================*/

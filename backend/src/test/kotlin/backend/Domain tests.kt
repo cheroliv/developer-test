@@ -12,9 +12,10 @@ import backend.Constants.PARENT
 import backend.Constants.VISITE
 import backend.Data.config
 import backend.Data.routes
-import org.junit.jupiter.api.extension.ExtendWith
-import org.springframework.boot.test.system.OutputCaptureExtension
-import kotlin.test.*
+import backend.Log.log
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 
 internal class `Domain tests` {
@@ -58,18 +59,14 @@ internal class `Domain tests` {
     fun `mini function`() {
         assertEquals(
             Pair("Hoth", 1),
-            mini(mapOf("Endor" to 4, "Hoth" to 1, "Dagobah" to 6))
+            mapOf("Endor" to 4, "Hoth" to 1, "Dagobah" to 6).mini
         )
     }
 
     @Test
     fun `initialisation function`() {
-
         initialisation(routes.toGraph, config.departure).run {
             assertTrue(containsKey(DISTANCE))
-            assertTrue(containsKey(PARENT))
-            assertTrue(containsKey(VISITE))
-
             assertEquals(
                 this[DISTANCE].toString(), mapOf(
                     "Tatooine" to 0,
@@ -78,14 +75,19 @@ internal class `Domain tests` {
                 ).toString()
             )
 
+            assertTrue(containsKey(PARENT))
             mapOf(
                 "Tatooine" to null,
                 "Dagobah" to null,
                 "Hoth" to null
-            ).map {
+            ).apply {
+                assertEquals(size, (this@run[PARENT] as Map<*, *>).size)
+            }.map {
                 assertTrue((this[PARENT] as Map<*, *>).containsKey(it.key))
             }
 
+
+            assertTrue(containsKey(VISITE))
             assertEquals(
                 this[VISITE].toString(), listOf(
                     "Tatooine",
@@ -97,11 +99,10 @@ internal class `Domain tests` {
     }
 
     @Test
-    fun `dijkstra function`() {
-        dijkstra(
-            routes.toGraph,
+    fun `shortestPath function`() {
+        routes.shortestPath(
             config.departure,
             config.arrival
-        )
+        ).run { log.info(this) }
     }
 }
