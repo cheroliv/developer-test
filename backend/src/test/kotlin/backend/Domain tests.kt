@@ -19,9 +19,6 @@ import kotlin.test.assertTrue
 
 
 internal class `Domain tests` {
-
-
-
     @Test
     fun `list of destinations from routes`() {
         mutableListOf<String>().apply {
@@ -40,12 +37,10 @@ internal class `Domain tests` {
             assertEquals(this, mutableMapOf<String, MutableMap<String, Int>>().apply {
                 destinations.forEach { destination -> set(destination, mutableMapOf()) }
                 forEach { route: Route ->
-                    if (!this[route.origin]!!.containsKey(route.destination)) {
+                    if (!this[route.origin]!!.containsKey(route.destination))
                         this[route.origin]!![route.destination] = route.travelTime
-                    }
-                    if (!this[route.destination]!!.containsKey(route.origin)) {
+                    if (!this[route.destination]!!.containsKey(route.origin))
                         this[route.destination]!![route.origin] = route.travelTime
-                    }
                 }
             })
             assertEquals(this, routes.toGraph)
@@ -57,40 +52,46 @@ internal class `Domain tests` {
     @Test
     fun `mini function a pair destination and travel time`() = assertEquals(
         Pair("Hoth", 1),
-        mapOf("Endor" to 4, "Hoth" to 1, "Dagobah" to 6).mini
+        mapOf(
+            "Endor" to 4,
+            "Hoth" to 1,
+            "Dagobah" to 6
+        ).mini
     )
 
     @Test
-    fun `initialisation function`() = initialisation(routes.toGraph, config.departure).run {
-        assertTrue(containsKey(DISTANCE))
-        assertEquals(
-            this[DISTANCE].toString(), mapOf(
-                "Tatooine" to 0,
-                "Dagobah" to DISTANCE_LIMIT,
-                "Hoth" to DISTANCE_LIMIT,
-                "Endor" to DISTANCE_LIMIT,
-            ).toString()
-        )
+    fun `initialisation function return data structure to consume from departure`() =
+        initialisation(routes.toGraph, config.departure).run {
+            assertTrue(containsKey(DISTANCE))
+            assertEquals(
+                this[DISTANCE].toString(),
+                mapOf(
+                    "Tatooine" to 0,
+                    "Dagobah" to DISTANCE_LIMIT,
+                    "Hoth" to DISTANCE_LIMIT,
+                    "Endor" to DISTANCE_LIMIT,
+                ).toString()
+            )
 
-        assertTrue(containsKey(PARENT))
-        mapOf(
-            "Tatooine" to null,
-            "Dagobah" to null,
-            "Hoth" to null,
-            "Endor" to null,
-        ).apply { assertEquals(size, (this@run[PARENT] as Map<*, *>).size) }
-            .map { assertTrue((this[PARENT] as Map<*, *>).containsKey(it.key)) }
+            assertTrue(containsKey(PARENT))
+            mapOf(
+                "Tatooine" to null,
+                "Dagobah" to null,
+                "Hoth" to null,
+                "Endor" to null,
+            ).apply { assertEquals(size, (this@run[PARENT] as Map<*, *>).size) }
+                .map { assertTrue((this[PARENT] as Map<*, *>).containsKey(it.key)) }
 
-        assertTrue(containsKey(VISITE))
-        assertEquals(
-            this[VISITE].toString(), listOf(
-                "Tatooine",
-                "Dagobah",
-                "Hoth",
-                "Endor",
-            ).toString()
-        )
-    }
+            assertTrue(containsKey(VISITE))
+            assertEquals(
+                this[VISITE].toString(), listOf(
+                    "Tatooine",
+                    "Dagobah",
+                    "Hoth",
+                    "Endor",
+                ).toString()
+            )
+        }
 
     @Test
     fun `shortestPath function`() = routes.shortestPath(

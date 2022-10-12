@@ -33,10 +33,7 @@ object Data {
 
     val tripleExamples = pairExamples.map {
         Triple(
-            it.first.replace(
-                "empire.json",
-                "millennium-falcon.json"
-            ),
+            it.first.replace("empire.json", "millennium-falcon.json"),
             it.first,
             it.second
         )

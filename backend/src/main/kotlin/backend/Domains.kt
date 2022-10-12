@@ -40,7 +40,7 @@ fun initialisation(
 ): Map<String, Any> = mutableMapOf<String, Any>().apply {
     val du = mutableMapOf<String, Int>()
     val parentu = mutableMapOf<String, Map<String, Int>>()
-    val v = mutableListOf<String>()
+    val v = mutableSetOf<String>()
 
     graphe.forEach {
         du[it.key] = DISTANCE_LIMIT
