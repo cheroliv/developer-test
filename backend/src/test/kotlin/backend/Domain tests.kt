@@ -13,6 +13,7 @@ import backend.Constants.VISITE
 import backend.Data.config
 import backend.Data.expectedGraph
 import backend.Data.routes
+import backend.Log.log
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -32,7 +33,7 @@ internal class `Domain tests` {
 
 
     @Test
-    fun `toGraph function return the destinations graph for a list of routes`() = with(routes) {
+    fun `graph function return the destinations graph for a list of routes`() = with(routes) {
         expectedGraph.run {
             assertEquals(this, mutableMapOf<String, MutableMap<String, Int>>().apply {
                 destinations.forEach { destination -> set(destination, mutableMapOf()) }
@@ -43,8 +44,8 @@ internal class `Domain tests` {
                         this[route.destination]!![route.origin] = route.travelTime
                 }
             })
-            assertEquals(this, routes.toGraph)
-            assertEquals(toString(), routes.toGraph.toString())
+            assertEquals(this, routes.graph)
+            assertEquals(toString(), routes.graph.toString())
         }
     }
 
@@ -61,7 +62,7 @@ internal class `Domain tests` {
 
     @Test
     fun `initialisation function return data structure to consume from departure`() =
-        initialisation(routes.toGraph, config.departure).run {
+        initialisation(routes.graph, config.departure).run {
             assertTrue(containsKey(DISTANCE))
             assertEquals(
                 this[DISTANCE].toString(),
@@ -94,20 +95,29 @@ internal class `Domain tests` {
         }
 
     @Test
-    fun `shortestPath function`() = routes.shortestPath(
-        config.departure,
-        config.arrival
-    ).run {
-//        log.info(
-//            "graph: ${
-//                mapOf(
-//                    "Tatooine" to mapOf("Dagobah" to 6, "Hoth" to 6),
-//                    "Dagobah" to mapOf("Endor" to 4, "Hoth" to 1),
-//                    "Hoth" to mapOf("Endor" to 1)
-//                    // "Endor" to mapOf("Dagobah" to 4, "Hoth" to 1)
-//                )
-//            }"
-//        )
-//        log.info("shortestPath: $this")
+    fun `shortestPath function`() {
+        val g: MutableMap<String, Any> = initialisation(routes.graph, config.departure) as MutableMap<String, Any>
+
+//    while ((g[VISITE] as List<*>).isNotEmpty()) {
+//        val chemins = mutableListOf<String>()
+//        val u: Pair<String, Int> = mini(g[DISTANCE] as MutableMap<String, Int>)!!
+//        var s: Pair<String, Int> = u
+//        val m: Int = (g[DISTANCE] as MutableMap<String, Int>)[s.first]!!
+//        while (s.first != source) {
+//            chemins.add(u.first)
+////            s=(g[PARENT] as MutableMap<String, Map<String, Int>>)[s].keys
+//            s = Pair("", 1)
+//            log.info(g[PARENT])
+//        }
+//    }
+        val res = emptyMap<String, Any>()
+        log.info("result: $res")
+//        routes.shortestPath(
+//            config.departure,
+//            config.arrival
+//        ).run {
+//            log.info("shortestPath: $this")
+////            assertEquals(res,this)
+//        }
     }
 }

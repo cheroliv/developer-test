@@ -22,7 +22,7 @@ val List<Route>.destinations: Set<String>
 
 
 /*=================================================================================*/
-val List<Route>.toGraph: Map<String, Map<String, Int>>
+val List<Route>.graph: Map<String, Map<String, Int>>
     get() = mutableMapOf<String, MutableMap<String, Int>>().apply {
         destinations.forEach { destination -> set(destination, mutableMapOf()) }
         forEach { route: Route ->
@@ -84,23 +84,7 @@ fun relachement(
 fun List<Route>.shortestPath(
     source: String,
     destination: String
-): Map<Pair<String, String>, Map<String, Any>> {
-    val g: MutableMap<String, Any> = initialisation(toGraph, source) as MutableMap<String, Any>
-
-//    while ((g[VISITE] as List<*>).isNotEmpty()) {
-//        val chemins = mutableListOf<String>()
-//        val u: Pair<String, Int> = mini(g[DISTANCE] as MutableMap<String, Int>)!!
-//        var s: Pair<String, Int> = u
-//        val m: Int = (g[DISTANCE] as MutableMap<String, Int>)[s.first]!!
-//        while (s.first != source) {
-//            chemins.add(u.first)
-////            s=(g[PARENT] as MutableMap<String, Map<String, Int>>)[s].keys
-//            s = Pair("", 1)
-//            log.info(g[PARENT])
-//        }
-//    }
-    return emptyMap()
-}
+): Map<Pair<String, String>, Map<String, Any>> = emptyMap()
 
 /*=================================================================================*/
 data class Route(
