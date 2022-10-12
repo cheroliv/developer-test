@@ -7,7 +7,7 @@
 
 package backend
 
-import backend.Data.pairsExample
+import backend.Data.pairExamples
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import kotlinx.coroutines.runBlocking
@@ -85,7 +85,7 @@ internal class `Backend tests` {
     @Ignore
     fun `Upload a JSON file containing the data intercepted by the rebels about the plans of the Empire and displaying the odds`() {
 
-        pairsExample.map {
+        pairExamples.map {
             client
                 .post()
                 .uri("api/give-me-the-odds")
@@ -133,7 +133,7 @@ internal class `Backend tests` {
     @Test
     fun `men at work Upload a JSON file containing the data intercepted by the rebels about the plans of the Empire and displaying the odds`() {
 
-        pairsExample.map {
+        pairExamples.map {
             client
                 .post()
                 .uri("api/give-me-the-odds")

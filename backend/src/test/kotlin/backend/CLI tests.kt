@@ -6,7 +6,7 @@
 
 package backend
 
-import backend.Data.triplesExample
+import backend.Data.tripleExamples
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.junit.jupiter.api.extension.ExtendWith
@@ -14,7 +14,6 @@ import org.springframework.beans.factory.getBean
 import org.springframework.boot.test.system.CapturedOutput
 import org.springframework.boot.test.system.OutputCaptureExtension
 import org.springframework.context.ConfigurableApplicationContext
-import org.springframework.data.r2dbc.core.R2dbcEntityTemplate
 import kotlin.test.*
 import kotlin.text.Charsets.UTF_8
 
@@ -27,7 +26,7 @@ internal class `CLI tests` {
 
     @Test
     fun `men at work check cli`(output: CapturedOutput) {
-        triplesExample.map {
+        tripleExamples.map {
             cli(it.first, it.second)
             assertTrue(output.out.contains("odds = -1"))
         }
@@ -36,7 +35,7 @@ internal class `CLI tests` {
     @Test
     @Ignore
     fun `check cli`(output: CapturedOutput) {
-        triplesExample.map {
+        tripleExamples.map {
             context = cli(it.first, it.second)
             val expectedOdds = mapper.readValue<Answer>(
                 context.getResource("classpath:${it.third}")
