@@ -64,7 +64,7 @@ to solve the problem let's use the Dijkstra’s algorithm who answers the questi
 of the shortest and fastest paths for travelers. +
 
 
-accordin to our universe.csv
+according to our universe.csv
 [%header,format=csv,separator=";"]
 |===
 origin;destination;travel_time
