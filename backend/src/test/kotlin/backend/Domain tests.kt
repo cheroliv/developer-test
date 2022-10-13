@@ -96,7 +96,7 @@ internal class `Domain tests` {
 
     @Test
     fun `shortestPath function`() {
-        val g: MutableMap<String, Any> = initialisation(routes.graph, config.departure) as MutableMap<String, Any>
+        val g: MutableMap<String, Any> = initialisation(routes.graph, config.departure)
 
 //    while ((g[VISITE] as List<*>).isNotEmpty()) {
 //        val chemins = mutableListOf<String>()

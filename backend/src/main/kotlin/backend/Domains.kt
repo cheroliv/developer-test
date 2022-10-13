@@ -2,7 +2,7 @@
     "unused",
     "SpellCheckingInspection",
     "UNCHECKED_CAST",
-    "UNUSED_PARAMETER",
+    "UNUSED_PARAMETER", "UnusedReceiverParameter",
 )
 
 package backend
@@ -37,7 +37,7 @@ val List<Route>.graph: Map<String, Map<String, Int>>
 fun initialisation(
     graphe: Map<String, Map<String, Int>>,
     source: String,
-): Map<String, Any> = mutableMapOf<String, Any>().apply {
+): MutableMap<String, Any> = mutableMapOf<String, Any>().apply {
     val du = mutableMapOf<String, Int>()
     val parentu = mutableMapOf<String, Map<String, Int>>()
     val v = mutableSetOf<String>()
@@ -84,7 +84,7 @@ fun relachement(
 fun List<Route>.shortestPath(
     source: String,
     destination: String
-): Map<Pair<String, String>, Map<String, Any>> = emptyMap()
+): Map<Any, Any> = emptyMap()
 
 /*=================================================================================*/
 data class Route(
