@@ -2,7 +2,6 @@
 
 package backend
 
-import backend.RouteRepositoryInMemory.InMemoryData.routes
 import kotlinx.coroutines.reactor.awaitSingle
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate
 import org.springframework.data.r2dbc.core.select
@@ -39,7 +38,7 @@ class RouteRepositoryR2dbc(
 class RouteRepositoryInMemory : RouteRepository {
     private object InMemoryData {
         private val routes: MutableList<Route> by lazy {
-            emptyList<Route>().toMutableList()
+            mutableListOf()
         }
 
         @JvmStatic

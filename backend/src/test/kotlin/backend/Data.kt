@@ -1,7 +1,7 @@
 package backend
 
 object Data {
-    val expectedGraph = mapOf(
+    val expectedRoadmap = mapOf(
         "Tatooine" to mapOf("Dagobah" to 6, "Hoth" to 6),
         "Dagobah" to mapOf("Tatooine" to 6, "Endor" to 4, "Hoth" to 1),
         "Hoth" to mapOf("Dagobah" to 1, "Endor" to 1, "Tatooine" to 6),

@@ -6,9 +6,9 @@
 
 package backend
 
-import backend.Data.expectedGraph
+import backend.Data.config
+import backend.Data.expectedRoadmap
 import backend.Data.routes
-import backend.Log.log
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -27,7 +27,7 @@ internal class `Domain tests` {
 
     @Test
     fun `roadmap function return the destinations map for a list of routes`() = with(routes) {
-        expectedGraph.run {
+        expectedRoadmap.run {
             assertEquals(this, mutableMapOf<String, MutableMap<String, Int>>().apply {
                 destinations.forEach { destination -> set(destination, mutableMapOf()) }
                 forEach { route: Route ->
@@ -42,114 +42,17 @@ internal class `Domain tests` {
         }
     }
 
-
     @Test
-    fun `graph function`() {
-        val roadmap = routes.roadmap
-        // construct graph
-        val graph = Graph_().apply {
-            roadmap.keys.forEach { destination ->
-                addNode(Node(name = destination))
-            }
-            roadmap.keys.forEach { destination ->
-                roadmap[destination]!!.map { node ->
-                    getNodes()
-                        .first { it.name == destination }
-                        .addDestination(Node(node.key), node.value)
-                }
-            }
+    fun `dijkstra algorithm`() {
+        val graph = routes.graph
+        val (path, value) = shortestPath(graph, config.departure, config.arrival)
+        println("path = $path, value = $value")
+        println(shortestPath(graph, config.departure, config.arrival))
+        assertEquals(
+            Pair(listOf("Tatooine", "Hoth", "Endor"), 7.0),
+            shortestPath(graph, config.departure, config.arrival)
+        )
 
-        }
-        assertEquals(graph.toString(), routes.roadmap.graph.toString())
-    }
-
-    @Test
-    fun `CalculateMinimumDistance function`(){
-        val nodeA = Node("A")
-        val nodeB = Node("B")
-        val nodeC = Node("C")
-        val nodeD = Node("D")
-        val nodeE = Node("E")
-        val nodeF = Node("F")
-
-        nodeA.addDestination(nodeB, 10)
-        nodeA.addDestination(nodeC, 15)
-
-        nodeB.addDestination(nodeD, 12)
-        nodeB.addDestination(nodeF, 15)
-
-        nodeC.addDestination(nodeE, 10)
-
-        nodeD.addDestination(nodeE, 2)
-        nodeD.addDestination(nodeF, 1)
-
-        nodeF.addDestination(nodeE, 5)
-
-        log.info("nodeB.distance avant: ${nodeB.distance}")
-        Dijkstra.CalculateMinimumDistance(nodeB,25,nodeA)
-        log.info("nodeB.distance apres: ${nodeB.distance}")
-        log.info("nodeB.getShortestPath(): ${nodeB.getShortestPath()}")
-    }
-
-    @Test
-    fun `Dijkstra test`() {
-
-        val nodeA = Node("A")
-        val nodeB = Node("B")
-        val nodeC = Node("C")
-        val nodeD = Node("D")
-        val nodeE = Node("E")
-        val nodeF = Node("F")
-
-        nodeA.addDestination(nodeB, 10)
-        nodeA.addDestination(nodeC, 15)
-
-        nodeB.addDestination(nodeD, 12)
-        nodeB.addDestination(nodeF, 15)
-
-        nodeC.addDestination(nodeE, 10)
-
-        nodeD.addDestination(nodeE, 2)
-        nodeD.addDestination(nodeF, 1)
-
-        nodeF.addDestination(nodeE, 5)
-
-        var graph = Graph_()
-
-        graph.addNode(nodeA)
-        graph.addNode(nodeB)
-        graph.addNode(nodeC)
-        graph.addNode(nodeD)
-        graph.addNode(nodeE)
-        graph.addNode(nodeF)
-
-//        graph = Dijkstra.calculateShortestPathFromSource(graph, nodeA)
-        log.info("graph: $graph")
-//
-//        val shortestPathForNodeB = listOf(nodeA)
-//        val shortestPathForNodeC = listOf(nodeA)
-//        val shortestPathForNodeD = listOf(nodeA, nodeB)
-//        val shortestPathForNodeE = listOf(nodeA, nodeB, nodeD)
-//        val shortestPathForNodeF = listOf(nodeA, nodeB, nodeD)
-//
-//        graph.getNodes().forEach { node ->
-//            when (node.name) {
-//                "B" -> assertEquals(node.getShortestPath(), shortestPathForNodeB)
-//                "C" -> assertEquals(node.getShortestPath(), shortestPathForNodeC)
-//                "D" -> assertEquals(node.getShortestPath(), shortestPathForNodeD)
-//                "E" -> assertEquals(node.getShortestPath(), shortestPathForNodeE)
-//                "F" -> assertEquals(node.getShortestPath(), shortestPathForNodeF)
-//            }
-//        }
-    }
-
-
-    @Test
-    @kotlin.test.Ignore
-    fun `shortestPath function`() {
-
-        val graph = routes.shortestPath("Tatooine")
-            .apply { log.info("graph: $this") }
     }
 }
 
