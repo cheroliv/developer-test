@@ -107,7 +107,6 @@ internal class `Domain tests` {
                     currentAutonomy -= timeToNext
                 }
                 timeWithRefuel += timeToNext
-                log.info("timeToNext(${it}, ${path.first[index + 1]}): $timeToNext")
             }
         }
         return timeWithRefuel + cptRefuel

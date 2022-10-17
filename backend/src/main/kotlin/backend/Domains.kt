@@ -11,12 +11,18 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.*
 import kotlin.Double.Companion.POSITIVE_INFINITY
 
+/*=================================================================================*/
 
-fun <T, E: Number> shortestPath(graph: IGraph<T, E>, from: T, destination: T): Pair<List<T>, Double> {
+fun <T, E : Number> shortestPath(graph: IGraph<T, E>, from: T, destination: T): Pair<List<T>, Double> {
     return dijkstra(graph, from, destination)[destination] ?: (emptyList<T>() to POSITIVE_INFINITY)
 }
+/*=================================================================================*/
 
-private fun <T, E : Number> dijkstra(graph: IGraph<T, E>, from: T, destination: T? = null): Map<T, Pair<List<T>, Double>> {
+private fun <T, E : Number> dijkstra(
+    graph: IGraph<T, E>,
+    from: T,
+    destination: T? = null
+): Map<T, Pair<List<T>, Double>> {
     val unvisitedSet = graph.getAllVertices().toMutableSet()
     val distances = graph.getAllVertices().associateWith { POSITIVE_INFINITY }.toMutableMap()
     val paths = mutableMapOf<T, List<T>>()
@@ -42,8 +48,10 @@ private fun <T, E : Number> dijkstra(graph: IGraph<T, E>, from: T, destination: 
 
     return paths.mapValues { entry -> entry.value to distances[entry.key]!! }
 }
+/*=================================================================================*/
 
 data class Edge<T, E : Number>(val from: T, val to: T, val value: E)
+/*=================================================================================*/
 
 interface IGraph<T, E : Number> {
     fun getAllVertices(): Set<T>
@@ -51,11 +59,12 @@ interface IGraph<T, E : Number> {
     fun getDistance(from: T, to: T): E
 }
 
+/*=================================================================================*/
 
 class Graph<T, E : Number>(
     val directed: Boolean = false,
     val defaultCost: E
-): IGraph<T, E> {
+) : IGraph<T, E> {
     private val edges = mutableSetOf<Edge<T, E>>()
     private val vertices = mutableSetOf<T>()
 
@@ -96,6 +105,8 @@ class Graph<T, E : Number>(
             .first()
     }
 }
+
+/*=================================================================================*/
 val List<Route>.graph
     get() = Graph<String, Int>(
         directed = true,
