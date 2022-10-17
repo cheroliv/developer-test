@@ -2,6 +2,7 @@
     "unused",
     "SpellCheckingInspection",
     "UnusedReceiverParameter",
+    "PARAMETER_NAME_CHANGED_ON_OVERRIDE",
 )
 
 package backend
@@ -27,9 +28,7 @@ private fun <T, E : Number> dijkstra(
     val distances = graph.getAllVertices().associateWith { POSITIVE_INFINITY }.toMutableMap()
     val paths = mutableMapOf<T, List<T>>()
     distances[from] = 0.0
-
     var current = from
-
     while (unvisitedSet.isNotEmpty() && unvisitedSet.contains(destination)) {
         graph.adjacentVertices(current).forEach { adjacent ->
             val distance = graph.getDistance(current, adjacent).toDouble()
@@ -38,14 +37,13 @@ private fun <T, E : Number> dijkstra(
                 paths[adjacent] = paths.getOrDefault(current, listOf(current)) + listOf(adjacent)
             }
         }
-
         unvisitedSet.remove(current)
-
-        if (current == destination || unvisitedSet.all { distances[it]!!.isInfinite() }) break
-
-        if (unvisitedSet.isNotEmpty()) current = unvisitedSet.minBy { distances[it]!! }!!
+        if (current == destination
+            || unvisitedSet.all { distances[it]!!.isInfinite() }
+        ) break
+        if (unvisitedSet.isNotEmpty())
+            current = unvisitedSet.minBy { distances[it]!! }!!
     }
-
     return paths.mapValues { entry -> entry.value to distances[entry.key]!! }
 }
 /*=================================================================================*/

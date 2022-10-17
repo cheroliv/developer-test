@@ -88,7 +88,10 @@ internal class `Domain tests` {
         return 1.0 - odds(path,empire)
     }
 
-    private fun odds(path: Pair<List<String>, Double>, empire: Empire): Double {
+    private fun odds(
+        path: Pair<List<String>, Double>,
+        empire: Empire
+    ): Double {
         TODO("Not yet implemented")
     }
 
@@ -103,9 +106,7 @@ internal class `Domain tests` {
                 if (timeToNext >= currentAutonomy) {
                     currentAutonomy = config.autonomy
                     cptRefuel++
-                } else {
-                    currentAutonomy -= timeToNext
-                }
+                } else currentAutonomy -= timeToNext
                 timeWithRefuel += timeToNext
             }
         }
