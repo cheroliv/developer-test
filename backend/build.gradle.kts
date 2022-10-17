@@ -73,7 +73,6 @@ sourceSets {
     getByName("main").resources.srcDirs(
         "${parent?.rootDir?.path}/configuration",
         "${parent?.rootDir?.path}/examples",
-    "${parent?.rootDir?.path}/data"
     )
 }
 

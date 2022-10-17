@@ -18,7 +18,7 @@ fun <T, E: Number> shortestPath(graph: IGraph<T, E>, from: T, destination: T): P
 
 private fun <T, E : Number> dijkstra(graph: IGraph<T, E>, from: T, destination: T? = null): Map<T, Pair<List<T>, Double>> {
     val unvisitedSet = graph.getAllVertices().toMutableSet()
-    val distances = graph.getAllVertices().map { it to POSITIVE_INFINITY }.toMap().toMutableMap()
+    val distances = graph.getAllVertices().associateWith { POSITIVE_INFINITY }.toMutableMap()
     val paths = mutableMapOf<T, List<T>>()
     distances[from] = 0.0
 
