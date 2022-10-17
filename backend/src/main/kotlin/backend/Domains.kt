@@ -98,7 +98,7 @@ class Graph<T, E : Number>(
 }
 
 /*=================================================================================*/
-val List<Route>.graph
+val List<Route>.graph: Graph<String, Int>
     get() = Graph<String, Int>(
         directed = true,
         defaultCost = 1
