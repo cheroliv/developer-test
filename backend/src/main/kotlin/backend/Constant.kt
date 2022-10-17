@@ -8,7 +8,7 @@ import java.net.URI.create
 
 object Constants {
 
-
+    const val UNLUCKY = 0.0
 
     const val REFUEL_DURATION = 1
     const val NORMAL_TERMINATION = 0
