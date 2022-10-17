@@ -13,10 +13,10 @@ import java.util.*
 import kotlin.Double.Companion.POSITIVE_INFINITY
 
 /*=================================================================================*/
-
-fun <T, E : Number> shortestPath(graph: IGraph<T, E>, from: T, destination: T): Pair<List<T>, Double> {
-    return dijkstra(graph, from, destination)[destination] ?: (emptyList<T>() to POSITIVE_INFINITY)
-}
+fun <T, E : Number> shortestPath(graph: IGraph<T, E>, from: T, destination: T)
+        : Pair<List<T>, Double> = dijkstra(
+    graph, from, destination
+)[destination] ?: (emptyList<T>() to POSITIVE_INFINITY)
 /*=================================================================================*/
 
 private fun <T, E : Number> dijkstra(
@@ -75,33 +75,26 @@ class Graph<T, E : Number>(
         val (from, to) = pair
         addVertex(from)
         addVertex(to)
-
         addRelation(from, to, value ?: defaultCost)
-        if (!directed) {
-            addRelation(to, from, value ?: defaultCost)
-        }
-
+        if (!directed) addRelation(to, from, value ?: defaultCost)
         return this
     }
 
-    override fun getAllVertices(): Set<T> {
-        return vertices.toSet()
-    }
+    override fun getAllVertices(): Set<T> = vertices.toSet()
 
     private fun addRelation(from: T, to: T, value: E) {
-        edges.add(Edge(from, to, value))
+        edges += Edge(from, to, value)
     }
 
-    override fun adjacentVertices(from: T): Set<T> {
-        return edges.filter { it.from == from }.map { it.to }.toSet()
-    }
+    override fun adjacentVertices(from: T): Set<T> = edges
+        .filter { it.from == from }
+        .map { it.to }
+        .toSet()
 
-    override fun getDistance(from: T, to: T): E {
-        return edges
-            .filter { it.from == from && it.to == to }
-            .map { it.value }
-            .first()
-    }
+    override fun getDistance(from: T, to: T): E = edges
+        .filter { it.from == from && it.to == to }
+        .map { it.value }
+        .first()
 }
 
 /*=================================================================================*/
@@ -117,14 +110,12 @@ val List<Route>.graph
         }
     }
 
-
 /*=================================================================================*/
 val List<Route>.destinations: Set<String>
     get() = mutableListOf<String>().apply {
         addAll(this@destinations.map { it.origin })
         addAll(this@destinations.map { it.destination })
     }.toSet()
-
 
 /*=================================================================================*/
 val List<Route>.roadmap: MutableMap<String, MutableMap<String, Int>>
