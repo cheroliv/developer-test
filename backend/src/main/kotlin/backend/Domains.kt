@@ -11,6 +11,7 @@ package backend
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.*
 import kotlin.Double.Companion.POSITIVE_INFINITY
+
 /*=================================================================================*/
 fun giveMeTheOdds(
     roadmap: MutableMap<String, MutableMap<String, Int>>,
@@ -28,7 +29,12 @@ else constraints(roadmap, config, empire, path).run {
 fun odds(
     hunterNumber: Int
 ): Double {
-    TODO("Not yet implemented")
+    //$$ {1 \over 10} + { 9 \over 10^2 } + { 9^2 \over 10^3 } + ... + { 9^k \over 10^{k+1} } $$
+    var odds=0.0
+    repeat(hunterNumber){
+
+    }
+    return odds
 }
 /*=================================================================================*/
 
