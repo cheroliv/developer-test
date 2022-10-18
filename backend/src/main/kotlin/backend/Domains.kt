@@ -11,6 +11,7 @@ package backend
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.*
 import kotlin.Double.Companion.POSITIVE_INFINITY
+import kotlin.math.pow
 
 /*=================================================================================*/
 fun giveMeTheOdds(
@@ -26,16 +27,12 @@ else constraints(roadmap, config, empire, path).run {
 }
 /*=================================================================================*/
 
-fun odds(
-    hunterNumber: Int
-): Double {
-    //$$ {1 \over 10} + { 9 \over 10^2 } + { 9^2 \over 10^3 } + ... + { 9^k \over 10^{k+1} } $$
-    var odds=0.0
-    repeat(hunterNumber){
-
-    }
-    return odds
+fun odds(hunterNumber: Int) = when {
+    hunterNumber <= 0 -> 0.0
+    else -> (1 until hunterNumber)
+        .sumOf { 9.0.pow(it.toDouble()) / 10.0.pow(it + 1) } + 1.0/10.0
 }
+
 /*=================================================================================*/
 
 internal data class PathStep(

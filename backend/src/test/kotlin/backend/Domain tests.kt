@@ -10,7 +10,7 @@ import backend.Constants.UNLUCKY
 import backend.Data.config
 import backend.Data.expectedRoadmap
 import backend.Data.routes
-import backend.Log.log
+import kotlin.math.pow
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -65,8 +65,6 @@ internal class `Domain tests` {
             config.departure,
             config.arrival
         )
-            .apply { log.info("shortestPath: $this") }
-
         assertEquals(
             giveMeTheOdds(
                 routes.roadmap,
@@ -82,6 +80,15 @@ internal class `Domain tests` {
                 shortestPathResult
             ), UNLUCKY
         )
+    }
+
+    @Test
+    fun `odds function`() = repeat((0..3).count()) {
+        odds(it).apply {
+            if (it == 0) assertEquals(this, 0.0)
+            if (it == 1) assertEquals(this, 1.0 / 10.0)
+            if (it == 2) assertEquals(this, 9.0.pow(it.toDouble()) / 10.0.pow(it + 1) + 1.0 / 10.0)
+        }
     }
 
 }
