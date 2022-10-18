@@ -1,5 +1,3 @@
-@file:Suppress("unused")
-
 package backend
 
 import backend.Constants.SPRING_PROFILE_CONF_DEFAULT_KEY
@@ -32,9 +30,7 @@ fun cli(vararg args: String) = runApplication<OnBoardComputerApplication>(*args)
 
 fun countRoute(context: ApplicationContext): Int = when {
     context.getBean("routeRepository") is RouteRepositoryInMemory ->
-        runBlocking {
-            context.getBean<RouteRepositoryInMemory>().findAllRoutes().size
-        }
+        runBlocking { context.getBean<RouteRepositoryInMemory>().findAllRoutes().size }
 
     else -> context.getBean<R2dbcEntityTemplate>()
         .select(RouteEntity::class.java)
@@ -44,9 +40,7 @@ fun countRoute(context: ApplicationContext): Int = when {
 
 fun findAllRoutes(context: ApplicationContext): List<Route> = when {
     context.getBean("routeRepository") is RouteRepositoryInMemory ->
-        runBlocking {
-            context.getBean<RouteRepositoryInMemory>().findAllRoutes()
-        }
+        runBlocking { context.getBean<RouteRepositoryInMemory>().findAllRoutes() }
 
     else -> context.getBean<R2dbcEntityTemplate>()
         .select(RouteEntity::class.java)

@@ -1,5 +1,3 @@
-@file:Suppress("unused")
-
 package backend
 
 import org.springframework.data.annotation.Id
