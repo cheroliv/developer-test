@@ -87,7 +87,7 @@ internal class `Domain tests` {
         odds(it).apply {
             if (it == 0) assertEquals(this, 0.0)
             if (it == 1) assertEquals(this, 1.0 / 10.0)
-            if (it == 2) assertEquals(this, 9.0.pow(it.toDouble()) / 10.0.pow(it + 1) + 1.0 / 10.0)
+//            if (it == 2) assertEquals(this, 9.0.pow(it.toDouble()) / 10.0.pow(it + 1) + 1.0 / 10.0)
         }
     }
 
