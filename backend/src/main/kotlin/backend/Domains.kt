@@ -11,6 +11,90 @@ package backend
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.*
 import kotlin.Double.Companion.POSITIVE_INFINITY
+/*=================================================================================*/
+fun giveMeTheOdds(
+    roadmap: MutableMap<String, MutableMap<String, Int>>,
+    config: ComputerConfig,
+    empire: Empire,
+    path: Pair<List<String>, Double>
+): Double = if (path.second > empire.countdown) Constants.UNLUCKY
+else constraints(roadmap, config, empire, path).run {
+    Log.log.info("constraints: $this")
+    if (empire.countdown < first) Constants.UNLUCKY
+    else 1.0 - odds(second)
+}
+/*=================================================================================*/
+
+fun odds(
+    hunterNumber: Int
+): Double {
+    TODO("Not yet implemented")
+}
+/*=================================================================================*/
+
+internal data class PathStep(
+    val departure: String,
+    val arrival: String,
+    val timeTravel: Int,
+    val refuel: Boolean,
+    var hunterCount: Int? = 0
+)
+/*=================================================================================*/
+
+fun constraints(
+    roadmap: MutableMap<String, MutableMap<String, Int>>,
+    config: ComputerConfig,
+    empire: Empire,
+    path: Pair<List<String>, Double>
+): Pair<Int, Int> {
+
+    var timeWithRefuel = 0
+    var cptRefuel = 0
+    var currentAutonomy = config.autonomy
+    val pathSize = path.first.size
+
+    val pathRefuel: MutableList<Pair<String, Boolean>> = mutableListOf<Pair<String, Boolean>>().apply {
+        path.first.forEachIndexed { index, destination: String ->
+            if (pathSize - index > 1) {
+                val timeToNext: Int = roadmap[destination]!![path.first[index + 1]]!!
+                if (timeToNext >= currentAutonomy) {
+                    currentAutonomy = config.autonomy
+                    cptRefuel++
+                    add(Pair(path.first[index + 1], true))
+                } else {
+                    currentAutonomy -= timeToNext
+                    add(Pair(path.first[index + 1], false))
+                }
+                timeWithRefuel += timeToNext
+            }
+        }
+        add(0, Pair(config.departure, false))
+    }
+
+    val pathSteps: MutableList<PathStep> = mutableListOf<PathStep>().apply {
+        path.first.forEachIndexed { index, destination: String ->
+            if (pathSize - index > 1)
+                add(
+                    PathStep(
+                        departure = destination,
+                        arrival = path.first[index + 1],
+                        refuel = pathRefuel.first { it.first == destination }.second,
+                        timeTravel = roadmap[destination]!![path.first[index + 1]]!!,
+                        hunterCount = empire.bountyHunters.filter { hunter ->
+                            hunter.planet == path.first[index + 1]
+                                    && hunter.day == roadmap[destination]!![path.first[index + 1]]!!
+                                    || hunter.day == roadmap[destination]!![path.first[index + 1]]!! + 1
+                        }.size
+                    )
+                )
+        }
+    }
+    return Pair(
+        timeWithRefuel + cptRefuel,
+        pathSteps.map { it.hunterCount }
+            .reduce { sum, count -> sum!! + (count!!) }!!
+    )
+}
 
 /*=================================================================================*/
 fun <T, E : Number> shortestPath(graph: IGraph<T, E>, from: T, destination: T)
