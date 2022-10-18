@@ -29,8 +29,7 @@ else constraints(roadmap, config, empire, path).run {
 
 fun odds(hunterNumber: Int) = when {
     hunterNumber <= 0 -> 0.0
-    else -> (1 until hunterNumber)
-        .sumOf { 9.0.pow(it.toDouble()) / 10.0.pow(it + 1) } + 1.0/10.0
+    else -> (1..hunterNumber).sumOf { 9.0.pow(it - 1) / 10.0.pow(it) }
 }
 
 /*=================================================================================*/
