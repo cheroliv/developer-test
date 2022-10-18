@@ -21,7 +21,6 @@ fun giveMeTheOdds(
     path: Pair<List<String>, Double>
 ): Double = if (path.second > empire.countdown) Constants.UNLUCKY
 else constraints(roadmap, config, empire, path).run {
-    Log.log.info("constraints: $this")
     if (empire.countdown < first) Constants.UNLUCKY
     else 1.0 - odds(second)
 }
@@ -29,7 +28,9 @@ else constraints(roadmap, config, empire, path).run {
 
 fun odds(hunterNumber: Int) = when {
     hunterNumber <= 0 -> 0.0
-    else -> (1..hunterNumber).sumOf { 9.0.pow(it - 1) / 10.0.pow(it) }
+    else -> (1..hunterNumber).sumOf {
+        9.0.pow(it - 1) / 10.0.pow(it)
+    }
 }
 
 /*=================================================================================*/

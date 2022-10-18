@@ -10,7 +10,6 @@ import backend.Constants.UNLUCKY
 import backend.Data.config
 import backend.Data.expectedRoadmap
 import backend.Data.routes
-import backend.Log.log
 import kotlin.math.pow
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -87,7 +86,10 @@ internal class `Domain tests` {
     fun `odds function`() = repeat((0..3).count()) {
         odds(it).apply {
             if (it == 0) assertEquals(0.0, this)
-            if (it == 1) assertEquals(9.0.pow(1 - 1) / 10.0.pow(1), this)
+            if (it == 1) assertEquals(
+                9.0.pow(1 - 1) / 10.0.pow(1),
+                this
+            )
             if (it == 2) assertEquals(
                 9.0.pow(1 - 1) / 10.0.pow(1)
                         + 9.0.pow(2 - 1) / 10.0.pow(2),

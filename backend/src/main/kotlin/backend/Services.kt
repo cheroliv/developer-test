@@ -8,10 +8,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import kotlinx.coroutines.runBlocking
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.beans.factory.getBean
 import org.springframework.boot.CommandLineRunner
 import org.springframework.context.ApplicationContext
-import org.springframework.context.ApplicationContextAware
 import org.springframework.context.annotation.Profile
 import org.springframework.core.io.Resource
 import org.springframework.stereotype.Component
@@ -56,11 +54,13 @@ class RoadMapService(
                 )
             }
         }
+
     @Transactional(readOnly = true)
-    suspend fun giveMeTheOdds(strEmpire: String,routes:List<Route>): Double {
+    suspend fun giveMeTheOdds(strEmpire: String, routes: List<Route>): Double {
         val empire = objectMapper.readValue<Empire>(strEmpire)
         return -1.0
     }
+
     @Transactional(readOnly = true)
     suspend fun giveMeTheOdds(strEmpire: String): Double {
         val empire = objectMapper.readValue<Empire>(strEmpire)
@@ -73,21 +73,47 @@ class RoadMapService(
 @Profile(SPRING_PROFILE_CLI)
 class OnBoardComputerCliRunner(
     private val context: ApplicationContext,
-    private val objectMapper: ObjectMapper,
-    private val roadMapService:RoadMapService
+    private val mapper: ObjectMapper
 ) : CommandLineRunner {
 
     override fun run(vararg args: String?) {
-        val computerConfig = objectMapper.readValue<ComputerConfig>(
+        val config = mapper.readValue<ComputerConfig>(
             context.getResource("classpath:${args.first()}")
                 .file.readText(Charsets.UTF_8)
         )
-        val empire = objectMapper.readValue<Empire>(
+        val empire = mapper.readValue<Empire>(
             context.getResource("classpath:${args.last()}")
                 .file.readText(Charsets.UTF_8)
         )
 
-        val odds:Double=-1.0
+        val routes: List<Route> = context
+            .getResource("classpath:${config.routesDb}")
+            .file
+            .readText(UTF_8)
+            .lines()
+            .drop(1)
+            .map {
+                it.split(";").run {
+                    Route(
+                        origin = first(),
+                        destination = this[1],
+                        travelTime = last().toInt(),
+                    )
+                }
+            }
+
+        val shortestPathResult: Pair<List<String>, Double> = shortestPath(
+            routes.graph,
+            config.departure,
+            config.arrival
+        )
+
+        val odds = giveMeTheOdds(
+            routes.roadmap,
+            config,
+            empire,
+            shortestPathResult
+        )
         log.info("odds = $odds")
     }
 
