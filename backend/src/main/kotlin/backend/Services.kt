@@ -17,8 +17,8 @@ import org.springframework.core.io.Resource
 import org.springframework.stereotype.Component
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import kotlin.text.Charsets.UTF_8
 import javax.annotation.PostConstruct
+import kotlin.text.Charsets.UTF_8
 
 /*=================================================================================*/
 @Service
@@ -102,7 +102,8 @@ class RoadMapService(
             empire,
             shortestPath(
                 routes.graph,
-                config.departure, config.arrival
+                config.departure,
+                config.arrival
             )
         )
 

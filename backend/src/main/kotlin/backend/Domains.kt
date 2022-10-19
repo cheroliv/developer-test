@@ -36,9 +36,9 @@ fun odds(hunterNumber: Int) = when {
 internal data class PathStep(
     val departure: String,
     val arrival: String,
-    val timeTravel: Int,
-    val refuel: Boolean,
-    var hunterCount: Int? = 0
+    val timeTravel: Int = 0,
+    val refuel: Boolean = false,
+    var hunterCount: Int = 0
 )
 /*=================================================================================*/
 
@@ -93,7 +93,7 @@ fun constraints(
     return Pair(
         timeWithRefuel + cptRefuel,
         pathSteps.map { it.hunterCount }
-            .reduce { sum, count -> sum!! + (count!!) }!!
+            .reduce { sum, count -> sum + (count) }
     )
 }
 
@@ -110,26 +110,26 @@ private fun <T, E : Number> dijkstra(
     destination: T? = null
 ): Map<T, Pair<List<T>, Double>> {
     val unvisitedSet = graph.getAllVertices().toMutableSet()
-    val distances = graph.getAllVertices().associateWith { POSITIVE_INFINITY }.toMutableMap()
+    val times = graph.getAllVertices().associateWith { POSITIVE_INFINITY }.toMutableMap()
     val paths = mutableMapOf<T, List<T>>()
-    distances[from] = 0.0
+    times[from] = 0.0
     var current = from
     while (unvisitedSet.isNotEmpty() && unvisitedSet.contains(destination)) {
         graph.adjacentVertices(current).forEach { adjacent ->
-            val distance = graph.getDistance(current, adjacent).toDouble()
-            if (distances[current]!! + distance < distances[adjacent]!!) {
-                distances[adjacent] = distances[current]!! + distance
+            val time = graph.getDistance(current, adjacent).toDouble()
+            if (times[current]!! + time < times[adjacent]!!) {
+                times[adjacent] = times[current]!! + time
                 paths[adjacent] = paths.getOrDefault(current, listOf(current)) + listOf(adjacent)
             }
         }
         unvisitedSet.remove(current)
         if (current == destination
-            || unvisitedSet.all { distances[it]!!.isInfinite() }
+            || unvisitedSet.all { times[it]!!.isInfinite() }
         ) break
         if (unvisitedSet.isNotEmpty())
-            current = unvisitedSet.minBy { distances[it]!! }!!
+            current = unvisitedSet.minBy { times[it]!! }!!
     }
-    return paths.mapValues { entry -> entry.value to distances[entry.key]!! }
+    return paths.mapValues { entry -> entry.value to times[entry.key]!! }
 }
 /*=================================================================================*/
 
