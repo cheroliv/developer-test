@@ -17,11 +17,8 @@ import org.springframework.beans.factory.getBean
 import org.springframework.boot.runApplication
 import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.http.MediaType.APPLICATION_JSON
-import org.springframework.http.MediaType.MULTIPART_FORM_DATA
-import org.springframework.http.client.MultipartBodyBuilder
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.test.web.reactive.server.returnResult
-import org.springframework.web.reactive.function.BodyInserters.fromMultipartData
 import java.nio.charset.StandardCharsets
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -91,12 +88,9 @@ internal class `Backend tests` {
                 .post()
                 .uri("api/give-me-the-odds")
                 .contentType(APPLICATION_JSON)
-                .body(fromMultipartData(MultipartBodyBuilder().apply {
-                    part(
-                        "empire",
-                        context.getResource("classpath:${it.first}")
-                    ).contentType(MULTIPART_FORM_DATA)
-                }.build()))
+                .bodyValue(
+                    mapper.readValue<Empire>(context.getResource("classpath:${it.first}").file)
+                )
                 .exchange()
                 .expectStatus()
                 .isOk
@@ -106,15 +100,13 @@ internal class `Backend tests` {
                         context.getResource("classpath:${it.first}").file
                     )
 
-                    val sentEmpire = mapper.readValue<Empire>(requestBodyContent!!
-                        .map { it.toInt().toChar().toString() }
-                        .reduce { acc: String, s: String -> acc + s }
-                        .lines()
-                        .drop(5)//clean what's not json in request body
-                        .dropLast(1)//clean what's not json in request body
-                        .reduce { accumulator: String, s: String -> accumulator + "\n" + s })
+                    val empireSent = mapper.readValue<Empire>(
+                        requestBodyContent!!
+                            .map { byte -> byte.toInt().toChar().toString() }
+                            .reduce { acc: String, s: String -> acc + s }
+                    )
 
-                    assertEquals(empireInRequest, sentEmpire)
+                    assertEquals(empireInRequest, empireSent)
 
                     runBlocking {
                         responseBodyContent!!.apply {

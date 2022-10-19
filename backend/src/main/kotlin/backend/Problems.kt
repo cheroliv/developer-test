@@ -2,6 +2,16 @@
 
 package backend
 
+import backend.Constants.CONSTRAINT_VIOLATION_TYPE
+import backend.Constants.DEFAULT_TYPE
+import backend.Constants.ERR_CONCURRENCY_FAILURE
+import backend.Constants.ERR_VALIDATION
+import backend.Constants.FIELD_ERRORS_KEY
+import backend.Constants.MESSAGE_KEY
+import backend.Constants.PATH_KEY
+import backend.Constants.SPRING_PROFILE_PRODUCTION
+import backend.Constants.VIOLATIONS_KEY
+import backend.HttpHeaderUtil.createFailureAlert
 import org.springframework.core.env.Environment
 import org.springframework.dao.ConcurrencyFailureException
 import org.springframework.dao.DataAccessException
@@ -15,6 +25,7 @@ import org.springframework.web.server.ServerWebExchange
 import org.zalando.problem.*
 import org.zalando.problem.Problem.builder
 import org.zalando.problem.Status.BAD_REQUEST
+import org.zalando.problem.Status.CONFLICT
 import org.zalando.problem.spring.webflux.advice.ProblemHandling
 import org.zalando.problem.violations.ConstraintViolationProblem
 import reactor.core.publisher.Mono
@@ -75,13 +86,6 @@ class ProblemTranslator(
     private val properties: ApplicationProperties
 ) : ProblemHandling {
 
-    companion object {
-        private const val FIELD_ERRORS_KEY = "fieldErrors"
-        private const val MESSAGE_KEY = "message"
-        private const val PATH_KEY = "path"
-        private const val VIOLATIONS_KEY = "violations"
-    }
-
     class FieldErrorVM(
         val objectName: String,
         val field: String,
@@ -108,7 +112,7 @@ class ProblemTranslator(
         ) return just(entity)
         val builder = builder()
             .withType(
-                if (PROBLEM_DEFAULT_TYPE == problem.type) Constants.DEFAULT_TYPE
+                if (PROBLEM_DEFAULT_TYPE == problem.type) DEFAULT_TYPE
                 else problem.type
             )
             .withStatus(problem.status)
@@ -117,7 +121,7 @@ class ProblemTranslator(
 
         if (problem is ConstraintViolationProblem) builder
             .with(VIOLATIONS_KEY, problem.violations)
-            .with(MESSAGE_KEY, Constants.ERR_VALIDATION)
+            .with(MESSAGE_KEY, ERR_VALIDATION)
         else {
             builder
                 .withCause((problem as DefaultProblem).cause)
@@ -144,10 +148,10 @@ class ProblemTranslator(
         ex: WebExchangeBindException, request: ServerWebExchange
     ): Mono<ResponseEntity<Problem>> = create(
         ex, builder()
-            .withType(Constants.CONSTRAINT_VIOLATION_TYPE)
+            .withType(CONSTRAINT_VIOLATION_TYPE)
             .withTitle("Data binding and validation failure")
             .withStatus(BAD_REQUEST)
-            .with(MESSAGE_KEY, Constants.ERR_VALIDATION)
+            .with(MESSAGE_KEY, ERR_VALIDATION)
             .with(FIELD_ERRORS_KEY, ex.bindingResult.fieldErrors.map {
                 FieldErrorVM(
                     it.objectName.replaceFirst(
@@ -166,7 +170,7 @@ class ProblemTranslator(
     ): Mono<ResponseEntity<Problem>> =
         create(
             ex, request,
-            HttpHeaderUtil.createFailureAlert(
+            createFailureAlert(
                 applicationName = properties.clientApp.name,
                 enableTranslation = true,
                 entityName = ex.entityName,
@@ -181,8 +185,8 @@ class ProblemTranslator(
         request: ServerWebExchange
     ): Mono<ResponseEntity<Problem>> = create(
         ex, builder()
-            .withStatus(Status.CONFLICT)
-            .with(MESSAGE_KEY, Constants.ERR_CONCURRENCY_FAILURE)
+            .withStatus(CONFLICT)
+            .with(MESSAGE_KEY, ERR_CONCURRENCY_FAILURE)
             .build(), request
     )
 
@@ -192,7 +196,7 @@ class ProblemTranslator(
         type: URI
     ): ProblemBuilder {
         var detail = throwable.message
-        if (env.activeProfiles.contains(Constants.SPRING_PROFILE_PRODUCTION)) {
+        if (env.activeProfiles.contains(SPRING_PROFILE_PRODUCTION)) {
             detail = when (throwable) {
                 is HttpMessageConversionException -> "Unable to convert http message"
                 is DataAccessException -> "Failure during data access"
@@ -208,7 +212,9 @@ class ProblemTranslator(
             .withTitle(status.reasonPhrase)
             .withStatus(status)
             .withDetail(detail)
-            .withCause(throwable.cause.takeIf { isCausalChainsEnabled }?.let { toProblem(it) })
+            .withCause(throwable.cause.takeIf {
+                isCausalChainsEnabled
+            }?.let { toProblem(it) })
     }
 
     private fun containsPackageName(message: String?) =

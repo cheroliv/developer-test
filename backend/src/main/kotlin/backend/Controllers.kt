@@ -2,11 +2,11 @@
 
 package backend
 
-import backend.Log.log
 import org.springframework.http.HttpStatus.OK
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.io.IOException
+import javax.validation.Valid
 
 
 /*=================================================================================*/
@@ -18,9 +18,10 @@ class RoadMapController(private val roadMapService: RoadMapService) {
     @ResponseStatus(OK)
     @Throws(IOException::class)
     suspend fun giveMeOdds(
-        @RequestPart("empire") empire: String
+        @RequestBody @Valid empire: Empire
     ): ResponseEntity<Double> = ResponseEntity(
-        roadMapService.giveMeTheOdds(empire), OK)
-//        .also { log.info("empire: $empire") }
+        roadMapService.giveMeTheOdds(empire),
+        OK
+    )
 }
 /*=================================================================================*/
