@@ -93,7 +93,7 @@ fun constraints(
     return Pair(
         timeWithRefuel + cptRefuel,
         pathSteps.map { it.hunterCount }
-            .reduce { sum, count -> sum + (count) }
+            .reduce { sum, count -> sum + count }
     )
 }
 

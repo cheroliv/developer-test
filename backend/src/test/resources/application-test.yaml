@@ -28,18 +28,18 @@ spring:
   devtools:
     restart:
       enabled: true
-  thymeleaf:
-    mode: HTML
+  # thymeleaf:
+  #   mode: HTML
   messages:
     basename: i18n/messages
     encoding: UTF-8
   main:
     banner-mode: "off"
     allow-bean-definition-overriding: true
-  http:
-    multipart:
-      enabled: true
-      location: /api/give-me-the-odds
+  # http:
+  #   multipart:
+  #     enabled: true
+  #     location: /api/give-me-the-odds
 ##############################################################################
 logging:
   level:
