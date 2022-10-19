@@ -7,12 +7,6 @@ I assume java dev kit and runtime is installed and you are running under nix lik
 to run the frontend, launch this command in the terminal and go to http://localhost:8000
 [source,bash]
 ----
-./gradlew c3po
+killall node; ./gradlew c3po;
 ----
 to stop c3p0 use Ctrl+C +
-
-if the port is already running, just type this command to kill it.
-[source,bash]
-----
-killall node
-----
