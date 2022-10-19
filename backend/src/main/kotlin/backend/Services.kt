@@ -98,7 +98,10 @@ class RoadMapService(
         val config = mapper.readValue<ComputerConfig>(configurationFile.file)
         val routes = routeRepository.findAllRoutes()
         return giveMeTheOdds(
-            routes.roadmap, config, empire, shortestPath(
+            routes.roadmap,
+            config,
+            empire,
+            shortestPath(
                 routes.graph,
                 config.departure, config.arrival
             )

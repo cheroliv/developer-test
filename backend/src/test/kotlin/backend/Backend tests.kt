@@ -23,7 +23,6 @@ import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.test.web.reactive.server.returnResult
 import org.springframework.web.reactive.function.BodyInserters.fromMultipartData
 import java.nio.charset.StandardCharsets
-import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -60,9 +59,7 @@ internal class `Backend tests` {
                 assertEquals("universe.csv", routesDb)
             }
         }
-        //universe must be persisted
-        assertEquals(5, countRoute(context))
-        //let's compare retrieved data from database with what csv contains
+        assertEquals(5, countRoute(context), "universe must be persisted")
         with(findAllRoutes(context)) {
             context.getResource("classpath:universe.csv")
                 .file
@@ -77,7 +74,12 @@ internal class `Backend tests` {
                             travelTime = last().toInt(),
                         )
                     }
-                }.map { assertTrue(contains(it)) }
+                }.map {
+                    assertTrue(
+                        contains(it),
+                        "let's compare retrieved data from database with what csv contains"
+                    )
+                }
         }
     }
 
@@ -100,7 +102,7 @@ internal class `Backend tests` {
                 .isOk
                 .returnResult<Int>().run {
 
-                    val expectedEmpire = mapper.readValue<Empire>(
+                    val empireInRequest = mapper.readValue<Empire>(
                         context.getResource("classpath:${it.first}").file
                     )
 
@@ -112,7 +114,7 @@ internal class `Backend tests` {
                         .dropLast(1)//clean what's not json in request body
                         .reduce { accumulator: String, s: String -> accumulator + "\n" + s })
 
-                    assertEquals(expectedEmpire, sentEmpire)
+                    assertEquals(empireInRequest, sentEmpire)
 
                     runBlocking {
                         responseBodyContent!!.apply {
