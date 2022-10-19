@@ -1,29 +1,31 @@
 import React from "react";
 import axios from "axios";
 
+
 const api_url = "http://localhost:8080/api/give-me-the-odds";
-const empire = "empire"
+//const empire = "empire"
+
 export default function Empire() {
     const [uploadFile, setUploadFile] = React.useState();
 
     const submitForm = (event) => {
-        event.preventDefault();
+//        event.preventDefault();
 
-        const dataArray = new FormData();
-        dataArray.append(empire, uploadFile);
 
-        axios
-            .post(api_url, dataArray)
-            .then((response) => {
-                // successfully uploaded response
-                console.log(empire)
-                console.log(dataArray[empire])
-            })
-            .catch((error) => {
-                // error response
-                console.log(dataArray[empire])
-            });
-    };
+//        const empire = fs.readFileSync(uploadFile, {encoding: 'utf-8'})
+//        console.log(empire)
+
+//        axios
+//            .post(api_url, empire)
+//            .then((response) => {
+////                 successfully uploaded response
+//                console.log(empire)
+//            })
+//            .catch((error) => {
+////                 error response
+//                console.log(empire)
+//            });
+//    };
 
     return ( <
         div >
