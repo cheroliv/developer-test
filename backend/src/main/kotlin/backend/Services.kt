@@ -17,7 +17,7 @@ import org.springframework.core.io.Resource
 import org.springframework.stereotype.Component
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.nio.charset.StandardCharsets.UTF_8
+import kotlin.text.Charsets.UTF_8
 import javax.annotation.PostConstruct
 
 /*=================================================================================*/

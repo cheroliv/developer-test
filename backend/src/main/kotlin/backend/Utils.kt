@@ -7,10 +7,10 @@ import org.springframework.data.domain.Page
 import org.springframework.http.HttpHeaders
 import org.springframework.web.util.UriComponentsBuilder
 import java.io.UnsupportedEncodingException
-import java.net.URLEncoder
 import java.net.URLEncoder.encode
-import java.nio.charset.StandardCharsets.UTF_8
+
 import java.text.MessageFormat
+import kotlin.text.Charsets.UTF_8
 
 
 /*=================================================================================*/
