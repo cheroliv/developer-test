@@ -1,8 +1,6 @@
 @file:Suppress(
-    "unused",
-    "SpellCheckingInspection",
-    "UnusedReceiverParameter",
     "PARAMETER_NAME_CHANGED_ON_OVERRIDE",
+    "MemberVisibilityCanBePrivate",
 )
 
 package backend

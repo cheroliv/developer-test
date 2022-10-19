@@ -1,8 +1,4 @@
-@file:Suppress(
-    "NonAsciiCharacters",
-    "unused",
-    "ClassName",
-)
+@file:Suppress("ClassName")
 
 package backend
 
@@ -59,32 +55,29 @@ internal class `Domain tests` {
 
 
     @Test
-    fun `give me the odds`() {
-        val shortestPathResult: Pair<List<String>, Double> = shortestPath(
-            routes.graph,
-            config.departure,
-            config.arrival
-        )
-        assertEquals(
-            giveMeTheOdds(
-                routes.roadmap,
-                config,
-                Empire(
-                    countdown = 7,
-                    bountyHunters = listOf(
-                        BountyHunter(planet = "Hoth", day = 6),
-                        BountyHunter(planet = "Hoth", day = 7),
-                        BountyHunter(planet = "Hoth", day = 8)
-                    )
-                ),
-                shortestPathResult
-            ), UNLUCKY
-        )
-    }
+    fun `give me the odds`() = assertEquals(
+        giveMeTheOdds(
+            routes.roadmap,
+            config,
+            Empire(
+                countdown = 7,
+                bountyHunters = listOf(
+                    BountyHunter(planet = "Hoth", day = 6),
+                    BountyHunter(planet = "Hoth", day = 7),
+                    BountyHunter(planet = "Hoth", day = 8)
+                )
+            ),
+            shortestPath(
+                routes.graph,
+                config.departure,
+                config.arrival
+            )
+        ), UNLUCKY
+    )
 
     @Test
-    fun `odds function`() = repeat((0..3).count()) {
-        odds(it).apply {
+    fun `odds function`() = repeat((0..4).count()) {
+        with(odds(it)) {
             if (it == 0) assertEquals(0.0, this)
             if (it == 1) assertEquals(
                 9.0.pow(1 - 1) / 10.0.pow(1),
@@ -111,5 +104,3 @@ internal class `Domain tests` {
         }
     }
 }
-
-

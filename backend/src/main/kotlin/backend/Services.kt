@@ -2,12 +2,14 @@
 
 package backend
 
+import backend.Constants.CSV_DELIMITER
 import backend.Constants.SPRING_PROFILE_CLI
 import backend.Log.log
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import kotlinx.coroutines.runBlocking
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.beans.factory.getBean
 import org.springframework.boot.CommandLineRunner
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Profile
@@ -19,14 +21,13 @@ import java.nio.charset.StandardCharsets.UTF_8
 import javax.annotation.PostConstruct
 
 /*=================================================================================*/
-
 @Service
 class RoadMapService(
     @Value("classpath:millennium-falcon.json")
     private val configurationFile: Resource,
     private val routeRepository: RouteRepository,
     private val context: ApplicationContext,
-    private val objectMapper: ObjectMapper,
+    private val mapper: ObjectMapper,
 ) {
     @PostConstruct
     private fun init() = runBlocking {
@@ -35,7 +36,7 @@ class RoadMapService(
     }
 
     @Transactional
-    private suspend fun loadOnBoardComputerConfig() = objectMapper
+    private suspend fun loadOnBoardComputerConfig() = mapper
         .readValue<ComputerConfig>(configurationFile.file)
         .run { routeRepository.saveAll(readUniverseCsv(routesDb)) }
 
@@ -46,7 +47,7 @@ class RoadMapService(
         .lines()
         .drop(1)
         .map {
-            it.split(";").run {
+            it.split(CSV_DELIMITER).run {
                 Route(
                     origin = this[0],
                     destination = this[1],
@@ -56,32 +57,11 @@ class RoadMapService(
         }
 
     @Transactional(readOnly = true)
-    suspend fun giveMeTheOdds(strEmpire: String, routes: List<Route>): Double {
-        val empire = objectMapper.readValue<Empire>(strEmpire)
-        return -1.0
-    }
-
-    @Transactional(readOnly = true)
-    suspend fun giveMeTheOdds(strEmpire: String): Double {
-        val empire = objectMapper.readValue<Empire>(strEmpire)
-        return -1.0
-    }
-}
-/*=================================================================================*/
-
-@Component
-@Profile(SPRING_PROFILE_CLI)
-class OnBoardComputerCliRunner(
-    private val context: ApplicationContext,
-    private val mapper: ObjectMapper
-) : CommandLineRunner {
-
-    override fun run(vararg args: String?) {
+    suspend fun giveMeTheOdds(strConfig: String, strEmpire: String): Double {
         val config = mapper.readValue<ComputerConfig>(
-            context.getResource("classpath:${args.first()}")
+            context.getResource("classpath:$strConfig")
                 .file.readText(Charsets.UTF_8)
         )
-
         val routes: List<Route> = context
             .getResource("classpath:${config.routesDb}")
             .file
@@ -89,7 +69,7 @@ class OnBoardComputerCliRunner(
             .lines()
             .drop(1)
             .map {
-                it.split(";").run {
+                it.split(CSV_DELIMITER).run {
                     Route(
                         origin = first(),
                         destination = this[1],
@@ -97,11 +77,11 @@ class OnBoardComputerCliRunner(
                     )
                 }
             }
-        val odds = giveMeTheOdds(
+        return giveMeTheOdds(
             routes.roadmap,
             config,
             mapper.readValue(
-                context.getResource("classpath:${args.last()}")
+                context.getResource("classpath:$strEmpire")
                     .file.readText(UTF_8)
             ),
             shortestPath(
@@ -110,9 +90,41 @@ class OnBoardComputerCliRunner(
                 config.arrival
             )
         )
-        log.info("odds = $odds")
     }
 
+    @Transactional(readOnly = true)
+    suspend fun giveMeTheOdds(strEmpire: String): Double {
+        val empire = mapper.readValue<Empire>(strEmpire)
+        val config = mapper.readValue<ComputerConfig>(configurationFile.file)
+        val routes = routeRepository.findAllRoutes()
+        return giveMeTheOdds(
+            routes.roadmap, config, empire, shortestPath(
+                routes.graph,
+                config.departure, config.arrival
+            )
+        )
+
+    }
+}
+/*=================================================================================*/
+
+@Component
+@Profile(SPRING_PROFILE_CLI)
+class OnBoardComputerCliRunner(
+    private val context: ApplicationContext,
+) : CommandLineRunner {
+    override fun run(vararg args: String?) {
+        runBlocking {
+            log.info(
+                "odds = ${
+                    context.getBean<RoadMapService>().giveMeTheOdds(
+                        args.first().toString(),
+                        args.last().toString()
+                    )
+                }"
+            )
+        }
+    }
 }
 /*=================================================================================*/
 

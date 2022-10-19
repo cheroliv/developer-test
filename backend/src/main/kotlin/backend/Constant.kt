@@ -8,6 +8,7 @@ import java.net.URI.create
 
 object Constants {
 
+    const val CSV_DELIMITER = ";"
     const val UNLUCKY = 0.0
 
     const val REFUEL_DURATION = 1
@@ -26,7 +27,7 @@ object Constants {
     const val SPRING_PROFILE_NO_LIQUIBASE = "no-liquibase"
     const val SPRING_PROFILE_K8S = "k8s"
     const val SPRING_PROFILE_CLI = "cli"
-    val SPRING_PROFILE_CLI_PROPS = mutableMapOf<String, Any>("spring.main.web-application-type" to "none")
+    val SPRING_PROFILE_CLI_PROPS = mapOf("spring.main.web-application-type" to "none")
 
 
     //Config
