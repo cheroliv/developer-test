@@ -81,10 +81,6 @@ class OnBoardComputerCliRunner(
             context.getResource("classpath:${args.first()}")
                 .file.readText(Charsets.UTF_8)
         )
-        val empire = mapper.readValue<Empire>(
-            context.getResource("classpath:${args.last()}")
-                .file.readText(Charsets.UTF_8)
-        )
 
         val routes: List<Route> = context
             .getResource("classpath:${config.routesDb}")
@@ -101,18 +97,18 @@ class OnBoardComputerCliRunner(
                     )
                 }
             }
-
-        val shortestPathResult: Pair<List<String>, Double> = shortestPath(
-            routes.graph,
-            config.departure,
-            config.arrival
-        )
-
         val odds = giveMeTheOdds(
             routes.roadmap,
             config,
-            empire,
-            shortestPathResult
+            mapper.readValue(
+                context.getResource("classpath:${args.last()}")
+                    .file.readText(UTF_8)
+            ),
+            shortestPath(
+                routes.graph,
+                config.departure,
+                config.arrival
+            )
         )
         log.info("odds = $odds")
     }
