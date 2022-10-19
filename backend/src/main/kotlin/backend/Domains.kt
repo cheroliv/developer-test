@@ -38,7 +38,7 @@ internal data class PathStep(
     val arrival: String,
     val timeTravel: Int = 0,
     val refuel: Boolean = false,
-    var hunterCount: Int = 0
+    val hunterCount: Int = 0
 )
 /*=================================================================================*/
 
@@ -98,22 +98,22 @@ fun constraints(
 }
 
 /*=================================================================================*/
-fun <T, E : Number> shortestPath(graph: IGraph<T, E>, from: T, destination: T)
+fun <T, E : Number> shortestPath(graph: IGraph<T, E>, origin: T, destination: T)
         : Pair<List<T>, Double> = dijkstra(
-    graph, from, destination
+    graph, origin, destination
 )[destination] ?: (emptyList<T>() to POSITIVE_INFINITY)
 /*=================================================================================*/
 
 private fun <T, E : Number> dijkstra(
     graph: IGraph<T, E>,
-    from: T,
+    origin: T,
     destination: T? = null
 ): Map<T, Pair<List<T>, Double>> {
     val unvisitedSet = graph.getAllVertices().toMutableSet()
     val times = graph.getAllVertices().associateWith { POSITIVE_INFINITY }.toMutableMap()
     val paths = mutableMapOf<T, List<T>>()
-    times[from] = 0.0
-    var current = from
+    times[origin] = 0.0
+    var current = origin
     while (unvisitedSet.isNotEmpty() && unvisitedSet.contains(destination)) {
         graph.adjacentVertices(current).forEach { adjacent ->
             val time = graph.getDistance(current, adjacent).toDouble()
