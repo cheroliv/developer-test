@@ -132,8 +132,8 @@ private fun <T, E : Number> dijkstra(
     return paths.mapValues { entry -> entry.value to times[entry.key]!! }
 }
 /*=================================================================================*/
+data class Edge<T, E : Number>(val origin: T,val destination: T,val travelTime: E)
 
-data class Edge<T, E : Number>(val from: T, val to: T, val value: E)
 /*=================================================================================*/
 
 interface IGraph<T, E : Number> {
@@ -172,16 +172,15 @@ class Graph<T, E : Number>(
     }
 
     override fun adjacentVertices(from: T): Set<T> = edges
-        .filter { it.from == from }
-        .map { it.to }
+        .filter { it.origin == from }
+        .map { it.destination }
         .toSet()
 
     override fun getDistance(from: T, to: T): E = edges
-        .filter { it.from == from && it.to == to }
-        .map { it.value }
+        .filter { it.origin == from && it.destination == to }
+        .map { it.travelTime }
         .first()
 }
-
 /*=================================================================================*/
 val List<Route>.graph: Graph<String, Int>
     get() = Graph<String, Int>(
