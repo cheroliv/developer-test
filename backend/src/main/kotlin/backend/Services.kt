@@ -29,6 +29,9 @@ class RoadMapService(
     private val context: ApplicationContext,
     private val mapper: ObjectMapper,
 ) {
+
+    private val config: ComputerConfig by lazy { mapper.readValue(configurationFile.file) }
+
     @PostConstruct
     private fun init() = runBlocking {
         checkProfileLog(context)
@@ -36,8 +39,7 @@ class RoadMapService(
     }
 
     @Transactional
-    private suspend fun loadOnBoardComputerConfig() = mapper
-        .readValue<ComputerConfig>(configurationFile.file)
+    private suspend fun loadOnBoardComputerConfig() = config
         .run { routeRepository.saveAll(readUniverseCsv(routesDb)) }
 
     private fun readUniverseCsv(fileName: String): List<Route> = context
@@ -77,25 +79,11 @@ class RoadMapService(
                     )
                 }
             }
-        return giveMeTheOdds(
-            routes.roadmap,
-            config,
-            mapper.readValue(
-                context.getResource("classpath:$strEmpire")
-                    .file.readText(UTF_8)
-            ),
-            shortestPath(
-                routes.graph,
-                config.departure,
-                config.arrival
-            )
+        val empire: Empire = mapper.readValue(
+            context.getResource("classpath:$strEmpire")
+                .file.readText(UTF_8)
         )
-    }
 
-    @Transactional(readOnly = true)
-    suspend fun giveMeTheOdds(empire: Empire): Double {
-        val config = mapper.readValue<ComputerConfig>(configurationFile.file)
-        val routes = routeRepository.findAllRoutes()
         return giveMeTheOdds(
             routes.roadmap,
             config,
@@ -106,7 +94,20 @@ class RoadMapService(
                 config.arrival
             )
         )
+    }
 
+    @Transactional(readOnly = true)
+    suspend fun giveMeTheOdds(empire: Empire): Double = with(routeRepository.findAllRoutes()) {
+        return giveMeTheOdds(
+            roadmap,
+            config,
+            empire,
+            shortestPath(
+                graph,
+                config.departure,
+                config.arrival
+            )
+        )
     }
 }
 /*=================================================================================*/
@@ -119,12 +120,10 @@ class OnBoardComputerCliRunner(
     override fun run(vararg args: String?) {
         runBlocking {
             log.info(
-                "${
-                    context.getBean<RoadMapService>().giveMeTheOdds(
-                        args.first().toString(),
-                        args.last().toString()
-                    )
-                }"
+                context.getBean<RoadMapService>().giveMeTheOdds(
+                    args.first()!!,
+                    args.last()!!
+                )
             )
         }
     }
