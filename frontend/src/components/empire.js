@@ -18,7 +18,6 @@ export default function Empire() {
                         { headers: {"Content-Type": "application/json"}})
                 .then((response) => {
                         setOdds(response.data);
-                        console.log(odds);
                     })
                 .catch((error) => { console.log(error.response.data.message); });
         });
