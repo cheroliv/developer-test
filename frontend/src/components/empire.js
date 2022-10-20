@@ -34,9 +34,9 @@ export default function Empire() {
             <input type = "submit" / >
         </form>
 	<p>
-	{odds == 0 && <>probability of success: 0 %</>}
-	{odds == 1 && <>probability of success: 100 %</>}
-	{odds < 1 && odds >0 && <>probability of success: {odds} %</>}
+        {odds == 0 && <>probability of success: 0 %</>}
+        {odds == 1 && <>probability of success: 100 %</>}
+        {odds < 1 && odds >0 && <>probability of success: {odds*100} %</>}
 	</p>
     </div>);
 }
