@@ -26,11 +26,6 @@ internal class `CLI tests` {
     fun `check cli`(output: CapturedOutput): Unit = runBlocking {
         tripleExamples.map {
             with(cli(it.first, it.second)) {
-                assertTrue(
-                    output
-                        .out
-                        .contains("odds = ${getBean<RoadMapService>().giveMeTheOdds(it.first, it.second)}")
-                )
                 log.info(
                     "expectedOdds = ${
                         getBean<ObjectMapper>().readValue<Answer>(
@@ -39,6 +34,11 @@ internal class `CLI tests` {
                                 .readText(UTF_8)
                         ).odds
                     }"
+                )
+                assertTrue(
+                    output
+                        .out
+                        .contains("odds = ${getBean<RoadMapService>().giveMeTheOdds(it.first, it.second)}")
                 )
             }
         }
