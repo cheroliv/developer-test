@@ -39,8 +39,9 @@ class RoadMapService(
     }
 
     @Transactional
-    private suspend fun loadOnBoardComputerConfig() = config
-        .run { routeRepository.saveAll(readUniverseCsv(routesDb)) }
+    private suspend fun loadOnBoardComputerConfig() = config.run {
+        routeRepository.saveAll(readUniverseCsv(routesDb))
+    }
 
     private fun readUniverseCsv(fileName: String): List<Route> = context
         .getResource("classpath:${fileName}")
@@ -119,12 +120,7 @@ class OnBoardComputerCliRunner(
 ) : CommandLineRunner {
     override fun run(vararg args: String?) {
         runBlocking {
-            log.info(
-                context.getBean<RoadMapService>().giveMeTheOdds(
-                    args.first()!!,
-                    args.last()!!
-                )
-            )
+            log.info(context.getBean<RoadMapService>().giveMeTheOdds(args.first()!!, args.last()!!))
         }
     }
 }
