@@ -116,7 +116,7 @@ private fun <T, E : Number> dijkstra(
     var current = origin
     while (unvisitedSet.isNotEmpty() && unvisitedSet.contains(destination)) {
         graph.adjacentVertices(current).forEach { adjacent ->
-            val time = graph.getDistance(current, adjacent).toDouble()
+            val time = graph.getTime(current, adjacent).toDouble()
             if (times[current]!! + time < times[adjacent]!!) {
                 times[adjacent] = times[current]!! + time
                 paths[adjacent] = paths.getOrDefault(current, listOf(current)) + listOf(adjacent)
@@ -139,7 +139,7 @@ data class Edge<T, E : Number>(val origin: T,val destination: T,val travelTime: 
 interface IGraph<T, E : Number> {
     fun getAllVertices(): Set<T>
     fun adjacentVertices(vertex: T): Set<T>
-    fun getDistance(from: T, to: T): E
+    fun getTime(from: T, to: T): E
 }
 
 /*=================================================================================*/
@@ -176,7 +176,7 @@ class Graph<T, E : Number>(
         .map { it.destination }
         .toSet()
 
-    override fun getDistance(from: T, to: T): E = edges
+    override fun getTime(from: T, to: T): E = edges
         .filter { it.origin == from && it.destination == to }
         .map { it.travelTime }
         .first()
