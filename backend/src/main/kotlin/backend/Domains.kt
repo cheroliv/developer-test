@@ -6,6 +6,7 @@
 package backend
 
 
+import backend.Constants.UNLUCKY
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.*
 import kotlin.Double.Companion.POSITIVE_INFINITY
@@ -17,9 +18,9 @@ fun giveMeTheOdds(
     config: ComputerConfig,
     empire: Empire,
     path: Pair<List<String>, Double>
-): Double = if (path.second > empire.countdown) Constants.UNLUCKY
+): Double = if (path.second > empire.countdown) UNLUCKY
 else constraints(roadmap, config, empire, path).run {
-    if (empire.countdown < first) Constants.UNLUCKY
+    if (empire.countdown < first) UNLUCKY
     else 1.0 - odds(second)
 }
 /*=================================================================================*/
