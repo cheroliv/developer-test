@@ -7,7 +7,6 @@
 package backend
 
 import backend.Data.tripleExamples
-import backend.Log.log
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import kotlinx.coroutines.runBlocking
@@ -26,17 +25,13 @@ internal class `CLI tests` {
     fun `check cli`(output: CapturedOutput): Unit = runBlocking {
         tripleExamples.map {
             with(cli(it.first, it.second)) {
-                assertTrue(
-                    output
-                        .out
-                        .contains("odds = ${getBean<ObjectMapper>()
-                            .readValue<Answer>(
-                                getResource("classpath:${it.third}")
-                                    .file
-                                    .readText(UTF_8)
-                            ).odds
-                        }}")
-                )
+                val expectedOdds = getBean<ObjectMapper>()
+                    .readValue<Answer>(
+                        getResource("classpath:${it.third}")
+                            .file
+                            .readText(UTF_8)
+                    ).odds.toString()
+                assertTrue(output.out.contains(expectedOdds))
             }
         }
     }

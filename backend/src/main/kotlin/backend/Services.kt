@@ -119,7 +119,7 @@ class OnBoardComputerCliRunner(
     override fun run(vararg args: String?) {
         runBlocking {
             log.info(
-                "odds = ${
+                "${
                     context.getBean<RoadMapService>().giveMeTheOdds(
                         args.first().toString(),
                         args.last().toString()
