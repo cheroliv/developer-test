@@ -3,7 +3,7 @@ import axios from "axios";
 
 
 const api_url = "http://localhost:8080/api/give-me-the-odds";
-
+const postHeaders = { headers: {"Content-Type": "application/json"}}
 
 export default function Empire() {
     const [uploadFile, setUploadFile] = useState();
@@ -13,13 +13,9 @@ export default function Empire() {
         event.preventDefault();
         const reader = new FileReader();
         reader.addEventListener('load', (event) => {
-            axios.post(api_url,
-                       reader.result,
-                        { headers: {"Content-Type": "application/json"}})
-                .then((response) => {
-                        setOdds(response.data);
-                    })
-                .catch((error) => { console.log(error.response.data.message); });
+            axios.post(api_url, reader.result, postHeaders)
+                .then((response) => { setOdds(response.data);})
+                .catch((error) => { console.log(error.response.data.message);});
         });
         reader.readAsText(uploadFile.item(0));
     };
