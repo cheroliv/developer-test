@@ -39,7 +39,13 @@ internal class `CLI tests` {
                 assertTrue(
                     output
                         .out
-                        .contains("odds = ${getBean<RoadMapService>().giveMeTheOdds(it.first, it.second)}")
+                        .contains("odds = ${getBean<ObjectMapper>()
+                            .readValue<Answer>(
+                                getResource("classpath:${it.third}")
+                                    .file
+                                    .readText(UTF_8)
+                            ).odds
+                        }}")
                 )
             }
         }
