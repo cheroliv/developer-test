@@ -3,7 +3,7 @@
 package backend
 
 import backend.Constants.CSV_DELIMITER
-import backend.Constants.SPRING_PROFILE_CLI
+import backend.Constants.PROFILE_CLI
 import backend.Log.log
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
@@ -98,8 +98,10 @@ class RoadMapService(
     }
 
     @Transactional(readOnly = true)
-    suspend fun giveMeTheOdds(empire: Empire): Double = with(routeRepository.findAllRoutes()) {
-        return giveMeTheOdds(
+    suspend fun giveMeTheOdds(
+        empire: Empire
+    ): Double = with(routeRepository.findAllRoutes()) {
+        giveMeTheOdds(
             roadmap,
             config,
             empire,
@@ -114,7 +116,7 @@ class RoadMapService(
 /*=================================================================================*/
 
 @Component
-@Profile(SPRING_PROFILE_CLI)
+@Profile(PROFILE_CLI)
 class OnBoardComputerCliRunner(
     private val context: ApplicationContext,
 ) : CommandLineRunner {

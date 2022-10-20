@@ -5,12 +5,12 @@ package backend
 
 import backend.Constants.DEV_HOST
 import backend.Constants.NORMAL_TERMINATION
-import backend.Constants.SPRING_PROFILE_CLI
-import backend.Constants.SPRING_PROFILE_CLI_PROPS
-import backend.Constants.SPRING_PROFILE_CLOUD
-import backend.Constants.SPRING_PROFILE_CONF_DEFAULT_KEY
-import backend.Constants.SPRING_PROFILE_DEVELOPMENT
-import backend.Constants.SPRING_PROFILE_PRODUCTION
+import backend.Constants.PROFILE_CLI
+import backend.Constants.PROFILE_CLI_PROPS
+import backend.Constants.PROFILE_CLOUD
+import backend.Constants.PROFILE_CONF_DEFAULT_KEY
+import backend.Constants.PROFILE_DEVELOPMENT
+import backend.Constants.PROFILE_PRODUCTION
 import backend.Constants.STARTUP_LOG_MSG_KEY
 import backend.Log.log
 import org.springframework.beans.factory.getBean
@@ -38,10 +38,10 @@ object OnBoardComputerBootstrap {
         with(this) {
             setDefaultProperties(
                 hashMapOf<String, Any>(
-                    SPRING_PROFILE_CONF_DEFAULT_KEY to SPRING_PROFILE_DEVELOPMENT
+                    PROFILE_CONF_DEFAULT_KEY to PROFILE_DEVELOPMENT
                 )
             )
-            setAdditionalProfiles(SPRING_PROFILE_DEVELOPMENT)
+            setAdditionalProfiles(PROFILE_DEVELOPMENT)
         }
     }.run { bootstrapLog(context = this) }
 
@@ -52,8 +52,8 @@ object OnBoardComputerCliBootstrap {
     @JvmStatic
     fun main(args: Array<String>) {
         runApplication<OnBoardComputerApplication>(*args) {
-            setAdditionalProfiles(SPRING_PROFILE_CLI)
-            setDefaultProperties(SPRING_PROFILE_CLI_PROPS)
+            setAdditionalProfiles(PROFILE_CLI)
+            setDefaultProperties(PROFILE_CLI_PROPS)
         }
         exitProcess(NORMAL_TERMINATION)
     }
@@ -62,28 +62,28 @@ object OnBoardComputerCliBootstrap {
 
 fun checkProfileLog(context: ApplicationContext) = context.environment.activeProfiles.run {
     when {
-        contains(SPRING_PROFILE_DEVELOPMENT) &&
-                contains(SPRING_PROFILE_PRODUCTION)
+        contains(PROFILE_DEVELOPMENT) &&
+                contains(PROFILE_PRODUCTION)
         -> log.error(
             context.getBean<MessageSource>().getMessage(
                 STARTUP_LOG_MSG_KEY,
                 arrayOf(
-                    SPRING_PROFILE_DEVELOPMENT,
-                    SPRING_PROFILE_PRODUCTION
+                    PROFILE_DEVELOPMENT,
+                    PROFILE_PRODUCTION
                 ),
                 getDefault()
             )
         )
     }
     when {
-        contains(SPRING_PROFILE_DEVELOPMENT) &&
-                contains(SPRING_PROFILE_CLOUD)
+        contains(PROFILE_DEVELOPMENT) &&
+                contains(PROFILE_CLOUD)
         -> log.error(
             context.getBean<MessageSource>().getMessage(
                 STARTUP_LOG_MSG_KEY,
                 arrayOf(
-                    SPRING_PROFILE_DEVELOPMENT,
-                    SPRING_PROFILE_CLOUD
+                    PROFILE_DEVELOPMENT,
+                    PROFILE_CLOUD
                 ),
                 getDefault()
             )

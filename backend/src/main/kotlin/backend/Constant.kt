@@ -19,19 +19,18 @@ object Constants {
     const val NORMAL_TERMINATION = 0
 
     //Spring profiles
-    const val SPRING_PROFILE_DEVELOPMENT = "dev"
-    const val SPRING_PROFILE_PRODUCTION = "prod"
-    const val SPRING_PROFILE_CLOUD = "cloud"
-    const val SPRING_PROFILE_CONF_DEFAULT_KEY = "spring.profiles.default"
-    const val SPRING_PROFILE_TEST = "test"
-    const val SPRING_PROFILE_HEROKU = "heroku"
-    const val SPRING_PROFILE_AWS_ECS = "aws-ecs"
-    const val SPRING_PROFILE_AZURE = "azure"
-    const val SPRING_PROFILE_SWAGGER = "swagger"
-    const val SPRING_PROFILE_NO_LIQUIBASE = "no-liquibase"
-    const val SPRING_PROFILE_K8S = "k8s"
-    const val SPRING_PROFILE_CLI = "cli"
-    val SPRING_PROFILE_CLI_PROPS = mapOf("spring.main.web-application-type" to "none")
+    const val PROFILE_DEVELOPMENT = "dev"
+    const val PROFILE_PRODUCTION = "prod"
+    const val PROFILE_CLOUD = "cloud"
+    const val PROFILE_CONF_DEFAULT_KEY = "spring.profiles.default"
+    const val PROFILE_TEST = "test"
+    const val PROFILE_AWS_ECS = "aws-ecs"
+    const val PROFILE_AZURE = "azure"
+    const val PROFILE_SWAGGER = "swagger"
+    const val PROFILE_NO_LIQUIBASE = "no-liquibase"
+    const val PROFILE_K8S = "k8s"
+    const val PROFILE_CLI = "cli"
+    val PROFILE_CLI_PROPS = mapOf("spring.main.web-application-type" to "none")
 
 
     //Config

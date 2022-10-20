@@ -77,7 +77,7 @@ class WebConfiguration(
     @Bean
     fun constraintViolationProblemModule() = ConstraintViolationProblemModule()
 
-    @Profile("!${Constants.SPRING_PROFILE_PRODUCTION}")
+    @Profile("!${Constants.PROFILE_PRODUCTION}")
     fun reactorConfiguration() = Hooks.onOperatorDebug()
 
     @Bean

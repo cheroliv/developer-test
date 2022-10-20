@@ -9,7 +9,7 @@ import backend.Constants.ERR_VALIDATION
 import backend.Constants.FIELD_ERRORS_KEY
 import backend.Constants.MESSAGE_KEY
 import backend.Constants.PATH_KEY
-import backend.Constants.SPRING_PROFILE_PRODUCTION
+import backend.Constants.PROFILE_PRODUCTION
 import backend.Constants.VIOLATIONS_KEY
 import backend.HttpHeaderUtil.createFailureAlert
 import org.springframework.core.env.Environment
@@ -196,7 +196,7 @@ class ProblemTranslator(
         type: URI
     ): ProblemBuilder {
         var detail = throwable.message
-        if (env.activeProfiles.contains(SPRING_PROFILE_PRODUCTION)) {
+        if (env.activeProfiles.contains(PROFILE_PRODUCTION)) {
             detail = when (throwable) {
                 is HttpMessageConversionException -> "Unable to convert http message"
                 is DataAccessException -> "Failure during data access"

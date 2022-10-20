@@ -1,9 +1,9 @@
 package backend
 
-import backend.Constants.SPRING_PROFILE_CLI
-import backend.Constants.SPRING_PROFILE_CLI_PROPS
-import backend.Constants.SPRING_PROFILE_CONF_DEFAULT_KEY
-import backend.Constants.SPRING_PROFILE_TEST
+import backend.Constants.PROFILE_CLI
+import backend.Constants.PROFILE_CLI_PROPS
+import backend.Constants.PROFILE_CONF_DEFAULT_KEY
+import backend.Constants.PROFILE_TEST
 import kotlinx.coroutines.runBlocking
 import org.springframework.beans.factory.getBean
 import org.springframework.boot.SpringApplication
@@ -17,17 +17,17 @@ fun bootstrap(app: SpringApplication) = with(app) {
     setDefaultProperties(
         hashMapOf<String, Any>().apply {
             set(
-                SPRING_PROFILE_CONF_DEFAULT_KEY,
-                SPRING_PROFILE_TEST
+                PROFILE_CONF_DEFAULT_KEY,
+                PROFILE_TEST
             )
         })
-    setAdditionalProfiles(SPRING_PROFILE_TEST)
+    setAdditionalProfiles(PROFILE_TEST)
 }
 
 fun cli(vararg args: String) = runApplication<OnBoardComputerApplication>(*args) {
     bootstrap(this)
-    setAdditionalProfiles(SPRING_PROFILE_CLI)
-    setDefaultProperties(SPRING_PROFILE_CLI_PROPS)
+    setAdditionalProfiles(PROFILE_CLI)
+    setDefaultProperties(PROFILE_CLI_PROPS)
 }
 
 fun countRoute(context: ApplicationContext): Int = when {
