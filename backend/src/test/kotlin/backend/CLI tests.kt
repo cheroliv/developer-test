@@ -26,16 +26,6 @@ internal class `CLI tests` {
     fun `check cli`(output: CapturedOutput): Unit = runBlocking {
         tripleExamples.map {
             with(cli(it.first, it.second)) {
-                log.info(
-                    "expectedOdds = ${
-                        getBean<ObjectMapper>()
-                            .readValue<Answer>(
-                                getResource("classpath:${it.third}")
-                                    .file
-                                    .readText(UTF_8)
-                            ).odds
-                    }"
-                )
                 assertTrue(
                     output
                         .out
