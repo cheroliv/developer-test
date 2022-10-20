@@ -25,8 +25,11 @@ to stop the backend use Ctrl+C
 to test backend, run this command in terminal
 [source,bash]
 ----
-./gradlew check
+./gradlew check;
 ----
+
+test report is available from the root project folder follow this path: backend/build/reports/tests/test/index.html
+
 
 
 == deploy to google cloud
