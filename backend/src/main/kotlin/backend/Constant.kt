@@ -24,10 +24,7 @@ object Constants {
     const val PROFILE_CLOUD = "cloud"
     const val PROFILE_CONF_DEFAULT_KEY = "spring.profiles.default"
     const val PROFILE_TEST = "test"
-    const val PROFILE_AWS_ECS = "aws-ecs"
-    const val PROFILE_AZURE = "azure"
-    const val PROFILE_SWAGGER = "swagger"
-    const val PROFILE_NO_LIQUIBASE = "no-liquibase"
+    const val PROFILE_GCLOUD = "gcloud"
     const val PROFILE_K8S = "k8s"
     const val PROFILE_CLI = "cli"
     val PROFILE_CLI_PROPS = mapOf("spring.main.web-application-type" to "none")
