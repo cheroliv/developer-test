@@ -60,9 +60,13 @@ class RoadMapService(
         }
 
     @Transactional(readOnly = true)
-    suspend fun giveMeTheOdds(strConfig: String, strEmpire: String): Double {
-        val config = mapper.readValue<ComputerConfig>(
-            context.getResource("classpath:$strConfig")
+    suspend fun giveMeTheOdds(configPath: String, empirePath: String): Double {
+        val config: ComputerConfig = mapper.readValue(
+            context.getResource("classpath:$configPath")
+                .file.readText(UTF_8)
+        )
+        val empire: Empire = mapper.readValue(
+            context.getResource("classpath:$empirePath")
                 .file.readText(UTF_8)
         )
         val routes: List<Route> = context
@@ -80,10 +84,6 @@ class RoadMapService(
                     )
                 }
             }
-        val empire: Empire = mapper.readValue(
-            context.getResource("classpath:$strEmpire")
-                .file.readText(UTF_8)
-        )
 
         return giveMeTheOdds(
             routes.roadmap,
