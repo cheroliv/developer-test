@@ -26,7 +26,7 @@ import java.util.Locale.getDefault
 import kotlin.system.exitProcess
 
 /*=================================================================================*/
-@SpringBootApplication()
+@SpringBootApplication
 @EnableConfigurationProperties(ApplicationProperties::class)
 class OnBoardComputerApplication
 
@@ -35,14 +35,10 @@ class OnBoardComputerApplication
 object OnBoardComputerBootstrap {
     @JvmStatic
     fun main(args: Array<String>) = runApplication<OnBoardComputerApplication>(*args) {
-        with(this) {
-            setDefaultProperties(
-                hashMapOf<String, Any>(
-                    PROFILE_CONF_DEFAULT_KEY to PROFILE_DEVELOPMENT
-                )
-            )
-            setAdditionalProfiles(PROFILE_DEVELOPMENT)
-        }
+        setDefaultProperties(
+            hashMapOf<String, Any>(PROFILE_CONF_DEFAULT_KEY to PROFILE_DEVELOPMENT)
+        )
+        setAdditionalProfiles(PROFILE_DEVELOPMENT)
     }.run { bootstrapLog(context = this) }
 
 }
@@ -90,6 +86,7 @@ fun checkProfileLog(context: ApplicationContext) = context.environment.activePro
         )
     }
 }
+
 /*=================================================================================*/
 private fun bootstrapLogMessage(
     appName: String?,
@@ -108,6 +105,7 @@ External:   $protocol://$hostAddress:$serverPort$contextPath
 Profile(s): $profiles
 ----------------------------------------------------------
 ${"\n\n\n"}""".trimIndent()
+
 /*=================================================================================*/
 private fun bootstrapLog(context: ApplicationContext): Unit =
     log.info(
