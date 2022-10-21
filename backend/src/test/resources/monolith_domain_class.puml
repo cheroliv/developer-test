@@ -77,6 +77,7 @@ json AccountJSON {
 }
 
 AccountJSON  <|-- Account
+
 json AccountCredentialsJSON {
    "password":"admin",
    "activationKey":"",
@@ -92,9 +93,6 @@ json AccountCredentialsJSON {
    "created_by":"",
    "last_modified_by":""
 }
-'id;login;password_hash;first_name;last_name;email;image_url;activated;lang_key;created_by;last_modified_by
-'2;user;$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K;User;User;user@localhost;;true;fr;system;system
-
 
 AccountCredentialsJSON  <|-- AccountCredentials
 
@@ -104,7 +102,7 @@ package backend"Services.kt" <<Node>> {
     class AccountService
 }
 
-package backend"Repositories.kt" <<Node>>{
+package backend:"Repositories.kt" <<Node>>{
   interface AccountRepository{
     + suspend fun findOneByLogin(login: String): Account
     + suspend fun findOneByEmail(email: String): Account

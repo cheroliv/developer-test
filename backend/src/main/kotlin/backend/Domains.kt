@@ -181,6 +181,10 @@ class Graph<T, E : Number>(
         .filter { it.origin == from && it.destination == to }
         .map { it.travelTime }
         .first()
+
+    override fun toString(): String = vertices.joinToString("\n") {
+        "$it ${if (directed) "->" else "--"} ${adjacentVertices(it)}"
+    }
 }
 /*=================================================================================*/
 val List<Route>.graph: Graph<String, Int>

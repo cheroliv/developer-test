@@ -50,3 +50,19 @@ fun findAllRoutes(context: ApplicationContext): List<Route> = when {
         .toIterable()
         .map { it.toDomain }
 }
+
+private fun readUniverseCsv(context:ApplicationContext,fileName: String): List<Route> = context
+    .getResource("classpath:${fileName}")
+    .file
+    .readText(Charsets.UTF_8)
+    .lines()
+    .drop(1)
+    .map {
+        it.split(Constants.CSV_DELIMITER).run {
+            Route(
+                origin = this[0],
+                destination = this[1],
+                travelTime = this[2].toInt(),
+            )
+        }
+    }

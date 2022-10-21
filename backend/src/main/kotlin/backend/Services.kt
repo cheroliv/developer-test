@@ -17,8 +17,11 @@ import org.springframework.core.io.Resource
 import org.springframework.stereotype.Component
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.sql.DriverManager
+import java.sql.SQLException
 import javax.annotation.PostConstruct
 import kotlin.text.Charsets.UTF_8
+
 
 /*=================================================================================*/
 @Service
@@ -58,6 +61,28 @@ class RoadMapService(
                 )
             }
         }
+
+    private fun selectAll(fileName: String) {
+        try {
+            DriverManager.getConnection("jdbc:sqlite:${context.getResource("classpath:${fileName}")
+                .file.absolutePath}").use { conn ->
+                conn!!.createStatement().use { stmt ->
+                    stmt.executeQuery("SELECT * FROM ROUTES").use { rs ->
+                        // loop through the result set
+                        while (rs.next()) {
+                            println(
+                                rs.getInt("origin").toString() + "\t" +
+                                        rs.getString("destination") + "\t" +
+                                        rs.getDouble("travelTime")
+                            )
+                        }
+                    }
+                }
+            }
+        } catch (e: SQLException) {
+            println(e.message)
+        }
+    }
 
     @Transactional(readOnly = true)
     suspend fun giveMeTheOdds(configPath: String, empirePath: String): Double {
@@ -113,10 +138,20 @@ class RoadMapService(
         )
     }
 }
+
+class SelectApp {
+
+
+    /**
+     * select all rows in the warehouses table
+     */
+
+}
 /*=================================================================================*/
 
 @Component
 @Profile(PROFILE_CLI)
+
 class OnBoardComputerCliRunner(
     private val context: ApplicationContext,
 ) : CommandLineRunner {

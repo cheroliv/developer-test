@@ -61,6 +61,7 @@ dependencies {
     //H2database
     runtimeOnly("com.h2database:h2")
     runtimeOnly("io.r2dbc:r2dbc-h2")
+    runtimeOnly("org.xerial:sqlite-jdbc:3.25.2")
 
     //SSL
     implementation("io.netty:netty-tcnative-boringssl-static:${properties["boring_ssl.version"]}")

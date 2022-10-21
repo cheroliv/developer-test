@@ -103,4 +103,11 @@ internal class `Domain tests` {
             )
         }
     }
+
+    @Test
+    fun `graph property function`() {
+        Log.log.info("roadmap: ${routes.roadmap}")
+        Log.log.info("graph: ${routes.graph}")
+    }
+
 }
