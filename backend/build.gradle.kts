@@ -61,6 +61,7 @@ dependencies {
     //H2
     runtimeOnly("com.h2database:h2")
     runtimeOnly("io.r2dbc:r2dbc-h2")
+
     //sqlite
     runtimeOnly("org.xerial:sqlite-jdbc:${properties["sqlite_version"]}")
 
@@ -78,8 +79,8 @@ dependencies {
 
 sourceSets {
     getByName("main").resources.srcDirs(
-        "${parent?.rootDir?.path}/configuration",
-        "${parent?.rootDir?.path}/examples",
+        "${projectDir.path}/src/configuration",
+        "${parent!!.rootDir.path}/examples",
     )
 }
 
