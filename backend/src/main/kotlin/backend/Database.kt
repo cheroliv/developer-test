@@ -26,6 +26,7 @@ import java.time.Instant
 import java.time.LocalDateTime
 import java.time.LocalDateTime.ofInstant
 import java.time.ZoneOffset.UTC
+
 /*=================================================================================*/
 
 @Configuration
@@ -41,11 +42,7 @@ class DatabaseConfiguration(
     ): ConnectionFactoryInitializer =
         ConnectionFactoryInitializer().apply {
             setConnectionFactory(connectionFactory)
-            setDatabasePopulator(
-                ResourceDatabasePopulator(
-                    ClassPathResource(properties.database.populatorPath)
-                )
-            )
+            setDatabasePopulator(ResourceDatabasePopulator(ClassPathResource(properties.database.populatorPath)))
         }
 
     @Bean

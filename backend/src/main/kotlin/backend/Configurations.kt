@@ -1,4 +1,4 @@
-@file:Suppress("unused", "RedundantSuppression")
+@file:Suppress("unused")
 
 package backend
 

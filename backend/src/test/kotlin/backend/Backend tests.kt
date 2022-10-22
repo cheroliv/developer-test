@@ -42,7 +42,11 @@ internal class `Backend tests` {
     @Test
     fun `When it starts, the back-end service will read a JSON configuration file containing the autonomy`() {
         //validate needed resources are on classpath and contains expected values
-        with(context.getResource("classpath:millennium-falcon.json").file.readText(Charsets.UTF_8)) {
+        with(
+            context.getResource("classpath:millennium-falcon.json")
+                .file
+                .readText(Charsets.UTF_8)
+        ) {
             assertTrue(contains("{"))
             assertTrue(contains("}"))
             assertTrue(contains("\"autonomy\": 6,"))
@@ -98,7 +102,7 @@ internal class `Backend tests` {
                     assertEquals(empireInRequest, empireSent)
 
                     runBlocking {
-                        responseBodyContent!!.apply {
+                        responseBodyContent!!.run {
                             val oddsResponseResult = map { byte -> byte.toInt().toChar().toString() }
                                 .reduce { accumulator: String, s: String -> accumulator + s }
                                 .toDouble()
