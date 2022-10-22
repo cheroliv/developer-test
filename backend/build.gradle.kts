@@ -58,16 +58,22 @@ dependencies {
     //spring webflux reactive http
     implementation("org.springframework.boot:spring-boot-starter-webflux")
 
-    //H2database
+    //H2
     runtimeOnly("com.h2database:h2")
     runtimeOnly("io.r2dbc:r2dbc-h2")
-    runtimeOnly("org.xerial:sqlite-jdbc:3.25.2")
+    //sqlite
+    runtimeOnly("org.xerial:sqlite-jdbc:${properties["sqlite_version"]}")
 
     //SSL
     implementation("io.netty:netty-tcnative-boringssl-static:${properties["boring_ssl.version"]}")
 
     // spring Test dependencies
     testImplementation("org.springframework.boot:spring-boot-starter-test") { exclude(module = "mockito-core") }
+
+    //Arrow
+    implementation(platform("io.arrow-kt:arrow-stack:${properties["arrow_version"]}"))
+
+    implementation("io.arrow-kt:arrow-core")
 }
 
 sourceSets {

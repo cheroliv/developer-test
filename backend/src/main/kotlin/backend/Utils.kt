@@ -3,14 +3,62 @@
 package backend
 
 import backend.Log.log
+import org.springframework.context.ApplicationContext
+import org.springframework.core.io.ClassPathResource
 import org.springframework.data.domain.Page
 import org.springframework.http.HttpHeaders
 import org.springframework.web.util.UriComponentsBuilder
 import java.io.UnsupportedEncodingException
 import java.net.URLEncoder.encode
-
+import java.sql.DriverManager.getConnection
 import java.text.MessageFormat
 import kotlin.text.Charsets.UTF_8
+
+/*=================================================================================*/
+
+
+fun sqliteRoutes(fileName: String): List<Route> =
+    mutableListOf<Route>().apply {
+        val sqliteAbsolutePath = ClassPathResource(fileName)
+            .file
+            .absolutePath
+        val url = "jdbc:sqlite:$sqliteAbsolutePath"
+        getConnection(url).createStatement()
+            .executeQuery("SELECT * FROM routes")
+            .run {
+                while (next()) add(
+                    Route(
+                        origin = getString("origin"),
+                        destination = getString("destination"),
+                        travelTime = getInt("travel_time")
+                    )
+                )
+            }
+    }
+/*=================================================================================*/
+
+private const val universeCsv = """origin;destination;travel_time
+Tatooine;Dagobah;6
+Dagobah;Endor;4
+Dagobah;Hoth;1
+Hoth;Endor;1
+Tatooine;Hoth;6"""
+
+fun readUniverseCsv(fileName: String, context: ApplicationContext): List<Route> = context
+    .getResource("classpath:${fileName}")
+    .file
+    .readText(UTF_8)
+    .lines()
+    .drop(1)
+    .map {
+        it.split(Constants.CSV_DELIMITER).run {
+            Route(
+                origin = this[0],
+                destination = this[1],
+                travelTime = this[2].toInt(),
+            )
+        }
+    }
 
 
 /*=================================================================================*/

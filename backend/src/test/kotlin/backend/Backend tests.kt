@@ -7,6 +7,7 @@
 
 package backend
 
+import backend.Data.config
 import backend.Data.pairExamples
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
@@ -18,15 +19,15 @@ import org.springframework.boot.runApplication
 import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.test.web.reactive.server.WebTestClient
+import org.springframework.test.web.reactive.server.WebTestClient.bindToServer
 import org.springframework.test.web.reactive.server.returnResult
-import java.nio.charset.StandardCharsets
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 internal class `Backend tests` {
     private val client: WebTestClient by lazy {
-        WebTestClient.bindToServer().baseUrl(BASE_URL_DEV).build()
+        bindToServer().baseUrl(BASE_URL_DEV).build()
     }
     private lateinit var context: ConfigurableApplicationContext
     private val mapper: ObjectMapper by lazy { context.getBean<ObjectMapper>() }
@@ -47,38 +48,26 @@ internal class `Backend tests` {
             assertTrue(contains("\"autonomy\": 6,"))
             assertTrue(contains("\"departure\": \"Tatooine\","))
             assertTrue(contains("\"arrival\": \"Endor\","))
-            assertTrue(contains("\"routes_db\": \"universe.csv\""))
+            assertTrue(contains("\"routes_db\": \"universe.db\""))
 
             context.getBean<ObjectMapper>().readValue<ComputerConfig>(this).run {
                 assertEquals(6, autonomy)
                 assertEquals("Tatooine", departure)
                 assertEquals("Endor", arrival)
-                assertEquals("universe.csv", routesDb)
+                assertEquals("universe.db", routesDb)
             }
         }
         assertEquals(5, countRoute(context), "universe must be persisted")
         with(findAllRoutes(context)) {
-            context.getResource("classpath:universe.csv")
-                .file
-                .readText(StandardCharsets.UTF_8)
-                .lines()
-                .drop(1)
-                .map {
-                    it.split(";").run {
-                        Route(
-                            origin = first(),
-                            destination = this[1],
-                            travelTime = last().toInt(),
-                        )
-                    }
-                }.map {
-                    assertTrue(
-                        contains(it),
-                        "let's compare retrieved data from database with what csv contains"
-                    )
-                }
+            sqliteRoutes(config.routesDb).map {
+                assertTrue(
+                    contains(it),
+                    "let's compare retrieved data from database with what csv contains"
+                )
+            }
         }
     }
+
 
     @Test
     fun `Upload a JSON file containing the data intercepted by the rebels about the plans of the Empire and displaying the odds`() {
@@ -123,3 +112,27 @@ internal class `Backend tests` {
         }
     }
 }
+/*
+//TODO: testing csv reader
+with(findAllRoutes(context)) {
+            context.getResource("classpath:universe.csv")
+                .file
+                .readText(StandardCharsets.UTF_8)
+                .lines()
+                .drop(1)
+                .map {
+                    it.split(";").run {
+                        Route(
+                            origin = first(),
+                            destination = this[1],
+                            travelTime = last().toInt(),
+                        )
+                    }
+                }.map {
+                    assertTrue(
+                        contains(it),
+                        "let's compare retrieved data from database with what csv contains"
+                    )
+                }
+        }
+ */

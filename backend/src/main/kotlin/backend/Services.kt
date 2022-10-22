@@ -2,7 +2,6 @@
 
 package backend
 
-import backend.Constants.CSV_DELIMITER
 import backend.Constants.PROFILE_CLI
 import backend.Log.log
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -17,8 +16,6 @@ import org.springframework.core.io.Resource
 import org.springframework.stereotype.Component
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.sql.DriverManager
-import java.sql.SQLException
 import javax.annotation.PostConstruct
 import kotlin.text.Charsets.UTF_8
 
@@ -36,52 +33,10 @@ class RoadMapService(
     private val config: ComputerConfig by lazy { mapper.readValue(configurationFile.file) }
 
     @PostConstruct
+    @Transactional
     private fun init() = runBlocking {
         checkProfileLog(context)
-        loadOnBoardComputerConfig()
-    }
-
-    @Transactional
-    private suspend fun loadOnBoardComputerConfig() = config.run {
-        routeRepository.saveAll(readUniverseCsv(routesDb))
-    }
-
-    private fun readUniverseCsv(fileName: String): List<Route> = context
-        .getResource("classpath:${fileName}")
-        .file
-        .readText(UTF_8)
-        .lines()
-        .drop(1)
-        .map {
-            it.split(CSV_DELIMITER).run {
-                Route(
-                    origin = this[0],
-                    destination = this[1],
-                    travelTime = this[2].toInt(),
-                )
-            }
-        }
-
-    private fun selectAll(fileName: String) {
-        try {
-            DriverManager.getConnection("jdbc:sqlite:${context.getResource("classpath:${fileName}")
-                .file.absolutePath}").use { conn ->
-                conn!!.createStatement().use { stmt ->
-                    stmt.executeQuery("SELECT * FROM ROUTES").use { rs ->
-                        // loop through the result set
-                        while (rs.next()) {
-                            println(
-                                rs.getInt("origin").toString() + "\t" +
-                                        rs.getString("destination") + "\t" +
-                                        rs.getDouble("travelTime")
-                            )
-                        }
-                    }
-                }
-            }
-        } catch (e: SQLException) {
-            println(e.message)
-        }
+        routeRepository.saveAll(sqliteRoutes(config.routesDb))
     }
 
     @Transactional(readOnly = true)
@@ -94,21 +49,7 @@ class RoadMapService(
             context.getResource("classpath:$empirePath")
                 .file.readText(UTF_8)
         )
-        val routes: List<Route> = context
-            .getResource("classpath:${config.routesDb}")
-            .file
-            .readText(UTF_8)
-            .lines()
-            .drop(1)
-            .map {
-                it.split(CSV_DELIMITER).run {
-                    Route(
-                        origin = first(),
-                        destination = this[1],
-                        travelTime = last().toInt(),
-                    )
-                }
-            }
+        val routes: List<Route> = sqliteRoutes(config.routesDb)
 
         return giveMeTheOdds(
             routes.roadmap,
@@ -139,16 +80,7 @@ class RoadMapService(
     }
 }
 
-class SelectApp {
-
-
-    /**
-     * select all rows in the warehouses table
-     */
-
-}
 /*=================================================================================*/
-
 @Component
 @Profile(PROFILE_CLI)
 
