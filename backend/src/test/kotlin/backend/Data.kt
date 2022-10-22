@@ -4,8 +4,8 @@ object Data {
     val pairExamples = setOf(
         Pair("example1/empire.json", "example1/answer.json"),
         Pair("example2/empire.json", "example2/answer.json"),
-        Pair("example3/empire.json", "example3/answer.json"),
-        Pair("example4/empire.json", "example4/answer.json"),
+//        Pair("example3/empire.json", "example3/answer.json"),
+//        Pair("example4/empire.json", "example4/answer.json"),
     )
 
     val tripleExamples = pairExamples.map {
@@ -32,10 +32,19 @@ object Data {
         Route("Tatooine", "Hoth", 6),
     )
 
+    val universeCsv = buildString {
+        append("origin;destination;travel_time").append("\n")
+        append("Tatooine;Dagobah;6").append("\n")
+        append("Dagobah;Endor;4").append("\n")
+        append("Dagobah;Hoth;1").append("\n")
+        append("Hoth;Endor;1").append("\n")
+        append("Tatooine;Hoth;6")
+    }
+
     val config = ComputerConfig(
         autonomy = 6,
         departure = "Tatooine",
         arrival = "Endor",
-        routesDb = "universe.csv"
+        routesDb = "universe.db"
     )
 }

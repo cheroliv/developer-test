@@ -37,9 +37,7 @@ class RouteRepositoryR2dbc(
 @Repository("routeRepository")
 class RouteRepositoryInMemory : RouteRepository {
     private object InMemoryData {
-        private val routes: MutableList<Route> by lazy {
-            mutableListOf()
-        }
+        private val routes: MutableList<Route> by lazy { mutableListOf() }
 
         @JvmStatic
         val findAllRoutes: List<Route>

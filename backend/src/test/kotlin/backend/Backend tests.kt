@@ -112,27 +112,3 @@ internal class `Backend tests` {
         }
     }
 }
-/*
-//TODO: testing csv reader
-with(findAllRoutes(context)) {
-            context.getResource("classpath:universe.csv")
-                .file
-                .readText(StandardCharsets.UTF_8)
-                .lines()
-                .drop(1)
-                .map {
-                    it.split(";").run {
-                        Route(
-                            origin = first(),
-                            destination = this[1],
-                            travelTime = last().toInt(),
-                        )
-                    }
-                }.map {
-                    assertTrue(
-                        contains(it),
-                        "let's compare retrieved data from database with what csv contains"
-                    )
-                }
-        }
- */

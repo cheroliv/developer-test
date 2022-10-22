@@ -37,32 +37,6 @@ fun sqliteRoutes(fileName: String): List<Route> =
     }
 /*=================================================================================*/
 
-private const val universeCsv = """origin;destination;travel_time
-Tatooine;Dagobah;6
-Dagobah;Endor;4
-Dagobah;Hoth;1
-Hoth;Endor;1
-Tatooine;Hoth;6"""
-
-fun readUniverseCsv(fileName: String, context: ApplicationContext): List<Route> = context
-    .getResource("classpath:${fileName}")
-    .file
-    .readText(UTF_8)
-    .lines()
-    .drop(1)
-    .map {
-        it.split(Constants.CSV_DELIMITER).run {
-            Route(
-                origin = this[0],
-                destination = this[1],
-                travelTime = this[2].toInt(),
-            )
-        }
-    }
-
-
-/*=================================================================================*/
-
 /**
  * Utility class for HTTP headers creation.
  */

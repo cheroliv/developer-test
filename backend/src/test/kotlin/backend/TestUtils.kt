@@ -1,15 +1,22 @@
+@file:Suppress("ClassName")
+
 package backend
 
 import backend.Constants.PROFILE_CLI
 import backend.Constants.PROFILE_CLI_PROPS
 import backend.Constants.PROFILE_CONF_DEFAULT_KEY
 import backend.Constants.PROFILE_TEST
+import backend.Data.config
+import backend.Data.routes
+import backend.Data.universeCsv
 import kotlinx.coroutines.runBlocking
 import org.springframework.beans.factory.getBean
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.ApplicationContext
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 const val BASE_URL_DEV = "http://localhost:8080"
 
@@ -51,10 +58,8 @@ fun findAllRoutes(context: ApplicationContext): List<Route> = when {
         .map { it.toDomain }
 }
 
-private fun readUniverseCsv(context:ApplicationContext,fileName: String): List<Route> = context
-    .getResource("classpath:${fileName}")
-    .file
-    .readText(Charsets.UTF_8)
+
+fun readUniverseCsv(content: String): List<Route> = content
     .lines()
     .drop(1)
     .map {
@@ -66,3 +71,16 @@ private fun readUniverseCsv(context:ApplicationContext,fileName: String): List<R
             )
         }
     }
+
+internal class `TestUtils tests` {
+
+    @Test
+    fun `testing csv reader`() = routes.forEachIndexed { index, it ->
+        readUniverseCsv(universeCsv).run { assertEquals(it, this[index]) }
+    }
+
+    @Test
+    fun `testing sqlite reader`() = routes.forEachIndexed { index, it ->
+        sqliteRoutes(config.routesDb).run { assertEquals(it, this[index]) }
+    }
+}
