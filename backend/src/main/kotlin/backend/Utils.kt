@@ -3,7 +3,6 @@
 package backend
 
 import backend.Log.log
-import org.springframework.context.ApplicationContext
 import org.springframework.core.io.ClassPathResource
 import org.springframework.data.domain.Page
 import org.springframework.http.HttpHeaders
