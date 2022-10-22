@@ -13,6 +13,13 @@ import kotlin.test.assertEquals
 
 internal class `Domain tests` {
     @Test
+    fun `graph property function`() {
+        Log.log.info("roadmap: ${routes.roadmap}")
+        Log.log.info("graph: ${routes.graph}")
+        Log.log.info("graph: ${routes.graph.getAllVertices()}")
+    }
+
+    @Test
     fun `list of destinations from routes`() {
         mutableListOf<String>().apply {
             addAll(routes.map { it.origin })
@@ -103,11 +110,4 @@ internal class `Domain tests` {
             )
         }
     }
-
-    @Test
-    fun `graph property function`() {
-        Log.log.info("roadmap: ${routes.roadmap}")
-        Log.log.info("graph: ${routes.graph}")
-    }
-
 }

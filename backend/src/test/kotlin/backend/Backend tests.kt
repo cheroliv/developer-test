@@ -89,17 +89,17 @@ internal class `Backend tests` {
                 .isOk
                 .returnResult<Int>().run {
 
-                    val empireInRequest = mapper.readValue<Empire>(
+                    val empire = mapper.readValue<Empire>(
                         context.getResource("classpath:${it.first}").file
                     )
 
-                    val empireSent = mapper.readValue<Empire>(
+                    val requestEmpire = mapper.readValue<Empire>(
                         requestBodyContent!!
                             .map { byte -> byte.toInt().toChar().toString() }
                             .reduce { acc: String, s: String -> acc + s }
                     )
 
-                    assertEquals(empireInRequest, empireSent)
+                    assertEquals(empire, requestEmpire)
 
                     runBlocking {
                         responseBodyContent!!.run {
