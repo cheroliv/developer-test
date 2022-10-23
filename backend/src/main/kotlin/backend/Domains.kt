@@ -6,6 +6,7 @@
 package backend
 
 
+import backend.Constants.LUCKY
 import backend.Constants.UNLUCKY
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.*
@@ -21,7 +22,7 @@ fun giveMeTheOdds(
 ): Double = if (path.second > empire.countdown) UNLUCKY
 else constraints(roadmap, config, empire, path).run {
     if (empire.countdown < first) UNLUCKY
-    else 1.0 - odds(second)
+    else LUCKY - odds(second)
 }
 /*=================================================================================*/
 

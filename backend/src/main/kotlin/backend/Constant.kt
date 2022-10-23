@@ -13,8 +13,8 @@ object Constants {
     const val VIOLATIONS_KEY = "violations"
 
     const val CSV_DELIMITER = ";"
+    const val LUCKY = 1.0
     const val UNLUCKY = 0.0
-
     const val REFUEL_DURATION = 1
     const val NORMAL_TERMINATION = 0
 
