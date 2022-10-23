@@ -10,15 +10,13 @@ import kotlin.test.assertEquals
 
 
 internal class `TestUtils tests` {
-
     @Test
-    fun `testing csv reader`() = routes.forEachIndexed { i, it ->
-        readUniverseCsv(universeCsv).run { assertEquals(it, this[i]) }
+    fun `testing sqlite reader`() = sqliteRoutes(config.routesDb).run {
+        routes.forEachIndexed { i, it -> assertEquals(it, this[i]) }
     }
 
     @Test
-    fun `testing sqlite reader`() = routes.forEachIndexed { i, it ->
-        sqliteRoutes(config.routesDb).run { assertEquals(it, this[i]) }
+    fun `testing csv reader`() = readUniverseCsv(universeCsv).run {
+        routes.forEachIndexed { i, it -> assertEquals(it, this[i]) }
     }
-
 }
