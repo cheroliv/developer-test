@@ -11,12 +11,23 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 
+fun List<Route>.itineraries(empire:Empire,config: ComputerConfig):Set<Itinerary>{
+    return emptySet()
+}
+
+data class Itinerary(
+    val departure:String
+)
+
+data class ItineraryStep(
+    val departure:String
+)
+
 internal class `Domain tests` {
     @Test
     fun `graph property function`() {
         Log.log.info("roadmap: ${routes.roadmap}")
-        Log.log.info("graph: ${routes.graph}")
-        Log.log.info("graph: ${routes.graph.getAllVertices()}")
+
     }
 
     @Test
