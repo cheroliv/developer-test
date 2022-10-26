@@ -9,7 +9,6 @@ package backend
 import backend.Constants.LUCKY
 import backend.Constants.UNLUCKY
 import com.fasterxml.jackson.annotation.JsonProperty
-import java.util.*
 import kotlin.Double.Companion.POSITIVE_INFINITY
 import kotlin.math.pow
 
@@ -56,23 +55,24 @@ fun constraints(
     var currentAutonomy = config.autonomy
     val pathSize = path.first.size
 
-    val pathRefuel: MutableList<Pair<String, Boolean>> = mutableListOf<Pair<String, Boolean>>().apply {
-        path.first.forEachIndexed { index, destination: String ->
-            if (pathSize - index > 1) {
-                val timeToNext: Int = roadmap[destination]!![path.first[index + 1]]!!
-                if (timeToNext >= currentAutonomy) {
-                    currentAutonomy = config.autonomy
-                    cptRefuel++
-                    add(Pair(path.first[index + 1], true))
-                } else {
-                    currentAutonomy -= timeToNext
-                    add(Pair(path.first[index + 1], false))
+    val pathRefuel: MutableList<Pair<String, Boolean>> =
+        mutableListOf<Pair<String, Boolean>>().apply {
+            path.first.forEachIndexed { index, destination: String ->
+                if (pathSize - index > 1) {
+                    val timeToNext: Int = roadmap[destination]!![path.first[index + 1]]!!
+                    if (timeToNext >= currentAutonomy) {
+                        currentAutonomy = config.autonomy
+                        cptRefuel++
+                        add(Pair(path.first[index + 1], true))
+                    } else {
+                        currentAutonomy -= timeToNext
+                        add(Pair(path.first[index + 1], false))
+                    }
+                    timeWithRefuel += timeToNext
                 }
-                timeWithRefuel += timeToNext
             }
+            add(0, Pair(config.departure, false))
         }
-        add(0, Pair(config.departure, false))
-    }
 
     val pathSteps: MutableList<PathStep> = mutableListOf<PathStep>().apply {
         path.first.forEachIndexed { index, destination: String ->
@@ -133,8 +133,9 @@ private fun <T, E : Number> dijkstra(
     }
     return paths.mapValues { entry -> entry.value to times[entry.key]!! }
 }
+
 /*=================================================================================*/
-data class Edge<T, E : Number>(val origin: T,val destination: T,val travelTime: E)
+data class Edge<T, E : Number>(val origin: T, val destination: T, val travelTime: E)
 
 /*=================================================================================*/
 
@@ -187,6 +188,7 @@ class Graph<T, E : Number>(
         "$it ${if (directed) "->" else "--"} ${adjacentVertices(it)}"
     }
 }
+
 /*=================================================================================*/
 val List<Route>.graph: Graph<String, Int>
     get() = Graph<String, Int>(

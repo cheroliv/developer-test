@@ -6,28 +6,52 @@ import backend.Constants.UNLUCKY
 import backend.Data.config
 import backend.Data.expectedRoadmap
 import backend.Data.routes
+import backend.Log.log
 import kotlin.math.pow
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 
-fun List<Route>.itineraries(empire:Empire,config: ComputerConfig):Set<Itinerary>{
+fun List<Route>.itineraries(empire: Empire, config: ComputerConfig): Set<Itinerary> {
     return emptySet()
 }
 
 data class Itinerary(
-    val departure:String
+    val departure: String,
+    val arrival: String,
+    val autonomy: String,
+    val countdown: Int,
+    val travelTime: Int,
+    val odds: Double,
+    val steps: List<ItineraryStep>,
+    val refuelDays: List<Int>,
+    val bountyHunters: List<BountyHunter>
 )
 
 data class ItineraryStep(
-    val departure:String
+    val origin: String,
+    val destination: String,
+    val travelTime: Int,
+    val refuel: Boolean,
+    val hunterCount: Int,
+    val timeLeftBeforeCountdown: Int,
+    val autonomyLeft: Int
 )
 
 internal class `Domain tests` {
     @Test
-    fun `graph property function`() {
-        Log.log.info("roadmap: ${routes.roadmap}")
-
+    fun `itineraries property function`() {
+        log.info("roadmap: ${routes.roadmap}")
+        //variables we use to find out needed functions.
+        config
+        val empire = Empire(
+            countdown = 7,
+            bountyHunters = listOf(
+                BountyHunter(planet = "Hoth", day = 6),
+                BountyHunter(planet = "Hoth", day = 7),
+                BountyHunter(planet = "Hoth", day = 8)
+            )
+        ).apply { log.info("empire: $this") }
     }
 
     @Test

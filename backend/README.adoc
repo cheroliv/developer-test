@@ -103,7 +103,7 @@ vertex(roadmap) :
 |1
 |===
 
-=== Ubiquitous language
+=== Ubiquitous language (TODO: define terms)
 computer_configuration: +
 autonomy: +
 departure: +
@@ -118,3 +118,10 @@ countdown: +
 bounty_hunter: +
 planet: +
 day: +
+odds: +
+steps: list of itinerary +
+refuel_days: +
+refuel: +
+hunter_count: +
+time_left_before_countdown: +
+autonomy_left: +
