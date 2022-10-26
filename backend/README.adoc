@@ -119,7 +119,7 @@ bounty_hunter: +
 planet: +
 day: +
 odds: +
-steps: list of itinerary +
+steps: list of itineraries +
 refuel_days: +
 refuel: +
 hunter_count: +
