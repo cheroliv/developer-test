@@ -67,7 +67,7 @@ to solve the problem let's use the Dijkstra’s algorithm who answers the questi
 of the shortest and fastest paths for travelers. +
 
 
-according to our universe.csv
+according to our universe.db content:
 [%header,format=csv,separator=";"]
 |===
 origin;destination;travel_time
@@ -78,7 +78,7 @@ Hoth;Endor;1
 Tatooine;Hoth;6
 |===
 
-vertex :
+vertex(roadmap) :
 |===
 |starting vertex: days from start |Tattoine|Dagobah | Endor | Hoth
 |Tatooine
@@ -103,5 +103,18 @@ vertex :
 |1
 |===
 
-lowest-cost-path
-
+=== Ubiquitous language
+computer_configuration: +
+autonomy: +
+departure: +
+arrival: +
+route: +
+origin: +
+destination: +
+travel_time: +
+roadmap: +
+itinerary: +
+countdown: +
+bounty_hunter: +
+planet: +
+day: +
